@@ -1,0 +1,62 @@
+// font
+@import url('https://fonts.googleapis.com/css2?family=BBH+Hegarty&family=Dela+Gothic+One&family=Mochiy+Pop+One&display=swap');
+
+// bootstrap
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "bootstrap/scss/bootstrap";
+// @import "../../node_modules/bootstrap/scss/maps";
+
+
+// 客製樣式
+// @import "./configuration/custom-colors";
+// @import "./configuration/variables";
+// @import "./configuration/variables-dark";
+// @import "./configuration/utilities";
+
+// $utilities: map-merge(
+//   $utilities,
+//   (
+//     "background-color": (
+//       property: background-color,
+//       class: bg,
+//       values: $theme-colors
+//     ),
+
+//     "color": (
+//       property: color,
+//       class: text,
+//       values: $theme-colors
+//     ),
+
+//     "border-color": (
+//       property: border-color,
+//       class: border,
+//       values: $theme-colors
+//     ),
+
+//     "border": map-merge(
+//       map-get($utilities, "border"),
+//       (responsive: true)
+//     ),
+    
+//     "border-start": map-merge(
+//       map-get($utilities, "border-start"),
+//       (responsive: true)
+//     ),
+//   )
+// );
+
+
+//@import "../../node_modules/bootstrap/scss/mixins";
+//@import "../../node_modules/bootstrap/scss/bootstrap";
+
+//@import "../../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+
+
+// @import "./page/index";
+
+// // 元件
+
+
+
