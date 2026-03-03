@@ -1,0 +1,131 @@
+# Learning Frontend – 開發說明文件
+
+### 前端技術棧 (Tech Stack)
+* **建置工具:** Vite
+* **樣式:** SCSS, Bootstrap
+* **HTTP 客戶端:** Axios
+* **前端開發工具:** VS Code
+
+---
+
+### 環境需求
+* 請確認 **Node.js** 版本為 18 或以上
+* 套件管理工具 
+
+### 專案啟動步驟
+**Terminal 輸入（ 僅專案初次啟動 ）**
+0. `git clone https://github.com/lianne928/learning-frontend.git`
+1. `node -v` 確認版本是否為 v18+  
+2. 進入專案目錄，輸入 `npm install` 安裝所有依賴套件 ( 產生 `node_modules` 資料夾 )
+3. 本專案採用 scss + axios 請先安裝
+    3-1 `npm install -D sass` 若沒安裝會 `not found`
+    3-2 `npm install axios`
+
+### 執行與打包指令
+* **打包專案：** `npm run build` 每次 push 後或專案重啟請先下 build 後才進行開發 否則 scss 不會轉譯
+* **打包結果**: `npm run preview` 類似 status 
+* **啟動開發伺服器：** `npm run dev` 
+
+---
+
+### Git 開發流程（請務必遵守）
+一定要在自己的 branch 上操作<br>
+0. `git branch` 如果看到 `* main` 請停下動作，先按以下步驟建立 / 切換到 自己的分支
+> 如何建立自己的分支? 
+> 1. `git checkout main` 確保你拉到 main 而不是其他
+> 2. `git pull origin main` 完成拉取動作 
+> 3. `git checkout -b feature/你的分支名稱` 例如 `git checkout -b feature/auth` 建立並切換到新分支
+
+1. `git status`：查看檔案狀態 ( 好東西請常用 )
+2. `git add .`：將所有變更加入暫存區（ `.` 代表所有檔案 ）
+
+> **💡 如果有不推送的檔案不小心 add 了怎麼辦？**
+> 1. `git status` 查看狀態
+> 2. 畫面會提示 `use "git restore --staged <file>..." to unstage`，底下會列出所有 add 的檔案
+> 3. 複製你不打算推送的檔案名稱
+> 4. 輸入 `git restore --staged <你不想推送的檔案>` 將其移出暫存區
+
+3. `git status`：再確認一次狀態，確保準備提交的檔案都正確
+4. `git commit -m "<Type>: <Description>"`：提交變更，Commit 推送訊息請參考下方規則
+5. `git push origin 你的分支名稱`：推送到遠端儲存庫
+
+---
+
+### Git Commit Message Rules
+
+1. **原子化提交 (Atomic Commits)** <br>
+   假設你今天同時修復了 Bug (fix) 又新增了功能 (feat)，請分開成兩次提交
+
+2. **常用類型標籤 (Type Tags)**
+    * `feat`: 新增功能
+    * `fix`: 修復 Bug
+    * `docs`: 文件更動 ( 如修改 README )
+    * `refactor`: 重構程式碼 ( 不影響原本功能的優化 )
+    * `chore`: 雜項、套件或環境設定更動 ( 如修改 vite.config.js 或 package.json )
+    * `revert`: 回滾
+
+> Commit 總結 : <br>
+只能有相關的 commit <br>
+每個 commit 不要更動太多檔案，會難以閱讀
+---
+
+### 不該推送的檔案與 .gitignore 規範
+為了保持儲存庫乾淨並保護敏感資訊，以下檔案 **絕對不要** 用 `git add` 推送上去（請務必確保它們已寫入 `.gitignore` 檔案中）：
+
+1. **敏感設定與密碼**
+    * 前端的 `.env`、`.env.local` 環境變數檔 (裡面可能包含 API 金鑰或實際的後端網址)
+2. **編譯與打包產生的目錄**
+    * `node_modules/` (套件依賴資料夾，體積非常大，請讓大家自己 npm install)
+    * `dist/` (打包後的靜態檔案資料夾)
+3. **IDE 與開發工具產生的隱藏檔**
+    * VS Code 的 `.vscode/` 目錄
+    * WebStorm 的 `.idea/` 目錄
+4. **作業系統產生的系統檔**
+    * Mac 產生的 `.DS_Store`
+    * Windows 產生的 `Thumbs.db`
+
+### 前端 API 串接與 Axios 使用規範
+
+#### 1. API 路徑設定 (使用相對路徑)
+呼叫後端 API 時，**請勿寫死完整的伺服器網址**（如 `http://localhost:8080/api/...`）
+請統一使用相對路徑開頭，例如：`/api/auth/login`
+
+#### 2.資料清理與驗證
+前端 req 時，有責任檢查空值，並且去除 user 夾帶的空白
+
+#### 3. Axios 請求格式範例
+發送 API 請求時，請統一使用 `.then().catch()` 來處理非同步回應與錯誤
+
+##### GET 請求範例
+```axios
+  .get("/api/目標網址", {
+    params: {
+      id: 1 // 這裡放你要帶的參數 (非必填)
+    }
+  })
+  .then(function (resp) {
+    console.log("成功取得資料:", resp.data);
+    // 這裡處理畫面更新
+  })
+  .catch(function (err) {
+    console.error("請求失敗:", err);
+  });
+```
+##### POST 請求範例
+```axios
+// 準備要送出的資料
+let inputPost = {
+  account: "user123",
+  password: "password123"
+};
+
+axios
+  .post("/api/目標網址", inputPost)
+  .then(function (resp) {
+    console.log("成功送出:", resp.data);
+    // 這裡處理成功後的動作 (例如 alert 或跳轉頁面)
+  })
+  .catch(function (err) {
+    console.error("請求失敗:", err);
+  });
+```
