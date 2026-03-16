@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>課程列表</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+<style>
+    body { font-family: 'PingFang TC', 'Microsoft JhengHei', Arial, sans-serif; margin: 20px; background-color: #f9fafb; }
+    .search-section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
+    th, td { border: 1px solid #edf2f7; padding: 12px; text-align: center; }
+    th { background-color: #f8fafc; color: #4a5568; font-weight: 600; }
+    
+    .pagination ul { list-style-type:none; display:flex; justify-content:center; padding:20px 0; }
+    .pagination li { margin:0 5px; }
+    .pagination a { text-decoration: none; padding: 8px 16px; border: 1px solid #ddd; border-radius: 4px; color: #4a5568; }
+    .pagination a.active { background-color: #FF8E53; color: white; border-color: #FF8E53; }
+
+    /* 課表狀態顏色 */
+    .bg-available { background-color: #4CAF50 !important; }   /* 綠色 */
+    .bg-unavailable { background-color: #e2e8f0 !important; } /* 淺灰色 */
+    
+    /* 浮動課表視窗 */
+    #floatingCalendar {
+        display: none;
+        position: absolute;
+        z-index: 9999;
+        width: 450px;
+        pointer-events: none;
+        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        border: 2px solid #FF8E53;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+    }
+    .calendar-header {
+        padding: 16px;
+        background: linear-gradient(135deg, #6C63FF 0%, #FF8E53 100%);
+        color: white;
+    }
+    #calendarGrid td { padding: 4px; border: 1px solid #f0f0f0; }
+</style>
+</head>
+<body>
+
+    <div class="search-section">
+        <form th:action="@{/view/courses}" method="get">
+            <input type="text" name="teacherName" th:value="${currentTeacherName}" placeholder="搜尋老師姓名...">
+
+            <select name="subjectCategory" id="subjectCategory">
+                <option value="">所有科目</option>
+                <option value="10" th:selected="${currentSubjectCategory == 10}">年級課程</option>
+                <option value="20" th:selected="${currentSubjectCategory == 20}">檢定與升學</option>
+                <option value="30" th:selected="${currentSubjectCategory == 30}">其他</option>
+            </select>
+
+            <select name="subject" id="subjectDetail" th:style="${currentSubjectCategory != null} ? '' : 'display:none'">
+                <option value="">所有小類</option>
+            </select>
+
+            <select name="priceRange">
+                <option value="">所有價格</option>
+                <option value="300-500" th:selected="${currentPriceRange == '300-500'}">$300 - $500</option>
+                <option value="501-700" th:selected="${currentPriceRange == '501-700'}">$501 - $700</option>
+                <option value="701-900" th:selected="${currentPriceRange == '701-900'}">$701 - $900</option>
+            </select>
+
+            <select name="weekday">
+                <option value="">所有星期</option>
+                <option value="1" th:selected="${currentWeekday == 1}">一</option>
+                <option value="2" th:selected="${currentWeekday == 2}">二</option>
+                <option value="3" th:selected="${currentWeekday == 3}">三</option>
+                <option value="4" th:selected="${currentWeekday == 4}">四</option>
+                <option value="5" th:selected="${currentWeekday == 5}">五</option>
+                <option value="6" th:selected="${currentWeekday == 6}">六</option>
+                <option value="7" th:selected="${currentWeekday == 7}">日</option>
+            </select>
+
+            <button type="submit" style="background:#6C63FF; color:white; border:none; padding:6px 15px; border-radius:4px; cursor:pointer;">搜尋</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>老師</th>
+                <th>課程標題</th>
+                <th>科目</th>
+                <th>介紹</th>
+                <th>課表預覽</th>
+                <th>價格</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="c : ${courses}">
+                <td>
+                    <a th:href="@{/tutor/{id}(id=${c.tutorId})}" style="text-decoration:none; color:inherit; display:block;">
+                        <img th:if="${c.avatarUrl != null}" th:src="${c.avatarUrl}" style="width:45px; height:45px; border-radius:50%; object-fit:cover; margin:0 auto 5px;">
+                        <div th:text="${c.teacherName}" style="font-weight:bold;"></div>
+                    </a>
+                </td>
+                <td th:text="${c.courseName}"></td>
+                <td th:text="${c.subject == 11 ? '低年級' : c.subject == 12 ? '中年級' : c.subject == 13 ? '高年級' : c.subject == 21 ? 'GEPT' : c.subject == 22 ? 'YLE' : c.subject == 23 ? '國中先修' : '其他'}"></td>
+                <td th:text="${c.description}" style="font-size: 13px; color: #666; max-width: 200px;"></td>
+                <td>
+                    <div class="schedule-trigger"
+                         th:attr="onmouseenter=|showCalendar(event, '${c.teacherName}', ${c.tutorId})|, onclick=|pinCalendar(event, '${c.teacherName}', ${c.tutorId})|"
+                         onmousemove="moveCalendar(event)"
+                         onmouseleave="hideCalendar()">
+                        <span style="color: #6C63FF; cursor: pointer; font-weight: 500;">
+                            <span class="material-symbols-outlined" style="vertical-align: middle; font-size: 20px;">calendar_month</span>
+                            點擊固定
+                        </span>
+                    </div>
+                </td>
+                <td th:text="${'$' + c.price}" style="font-weight: bold; color: #FF8E53;"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div id="floatingCalendar">
+        <header class="calendar-header">
+            <h3 style="margin:0; font-size:18px;" id="calTeacherName">老師課表</h3>
+            <p style="margin:4px 0 0; font-size:12px; opacity:0.8;">每週固定開放時段 (僅供參考)</p>
+        </header>
+        <div style="padding:15px; background:white;">
+            <table style="width:100%; font-size:11px; text-align:center; border:none;">
+                <thead>
+                    <tr>
+                        <th style="background:none;">時段</th>
+                        <th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th><th>日</th>
+                    </tr>
+                </thead>
+                <tbody id="calendarGrid"></tbody>
+            </table>
+            <div style="margin-top:12px; font-size:11px; display:flex; gap:15px; justify-content:center; border-top:1px solid #eee; padding-top:10px;">
+                <div style="display:flex; align-items:center; gap:4px;"><span style="width:12px; height:12px; background:#4CAF50; border-radius:2px;"></span> 開放</div>
+                <div style="display:flex; align-items:center; gap:4px;"><span style="width:12px; height:12px; background:#e2e8f0; border-radius:2px;"></span> 不開放</div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        // 1. 科目連動邏輯
+        const subjectMap = {
+            10: [{value:'11', label:'低年級'}, {value:'12', label:'中年級'}, {value:'13', label:'高年級'}],
+            20: [{value:'21', label:'GEPT'}, {value:'22', label:'YLE'}, {value:'23', label:'國中先修'}],
+            30: [{value:'31', label:'其他'}]
+        };
+
+        const categoryEl = document.getElementById('subjectCategory');
+        const detailEl   = document.getElementById('subjectDetail');
+
+        function renderDetailOptions(categoryVal, selectedSubject) {
+            const options = subjectMap[categoryVal] || [];
+            detailEl.innerHTML = '<option value="">所有小類</option>';
+            options.forEach(opt => {
+                const el = document.createElement('option');
+                el.value = opt.value;
+                el.textContent = opt.label;
+                if (String(selectedSubject) === String(opt.value)) el.selected = true;
+                detailEl.appendChild(el);
+            });
+        }
+
+        categoryEl.addEventListener('change', function() {
+            const val = parseInt(this.value);
+            if (val && subjectMap[val]) {
+                renderDetailOptions(val, null);
+                detailEl.style.display = 'inline-block';
+            } else {
+                detailEl.style.display = 'none';
+                detailEl.value = '';
+            }
+        });
+
+        // 初始化還原狀態 (Thymeleaf 注入)
+        window.onload = function() {
+            const cat = [[${currentSubjectCategory}]];
+            const sub = [[${currentSubject}]];
+            if (cat) {
+                renderDetailOptions(cat, sub);
+                detailEl.style.display = 'inline-block';
+            }
+        };
+
+        // 2. 課表邏輯 (包含快取與固定功能)
+        const cal = document.getElementById('floatingCalendar');
+        const calName = document.getElementById('calTeacherName');
+        const calGrid = document.getElementById('calendarGrid');
+        const scheduleCache = {}; 
+        let isPinned = false;
+
+        function renderGrid(data) {
+            calGrid.innerHTML = '';
+            for (let hour = 9; hour <= 21; hour++) {
+                const row = document.createElement('tr');
+                const timeCell = document.createElement('td');
+                timeCell.textContent = hour + ':00';
+                row.appendChild(timeCell);
+
+                for (let d = 1; d <= 7; d++) {
+                    const cell = document.createElement('td');
+                    cell.className = (data[d] && data[d].includes(hour)) ? 'bg-available' : 'bg-unavailable';
+                    row.appendChild(cell);
+                }
+                calGrid.appendChild(row);
+            }
+        }
+
+        function loadSchedule(tutorId) {
+            if (scheduleCache[tutorId]) {
+                renderGrid(scheduleCache[tutorId]);
+            } else {
+                calGrid.innerHTML = '<tr><td colspan="8" style="padding:20px;">載入中...</td></tr>';
+                fetch(`/view/teacher_schedule/${tutorId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        scheduleCache[tutorId] = data;
+                        renderGrid(data);
+                    });
+            }
+        }
+
+        function showCalendar(e, name, tutorId) {
+            if (isPinned) return;
+            calName.innerText = name + ' 的預約時段';
+            cal.style.display = 'block';
+            cal.style.position = 'absolute';
+            cal.style.transform = '';
+            cal.style.pointerEvents = 'none';
+            moveCalendar(e);
+            loadSchedule(tutorId);
+        }
+
+        function moveCalendar(e) {
+            if (isPinned) return;
+            let x = e.pageX + 15;
+            let y = e.pageY + 15;
+            if (x + 470 > window.innerWidth) x = e.pageX - 470;
+            cal.style.left = x + 'px';
+            cal.style.top = y + 'px';
+        }
+
+        function pinCalendar(e, name, tutorId) {
+            e.stopPropagation();
+            isPinned = true;
+            cal.style.position = 'fixed';
+            cal.style.left = '50%';
+            cal.style.top = '50%';
+            cal.style.transform = 'translate(-50%, -50%)';
+            cal.style.pointerEvents = 'auto';
+            cal.style.display = 'block';
+            loadSchedule(tutorId);
+        }
+
+        function hideCalendar() {
+            if (!isPinned) cal.style.display = 'none';
+        }
+
+        document.addEventListener('click', () => {
+            if (isPinned) {
+                isPinned = false;
+                cal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
