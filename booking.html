@@ -3,149 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>【框線稿】預約結帳頁面</title>
+    <title>【全動態實測版】預約結帳頁面</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        .slot-btn { padding: 10px; border: 1px dashed #999; cursor: pointer; background: #fff; transition: 0.2s; border-radius: 8px; }
+        .slot-btn:hover { background: #f0f0f0; }
+        .slot-btn.selected { border: 2px solid #000; font-weight: bold; background: #FFF9E6; transform: scale(1.02); }
+        .slot-btn.booked { border: 1px solid #ccc; background: #eee; color: #999; cursor: not-allowed; }
+    </style>
 </head>
 <body style="font-family: sans-serif; color: #333; line-height: 1.5; padding: 20px; background-color: #f5f5f5;">
 
-    <header style="border: 2px solid #000; padding: 15px; margin-bottom: 20px; text-align: center; background-color: #fff;">
-        <h1>預約結帳頁面 (Wireframe)</h1>
+    <header style="border: 2px solid #000; padding: 15px; margin-bottom: 20px; text-align: center; background-color: #fff; border-radius: 12px;">
+        <h1>預約結帳頁面 (企業級優化版)</h1>
     </header>
 
     <div style="display: flex; gap: 20px; align-items: flex-start;">
-
         <main style="flex: 6.5; display: flex; flex-direction: column; gap: 20px;">
-
-            <section style="border: 1px solid #666; padding: 20px; background-color: #fff;">
+            <section style="border: 1px solid #ccc; padding: 20px; background-color: #fff; border-radius: 12px;">
                 <div style="display: flex; gap: 20px; align-items: flex-start;">
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
                         <div style="width: 100px; height: 100px; border: 1px dashed #999; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: #eee;">
                             [大頭貼]
                         </div>
-                        <span style="border: 1px solid #ccc; padding: 2px 8px; font-size: 0.8em;">⭐ 4.9 (120則)</span>
                     </div>
-
                     <div style="flex-grow: 1;">
-                        <h2 style="margin: 0 0 5px 0;">課程名稱</h2>
-                        <p style="margin: 0 0 10px 0; color: #666;">Sunny Chen 老師</p>
-                        
-
-                        <p style="border: 1px dashed #999; padding: 10px; background-color: #fafafa; margin: 0;">
-                            課程介紹
+                        <h2 style="margin: 0 0 5px 0;" id="display-course-name">載入中...</h2>
+                        <p style="margin: 0 0 10px 0; color: #666;" id="teacher-name">載入中...</p>
+                        <p style="border: 1px dashed #999; padding: 10px; background-color: #fafafa; margin: 0; border-radius: 8px;">
+                            精選優質課程，馬上劃位預約！
                         </p>
                     </div>
                 </div>
             </section>
 
-            <section style="border: 1px solid #666; padding: 20px; background-color: #fff;">
-                
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-                    <div>
-                        <h3 style="margin: 0;">📅 請選擇您想預約的時段</h3>
-                        <p style="margin: 0; font-size: 0.8em; color: #666;">可多選，每格為 1 小時</p>
-                    </div>
-                    <div style="border: 1px solid #ccc; padding: 5px 10px;">
-                        <strong>2023年 10月</strong>
-                        <button>&lt;</button>
-                        <button>&gt;</button>
-                    </div>
-                </div>
-
+            <section style="border: 1px solid #ccc; padding: 20px; background-color: #fff; border-radius: 12px;">
+                <h3 style="margin: 0 0 20px 0; border-bottom: 1px solid #ccc; padding-bottom: 10px;">📅 請選擇您想預約的時段 (顯示未來 4 週)</h3>
                 <div style="overflow-x: auto;">
-                    <div style="min-width: 600px;">
-                        
-                        <div style="display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 10px; margin-bottom: 10px; text-align: center;">
-                            <div></div>
-                            <div>週一<br><strong>23</strong></div>
-                            <div>週二<br><strong>24</strong></div>
-                            <div style="border: 2px solid #000;">週三<br><strong>25</strong> (今日)</div>
-                            <div>週四<br><strong>26</strong></div>
-                            <div>週五<br><strong>27</strong></div>
-                            <div>週六<br><strong>28</strong></div>
-                            <div>週日<br><strong>29</strong></div>
-                        </div>
-
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            
-                            <div style="display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 10px; align-items: center;">
-                                <div style="text-align: right; padding-right: 10px; font-size: 0.9em; color: #666;">09:00</div>
-                                <button style="padding: 10px; border: 1px dashed #999;">可預約</button>
-                                <button style="padding: 10px; border: 1px dashed #999;">可預約</button>
-                                <div style="padding: 10px; border: 1px solid #ccc; background-color: #eee; text-align: center; font-size: 0.8em;">- (無班)</div>
-                                <button style="padding: 10px; border: 1px dashed #999;">可預約</button>
-                                <button style="padding: 10px; border: 2px solid #000; font-weight: bold;">☑ 已選擇</button>
-                                <div style="padding: 10px; border: 1px solid #ccc; background-color: #ddd; text-align: center; font-size: 0.8em;">已滿</div>
-                                <button style="padding: 10px; border: 1px dashed #999;">可預約</button>
-                            </div>
-
-                            <div style="display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 10px; align-items: center;">
-                                <div style="text-align: right; padding-right: 10px; font-size: 0.9em; color: #666;">10:00</div>
-                                <button style="padding: 10px; border: 1px dashed #999;">可預約</button>
-                                <div style="padding: 10px; border: 1px solid #ccc; background-color: #ddd; text-align: center; font-size: 0.8em;">已滿</div>
-                                <button style="padding: 10px; border: 1px dashed #999;">可預約</button>
-                                <button style="padding: 10px; border: 1px dashed #999;">可預約</button>
-                                <button style="padding: 10px; border: 1px dashed #999;">可預約</button>
-                                <button style="padding: 10px; border: 1px dashed #999;">可預約</button>
-                                <div style="padding: 10px; border: 1px solid #ccc; background-color: #eee; text-align: center; font-size: 0.8em;">- (無班)</div>
-                            </div>
-
-                            <div style="text-align: center; color: #999; padding: 10px;">... 更多時間列 ...</div>
-
-                        </div>
+                    <div id="calendar-body" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <div style="text-align: center; padding: 20px; width: 100%; color: #666;">⏳ 正在向後端撈取班表資料...</div>
                     </div>
                 </div>
             </section>
-
         </main>
 
-        <aside style="flex: 3.5; border: 2px solid #000; padding: 20px; background-color: #fff; position: sticky; top: 20px;">
-            
+        <aside style="flex: 3.5; border: 2px solid #000; padding: 20px; background-color: #fff; position: sticky; top: 20px; border-radius: 12px;">
             <div style="border-bottom: 1px solid #ccc; padding-bottom: 15px; margin-bottom: 15px;">
-                <h3 style="margin: 0 0 5px 0;">5 堂正式課 (9折)</h3>
-                <p style="margin: 0; font-size: 0.8em; color: #666;">方案總價：NT$ 2,250</p>
+                <h3 style="margin: 0 0 5px 0;">正式課預約</h3>
+                <p style="margin: 0; font-size: 0.8em; color: #666;">單價：NT$ <span id="display-unit-price">0</span> / 堂</p>
             </div>
 
-            <div style="min-height: 100px; border: 1px dashed #999; padding: 10px; margin-bottom: 20px; background-color: #fafafa;">
+            <div style="min-height: 100px; border: 1px dashed #999; padding: 10px; margin-bottom: 20px; background-color: #fafafa; border-radius: 8px;">
                 <p style="margin: 0 0 10px 0; font-size: 0.9em; font-weight: bold;">已選取的時段：</p>
-                
-                <div style="display: flex; justify-content: space-between; border: 1px solid #ccc; padding: 8px; margin-bottom: 5px; background-color: #fff;">
-                    <span style="font-size: 0.9em;">10/25 (三) 09:00 - 10:00</span>
-                    <button style="border: none; background: none; cursor: pointer;">❌</button>
-                </div>
-                
-                <div style="display: flex; justify-content: space-between; border: 1px solid #ccc; padding: 8px; margin-bottom: 5px; background-color: #fff;">
-                    <span style="font-size: 0.9em;">10/27 (五) 09:00 - 10:00</span>
-                    <button style="border: none; background: none; cursor: pointer;">❌</button>
-                </div>
+                <div id="cart-list"></div>
             </div>
 
             <div style="border-top: 1px solid #ccc; padding-top: 15px;">
-                
-            
-
                 <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
                     <div>
-                        <p style="margin: 0; font-size: 0.8em; color: #666;">共選取 2 堂課</p>
-                        <p style="margin: 0; font-size: 0.8em; color: orange;">(剩餘 3 堂可選)</p>
+                        <p style="margin: 0; font-size: 0.8em; color: #666;">共選取 <span id="summary-count" style="font-weight: bold; color: #000;">0</span> 堂</p>
                     </div>
                     <div style="text-align: right;">
                         <p style="margin: 0; font-size: 0.7em; color: #666;">總計金額</p>
-                        <strong style="font-size: 1.5em;">NT$ 2,250</strong>
+                        <strong style="font-size: 1.5em; color: orange;">NT$ <span id="summary-price">0</span></strong>
                     </div>
                 </div>
-
-                <button style="width: 100%; padding: 15px; background-color: #000; color: #fff; font-weight: bold; font-size: 1.1em; border: none; cursor: pointer; margin-bottom: 15px;">
-                    前往結帳 👉
+                <button id="checkout-btn" disabled style="width: 100%; padding: 15px; background-color: #ccc; color: #fff; font-weight: bold; font-size: 1.1em; border: none; cursor: not-allowed; margin-bottom: 15px; border-radius: 8px;">
+                    請先選擇時段
                 </button>
-
-                <div style="text-align: center; font-size: 0.7em; color: #666;">
-                    🔒 256-bit 加密結帳<br>
-                    🛡️ ECPay 綠界科技
-                </div>
             </div>
-
         </aside>
-
     </div>
 
+    <script>
+        // 🔗 【API 串接處 1】：定義後端伺服器的根目錄 URL (如果組員改 port 號，在這裡改)
+        const API_BASE_URL = 'http://localhost:8080/api';
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        const tutorId = urlParams.get('tutorId') || 1;
+        const courseId = urlParams.get('courseId') || 101;
+        const UNIT_PRICE = parseInt(urlParams.get('price')) || 500; 
+        
+        document.getElementById('display-course-name').textContent = urlParams.get('courseName') || '兒童生活情境對話';
+        document.getElementById('teacher-name').textContent = urlParams.get('tutorName') || 'Sunny Chen 老師';
+        document.getElementById('display-unit-price').textContent = UNIT_PRICE;
+        
+        let scheduleData = []; 
+        let selectedSlots = []; 
+
+        const calendarBody = document.getElementById('calendar-body');
+        const cartList = document.getElementById('cart-list');
+        const checkoutBtn = document.getElementById('checkout-btn');
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // 🔗 【API 串接處 2】：向後端抓取「老師的排班表」與「已預約紀錄」
+                // 對應 Spring Boot 的 @GetMapping("/{tutorId}")
+                const [schedRes, bookRes] = await Promise.all([
+                    axios.get(`${API_BASE_URL}/teacher/schedules/${tutorId}`),
+                    axios.get(`${API_BASE_URL}/bookings/tutor/${tutorId}`)
+                ]);
+
+                const schedules = schedRes.data; 
+                const bookings = bookRes.data;   
+                const now = new Date();
+
+                scheduleData = [];
+
+                schedules.forEach(s => {
+                    if (!s.isAvailable) return; 
+
+                    for (let weekOffset = 0; weekOffset < 4; weekOffset++) {
+                        const targetDate = new Date();
+                        const currentDay = targetDate.getDay() === 0 ? 7 : targetDate.getDay();
+                        const daysToAdd = (s.weekday + 7 - currentDay) % 7;
+                        
+                        targetDate.setDate(targetDate.getDate() + daysToAdd + (weekOffset * 7));
+                        targetDate.setHours(s.hour, 0, 0, 0);
+
+                        if (targetDate <= now) continue;
+
+                        const dateString = targetDate.toISOString().split('T')[0];
+
+                        const isBooked = bookings.some(b => {
+                            let bDateStr = Array.isArray(b.date) 
+                                ? `${b.date[0]}-${String(b.date[1]).padStart(2, '0')}-${String(b.date[2]).padStart(2, '0')}`
+                                : b.date;
+                            return bDateStr === dateString && b.hour === s.hour && b.slotLocked;
+                        });
+
+                        scheduleData.push({
+                            date: dateString,
+                            time: `${s.hour}:00`,
+                            hour: s.hour,
+                            isBooked: isBooked
+                        });
+                    }
+                });
+
+                scheduleData.sort((a, b) => a.date.localeCompare(b.date) || a.hour - b.hour);
+                renderCalendar();
+
+            } catch (error) {
+                console.error("❌ 撈取資料失敗：", error);
+                calendarBody.innerHTML = `<div style="padding: 20px; color: red;">❌ 無法取得班表，請確認 Spring Boot 是否啟動。</div>`;
+            }
+        });
+
+        function renderCalendar() {
+            calendarBody.innerHTML = '';
+            if(scheduleData.length === 0) {
+                calendarBody.textContent = '老師近期沒有開放時段喔！';
+                return;
+            }
+
+            const fragment = document.createDocumentFragment();
+            scheduleData.forEach(slot => {
+                const slotString = `${slot.date} ${slot.time}`;
+                const isSelected = selectedSlots.includes(slotString);
+
+                const btn = document.createElement('button');
+                btn.className = `slot-btn ${slot.isBooked ? 'booked' : ''} ${isSelected ? 'selected' : ''}`;
+                btn.innerHTML = `${slot.date} <br> <strong>${slot.time}</strong> <br> ${slot.isBooked ? '已滿' : (isSelected ? '☑ 已選' : '可預約')}`;
+                
+                if (!slot.isBooked) {
+                    btn.addEventListener('click', () => toggleSlot(slotString));
+                }
+                fragment.appendChild(btn);
+            });
+            calendarBody.appendChild(fragment);
+        }
+
+        function toggleSlot(slotString) {
+            if (selectedSlots.includes(slotString)) {
+                selectedSlots = selectedSlots.filter(s => s !== slotString);
+            } else {
+                selectedSlots.push(slotString);
+            }
+            renderCalendar();
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            cartList.innerHTML = '';
+            if (selectedSlots.length === 0) {
+                cartList.textContent = '尚未選擇任何時段';
+                cartList.style.color = '#999';
+                cartList.style.textAlign = 'center';
+            } else {
+                const fragment = document.createDocumentFragment();
+                selectedSlots.forEach(slot => {
+                    const div = document.createElement('div');
+                    div.style.cssText = "display: flex; justify-content: space-between; border: 1px solid #ccc; padding: 8px; margin-bottom: 5px; background-color: #fff; border-radius: 4px;";
+                    
+                    const span = document.createElement('span');
+                    span.textContent = slot; 
+                    
+                    const delBtn = document.createElement('button');
+                    delBtn.textContent = "❌";
+                    delBtn.style.cssText = "border: none; background: none; cursor: pointer;";
+                    delBtn.onclick = () => toggleSlot(slot);
+
+                    div.appendChild(span);
+                    div.appendChild(delBtn);
+                    fragment.appendChild(div);
+                });
+                cartList.appendChild(fragment);
+            }
+
+            const totalCount = selectedSlots.length;
+            let originalTotal = totalCount * UNIT_PRICE; 
+            let finalTotal = originalTotal;              
+            let discountTip = "";                        
+
+            if (totalCount >= 10) {
+                finalTotal = Math.floor(originalTotal * 0.90);
+                discountTip = "🎉 已享 9 折優惠！";
+            } else if (totalCount >= 5) {
+                finalTotal = Math.floor(originalTotal * 0.95);
+                discountTip = "🎉 已享 95 折優惠！";
+            }
+
+            document.getElementById('summary-count').textContent = totalCount;
+            const summaryPriceElem = document.getElementById('summary-price');
+            
+            if (finalTotal < originalTotal) {
+                summaryPriceElem.innerHTML = `
+                    <span style="text-decoration: line-through; color: #999; font-size: 0.6em; margin-right: 8px;">${originalTotal.toLocaleString()}</span>
+                    ${finalTotal.toLocaleString()}
+                    <div style="font-size: 0.5em; color: #e11d48; margin-top: 5px;">${discountTip}</div>
+                `;
+            } else {
+                summaryPriceElem.textContent = finalTotal.toLocaleString();
+            }
+
+            if (totalCount > 0) {
+                checkoutBtn.disabled = false;
+                checkoutBtn.style.backgroundColor = "#000";
+                checkoutBtn.style.cursor = "pointer";
+                checkoutBtn.textContent = "前往結帳 👉";
+            } else {
+                checkoutBtn.disabled = true;
+                checkoutBtn.style.backgroundColor = "#ccc";
+                checkoutBtn.style.cursor = "not-allowed";
+                checkoutBtn.textContent = "請先選擇時段";
+            }
+        }
+
+        checkoutBtn.addEventListener('click', async () => {
+            if(selectedSlots.length === 0) return;
+
+            const formattedSlots = selectedSlots.map(slotStr => {
+                const [datePart, timePart] = slotStr.split(' ');
+                return { date: datePart, hour: parseInt(timePart.split(':')[0], 10) };
+            });
+
+            const simulatedUserId = localStorage.getItem('userId') || 9527;
+
+            const orderPayload = {
+                studentId: parseInt(simulatedUserId), 
+                courseId: parseInt(courseId), 
+                selectedSlots: formattedSlots 
+            };
+            
+            checkoutBtn.textContent = "資料傳送中... ⏳";
+            checkoutBtn.disabled = true;
+            checkoutBtn.style.backgroundColor = "#666";
+
+            try {
+                // 🔗 【API 串接處 3】：將訂單 payload 以 POST 方式傳送給結帳 Controller
+                // 對應 Spring Boot CheckoutController 的 @PostMapping("/purchase")
+                const response = await axios.post(`${API_BASE_URL}/shop/purchase`, orderPayload);
+                alert("🎉 " + response.data.msg); 
+                
+                selectedSlots = [];
+                window.location.reload();
+                
+            } catch (error) {
+                if (error.response && error.response.status === 402) {
+                    alert("💸 結帳失敗：" + error.response.data.msg + " (請先去儲值！)");
+                } else if (error.response && error.response.data) {
+                    alert("🚨 發生錯誤：" + error.response.data.msg);
+                } else {
+                    alert("🚨 伺服器連線異常！");
+                }
+            } finally {
+                updateCartUI();
+            }
+        });
+    </script>
 </body>
 </html>
