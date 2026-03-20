@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <header class="border-bottom py-2">
+  <header class="border-bottom py-2 fixed-top navbar-light bg-light">
     <div class="container">
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex">
@@ -81,26 +81,51 @@
       </div>
     </div>
     <!-- marquee end -->
-     <section class="container">  
-      <div class="my-5 border border-dark border-2 rounded-5 p-5 bg-white shadow-sm" style="height: 480px;">
+     <section class="overflow-hidden border-bottom">  
+      <div class="container position-relative ">
+        <ul
+          class="d-none d-lg-block list-unstyled position-absolute end-0 pt-1"
+          style="rotate: 8deg; transform: scale(4); transform-origin: top right;"
+        >
+          <li class="rounded-pill px-5 py-1 bg-secondary text-center">
+            <p style="font-size: 8px;">\ \ FIND YOUR TUTOR / /</p>
+          </li>
+          <a href="#" class="d-block text-decoration-none ">
+            <li class="rounded-pill px-5 py-1 bg-success text-center">
+                <p class="mb-0 fw-bold fst-italic" style="font-size: 8px;">
+                  LEVEL UP ! LEARN BETTER ! <br>
+                  <span class="text-primary">STUDY NOW!!</span>
+                </p>
+            </li>
+          </a>
+          <li class="rounded-pill px-5 py-1 bg-secondary text-center">
+            <p style="font-size: 8px;">\ \ PICK YOUR COURSE / /</p>
+          </li>
+
+          <li class="rounded-pill px-5 py-1 bg-secondary text-center">
+            <p style="font-size: 8px;">\ \ SPEAK WITH CONFIDENCE / /</p>
+          </li>
+        </ul>
+      <div class="my-5 border border-dark border-2 rounded-5 p-5 bg-white shadow-sm bg-dark" style="height: 480px;">
         <div class="row position-relative">
-          <div class="col">
-            <h3 class="display-4 tilt-warp text-primary">LEARNING ✦</h3>
+          <div class="col-12 col-lg-7 text-light">
+            <h3 class="display-4 tilt-warp">LEARNING ✦</h3>
             <h5>英文 | 從選對課開始</h5>
-            <p>整合基礎課程、證照準備與進階學習內容，
-幫助你依照需求快速找到合適課程。<br>
-不論是英檢準備、能力培養，還是實際應用提升，都能更有效率地開始。</p>
+            <p class="mt-4">整合基礎課程、證照準備與進階學習內容，<br>
+               幫助你依照需求快速找到合適課程。<br>
+               不論是英檢準備、能力培養，還是實際應用提升，<br>
+               都能更有效率地開始。
+            </p>
+
+            <div class="row">
+              
+            </div>
           </div>
           <div class="col">
 
           </div>
-          <ul class="list-unstyled position-absolute end-0" style="rotate: 8deg;">
-              <li><a href="#" class="rounded-pill px-5 py-1 text-decoration-none bg-secondary"></a></li>
-              <li><a href="#" class="rounded-pill px-5 py-1 text-decoration-none bg-secondary"></a></li>
-              <li><a href="#" class="rounded-pill px-5 py-1 text-decoration-none bg-secondary"></a></li>
-              <li><a href="#" class="rounded-pill px-5 py-1 text-decoration-none bg-secondary"></a></li>
-            </ul>
         </div>
+      </div>
       </div>
      </section>
 
@@ -121,7 +146,7 @@
 
               <div class="d-inline-block">✦</div>
             </h2>
-            <p style="max-width: 840px">
+            <p>
               提供基礎程以及證照等專業課程。不管你在找的是針對檢定考試的課程，還是透過紮實課程提升實力的基礎課程
               、進階課程
               、高階課程等，我們都可以滿足你的需求，並提供最即時的學生評價回饋數據，供您參考選擇。
