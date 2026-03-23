@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tutor/${id}</title>
+    <link rel="stylesheet" href="./assets/scss/all.scss" />
+  </head>
+  <body>
+    <header class="border-bottom py-2 fixed-top navbar-light bg-light">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex">
+            <a href="index.html" class="text-decoration-none">
+              <h1 class="nunito fst-italic display-5 pt-2">Merge</h1>
+            </a>
+          </div>
+          <nav class="ms-auto pt-2">
+            <ul class="list-unstyled d-flex align-items-center mb-0">
+              <li>
+                <a href="#" class="text-decoration-none px-3 ms-auto"
+                  >我要找學生</a
+                >
+              </li>
+              <li>
+                <a href="explore.html" class="text-decoration-none px-3"
+                  >我要找老師</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-decoration-none px-3">註冊送代幣</a>
+              </li>
+
+              <li id="auth-nav-item">
+                <a
+                  href="login.html"
+                  class="text-decoration-none px-3 pe-0 text-primary fw-bold"
+                  >LOGIN</a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section class="bg-gray vh-100">
+      <div class="container mt-5 pt-5">
+        <div class="text-center my-5">
+          <h3 class="zen-maru-gothic-light display-4">PICK YOUR TUTOR</h3>
+          <p>老師列表</p>
+        </div>
+        <div class="row mx-auto mt-5">
+          <div class="row row-cols-lg-4 row-cols-md-2">
+            <div class="col">
+              <div class="card bg-success border position-relative h-100">
+                <span
+                  class="badge border border-dark text-drak bg-secondary position-absolute translate-middle-y top-0"
+                  style="left: -2px"
+                  >Teacher From TW.</span
+                >
+                <img
+                  src="./assets/img/Ms.Lianne.png"
+                  class="border-bottom bg-line h-50 object-fit-cover"
+                  alt="..."
+                />
+                <div class="card-body position-relative">
+                  <div class="d-flex align-items-center">
+                    <h5
+                      class="mb-0 sansTeg border border-2 d-inline-block border-secondary rounded-circle"
+                    >
+                      Ms.Lianne
+                    </h5>
+
+                    <span
+                      class="ms-auto badge text-dark border rounded-pill bg-light"
+                      >★ 4.9</span
+                    >
+                  </div>
+                  <span
+                    class="position-absolute translate-middle-y display-5 text-secondary end-0"
+                    style="top: -2px"
+                    >✦</span
+                  >
+
+                  <div class="card-text">
+                    <p class="nunito ps-1 mb-0 d-inline-block px-1">
+                      兒童生活情景對話
+                    </p>
+                    <br />
+                    <small class="fw-light bg-light ps-1"
+                      >Adult Speaking / GEPT</small
+                    >
+                    <small class="fw-light bg-light ps-1">1200+ lessons</small>
+                  </div>
+                </div>
+
+                <div class="card-footer border-bottom">
+                  <div class="row pt-2">
+                    <div class="col">
+                      <div class="d-flex flex-column ps-1">
+                        <span class="mb-0" style="font-size: 14px"
+                          >體驗課<span
+                            class="fw-light bg-secondary text-light ms-1"
+                            style="font-size: 12px"
+                            >首堂優惠</span
+                          ></span
+                        >
+
+                        <p class="sansTeg text-secondary mb-0">
+                          400
+                          <span class="mb-0 fw-light" style="font-size: 14px">
+                            / 60 mins
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="d-flex flex-column ps-1">
+                        <span class="mb-0" style="font-size: 14px"
+                          >單堂<span
+                            class="fw-light bg-primary text-light ms-1"
+                            style="font-size: 12px"
+                            >一般方案</span
+                          ></span
+                        >
+                        <p class="sansTeg text-primary mb-0">
+                          600
+                          <span class="mb-0 fw-light" style="font-size: 14px">
+                            / 60 mins
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-primary ms-auto my-2 border border-light shadow-sm w-100"
+                  >
+                    <p class="fs-5 mb-0 fw-bold">LET'S TALK +</p>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card bg-success border position-relative h-100">
+                <span
+                  class="badge border border-dark text-drak bg-secondary position-absolute translate-middle-y top-0"
+                  style="left: -2px"
+                  >Teacher From TW.</span
+                >
+                <img
+                  src="./assets/img/tutor.png"
+                  class="border-bottom bg-line h-50 object-fit-cover"
+                  alt="..."
+                />
+                <div class="card-body position-relative">
+                  <div class="d-flex align-items-center">
+                    <h5
+                      class="mb-0 sansTeg border border-2 d-inline-block border-secondary rounded-circle"
+                    >
+                      Ms.Emma
+                    </h5>
+                    <span
+                      class="ms-auto badge text-dark border rounded-pill bg-light"
+                      >★ 4.9</span
+                    >
+                  </div>
+                  <span
+                    class="position-absolute translate-middle-y display-5 text-secondary end-0"
+                    style="top: -2px"
+                    >✦</span
+                  >
+
+                  <div class="card-text">
+                    <p class="nunito ps-1 mb-0 d-inline-block px-1">
+                      兒童生活情景對話
+                    </p>
+                    <br />
+                    <small class="fw-light bg-light ps-1"
+                      >Adult Speaking / GEPT</small
+                    >
+                    <small class="fw-light bg-light ps-1">1200+ lessons</small>
+                  </div>
+                </div>
+
+                <div class="card-footer border-bottom">
+                  <div class="row pt-2">
+                    <div class="col">
+                      <div class="d-flex flex-column ps-1">
+                        <span class="mb-0" style="font-size: 14px"
+                          >體驗課<span
+                            class="fw-light bg-secondary text-light ms-1"
+                            style="font-size: 12px"
+                            >首堂優惠</span
+                          ></span
+                        >
+
+                        <p class="sansTeg text-secondary mb-0">
+                          400
+                          <span class="mb-0 fw-light" style="font-size: 14px">
+                            / 60 mins
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="d-flex flex-column ps-1">
+                        <span class="mb-0" style="font-size: 14px"
+                          >單堂<span
+                            class="fw-light bg-primary text-light ms-1"
+                            style="font-size: 12px"
+                            >一般方案</span
+                          ></span
+                        >
+                        <p class="sansTeg text-primary mb-0">
+                          600
+                          <span class="mb-0 fw-light" style="font-size: 14px">
+                            / 60 mins
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-primary ms-auto my-2 border border-light shadow-sm w-100"
+                  >
+                    <p class="fs-5 mb-0 fw-bold">LET'S TALK +</p>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
