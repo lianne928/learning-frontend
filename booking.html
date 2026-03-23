@@ -1,118 +1,152 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-TW">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>預約課程 - Merge</title>
     <link rel="stylesheet" href="./assets/scss/all.scss" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</head>
+  </head>
 
-<body style="font-family: sans-serif; color: #333; line-height: 1.5; padding: 20px; padding-top: 90px; background-color: #f5f5f5;">
-
+  <body
+    style="
+      font-family: sans-serif;
+      color: #333;
+      line-height: 1.5;
+      padding: 20px;
+      padding-top: 90px;
+      background-color: #f5f5f5;
+    "
+  >
     <!-- 導覽列 -->
     <header class="border-bottom py-2 fixed-top navbar-light bg-light">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex">
-                    <a href="index.html" class="text-decoration-none">
-                        <h1 class="nunito fst-italic display-5 pt-2">Merge</h1>
-                    </a>
-                </div>
-                <nav class="ms-auto pt-2">
-                    <ul class="list-unstyled d-flex align-items-center mb-0">
-                        <li><a href="#" class="text-decoration-none px-3 ms-auto">我要找學生</a></li>
-                        <li><a href="explore.html" class="text-decoration-none px-3">我要找老師</a></li>
-                        <li><a href="#" class="text-decoration-none px-3">註冊送代幣</a></li>
-                        <li id="auth-nav-item">
-                            <a href="login.html" class="text-decoration-none px-3 pe-0 text-primary fw-bold">LOGIN</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex">
+            <a href="index.html" class="text-decoration-none">
+              <h1 class="nunito fst-italic display-5 pt-2">Merge</h1>
+            </a>
+          </div>
+          <nav class="ms-auto pt-2">
+            <ul class="list-unstyled d-flex align-items-center mb-0">
+              <li>
+                <a href="#" class="text-decoration-none px-3 ms-auto"
+                  >我要找學生</a
+                >
+              </li>
+              <li>
+                <a href="explore.html" class="text-decoration-none px-3"
+                  >我要找老師</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-decoration-none px-3">註冊送代幣</a>
+              </li>
+              <li id="auth-nav-item">
+                <a
+                  href="login.html"
+                  class="text-decoration-none px-3 pe-0 text-primary fw-bold"
+                  >LOGIN</a
+                >
+              </li>
+            </ul>
+          </nav>
         </div>
+      </div>
     </header>
 
     <div class="booking-wrapper">
+      <main class="booking-main">
+        <!-- 課程資訊 -->
+        <section class="booking-card">
+          <div class="booking-course-info">
+            <img
+              id="tutor-avatar"
+              src="https://via.placeholder.com/70"
+              alt="老師頭像"
+              class="booking-avatar"
+            />
+            <div class="booking-course-text">
+              <h2 id="display-course-name">載入中...</h2>
+              <p id="teacher-name">載入中...</p>
+              <p class="booking-price-label">
+                單堂：<strong
+                  >NT$ <span id="display-unit-price">0</span></strong
+                >
+              </p>
+            </div>
+          </div>
+        </section>
 
-        <main class="booking-main">
+        <!-- 週行事曆 -->
+        <section class="booking-card">
+          <h3 class="booking-section-title">
+            📅 請選擇您想預約的時段
+            <span class="booking-section-hint">最多顯示未來 4 週</span>
+          </h3>
 
-            <!-- 課程資訊 -->
-            <section class="booking-card">
-                <div class="booking-course-info">
-                    <img id="tutor-avatar" src="https://via.placeholder.com/70" alt="老師頭像" class="booking-avatar">
-                    <div class="booking-course-text">
-                        <h2 id="display-course-name">載入中...</h2>
-                        <p id="teacher-name">載入中...</p>
-                        <p class="booking-price-label">單堂：<strong>NT$ <span id="display-unit-price">0</span></strong></p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 週行事曆 -->
-            <section class="booking-card">
-                <h3 class="booking-section-title">
-                    📅 請選擇您想預約的時段
-                    <span class="booking-section-hint">最多顯示未來 4 週</span>
-                </h3>
-
-                <div class="calendar-wrapper">
-                    <div class="calendar-nav">
-                        <button id="prev-week" disabled>←</button>
-                        <span class="calendar-week-label" id="week-label">載入中...</span>
-                        <button id="next-week">→</button>
-                    </div>
-
-                    <div class="calendar-track-wrapper">
-                        <div class="calendar-track" id="calendar-track">
-                            <div class="calendar-loading">⏳ 正在載入班表...</div>
-                        </div>
-                    </div>
-
-                    <div class="calendar-dots" id="calendar-dots">
-                        <div class="calendar-dot active" data-week="0"></div>
-                        <div class="calendar-dot" data-week="1"></div>
-                        <div class="calendar-dot" data-week="2"></div>
-                        <div class="calendar-dot" data-week="3"></div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- 右側購物車 -->
-        <aside class="booking-aside">
-            <div class="booking-aside-header">
-                <h3>正式課預約</h3>
-                <p>單價：NT$ <span id="display-unit-price-2">0</span> / 堂</p>
+          <div class="calendar-wrapper">
+            <div class="calendar-nav">
+              <button id="prev-week" disabled>←</button>
+              <span class="calendar-week-label" id="week-label">載入中...</span>
+              <button id="next-week">→</button>
             </div>
 
-            <div class="booking-cart-box">
-                <p class="booking-cart-title">已選取的時段：</p>
-                <div id="cart-list">
-                    <p class="booking-cart-empty">尚未選擇任何時段</p>
-                </div>
+            <div class="calendar-track-wrapper">
+              <div class="calendar-track" id="calendar-track">
+                <div class="calendar-loading">⏳ 正在載入班表...</div>
+              </div>
             </div>
 
-            <div class="booking-summary">
-                <div class="booking-summary-row">
-                    <p>共選取 <span id="summary-count" class="booking-count">0</span> 堂</p>
-                    <div class="booking-total">
-                        <p>總計金額</p>
-                        <strong>NT$ <span id="summary-price">0</span></strong>
-                    </div>
-                </div>
-                <button id="checkout-btn" disabled class="booking-checkout-btn booking-checkout-btn--disabled">
-                    請先選擇時段
-                </button>
-                <div class="booking-secure">
-                    🔒 256-bit 加密結帳 ｜ ECPay 綠界科技
-                </div>
+            <div class="calendar-dots" id="calendar-dots">
+              <div class="calendar-dot active" data-week="0"></div>
+              <div class="calendar-dot" data-week="1"></div>
+              <div class="calendar-dot" data-week="2"></div>
+              <div class="calendar-dot" data-week="3"></div>
             </div>
-        </aside>
+          </div>
+        </section>
+      </main>
+
+      <!-- 右側購物車 -->
+      <aside class="booking-aside">
+        <div class="booking-aside-header">
+          <h3>正式課預約</h3>
+          <p>單價：NT$ <span id="display-unit-price-2">0</span> / 堂</p>
+        </div>
+
+        <div class="booking-cart-box">
+          <p class="booking-cart-title">已選取的時段：</p>
+          <div id="cart-list">
+            <p class="booking-cart-empty">尚未選擇任何時段</p>
+          </div>
+        </div>
+
+        <div class="booking-summary">
+          <div class="booking-summary-row">
+            <p>
+              共選取 <span id="summary-count" class="booking-count">0</span> 堂
+            </p>
+            <div class="booking-total">
+              <p>總計金額</p>
+              <strong>NT$ <span id="summary-price">0</span></strong>
+            </div>
+          </div>
+          <button
+            id="checkout-btn"
+            disabled
+            class="booking-checkout-btn booking-checkout-btn--disabled"
+          >
+            請先選擇時段
+          </button>
+          <div class="booking-secure">
+            🔒 256-bit 加密結帳 ｜ ECPay 綠界科技
+          </div>
+        </div>
+      </aside>
     </div>
 
+    <script src="./assets/js/navbar.js"></script>
     <script src="./assets/js/booking.js"></script>
-</body>
-
+  </body>
 </html>

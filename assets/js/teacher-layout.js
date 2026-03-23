@@ -4,6 +4,12 @@
 
 const API_BASE_URL = 'http://localhost:8080/api';
 
+// ── 自動帶入 JWT Token（所有老師後台 API 都需要）──
+const _token = localStorage.getItem('jwt_token');
+if (_token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${_token}`;
+}
+
 // ── 手機版側邊欄開關 ──
 const sidebarToggle = document.getElementById('sidebar-toggle');
 const sidebar       = document.getElementById('teacher-sidebar');
@@ -55,12 +61,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // 從 localStorage 填入側邊欄姓名（登入時已存入，不需要再打 API）
+    // 從 localStorage 填入側邊欄姓名
     const userName = localStorage.getItem('userName');
     const nameEl   = document.getElementById('sidebar-name');
     if (nameEl && userName) nameEl.textContent = userName;
 
-    // 載入頭貼（需要打 API 取得 avatar）
+    // 載入頭貼
     if (tutorId) loadSidebarAvatar(tutorId);
 });
 
@@ -72,7 +78,6 @@ async function loadSidebarAvatar(tutorId) {
         const avatarEl  = document.getElementById('sidebar-avatar');
 
         if (avatarEl && avatarUrl) {
-            // 轉換 Google Drive 連結格式
             const match = avatarUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
             avatarEl.src = match
                 ? `https://lh3.googleusercontent.com/d/${match[1]}`
