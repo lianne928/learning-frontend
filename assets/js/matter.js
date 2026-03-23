@@ -193,10 +193,10 @@ Matter.World.add(engine.world, [
   peanut,
   star,
   gourd,
-  snowman,
+  // snowman,
   asterisk,
   clover,
-  plum,
+  // plum,
   leftWall,
   rightWall,
   top,
@@ -207,35 +207,41 @@ Matter.World.add(engine.world, [
 
 // 防止圖形高速穿牆，每幀檢查位置並強制拉回
 Matter.Events.on(engine, "beforeUpdate", function () {
-    const allBodies = [
-        cloud, peanut, star,
-        gourd, snowman, asterisk,
-        clover, plum, flower,
-    ];
-    const margin = 80;
+  const allBodies = [
+    cloud,
+    peanut,
+    star,
+    gourd,
+    snowman,
+    asterisk,
+    clover,
+    plum,
+    flower,
+  ];
+  const margin = 80;
 
-    allBodies.forEach((body) => {
-        const pos = body.position;
-        const vx = body.velocity.x;
-        const vy = body.velocity.y;
+  allBodies.forEach((body) => {
+    const pos = body.position;
+    const vx = body.velocity.x;
+    const vy = body.velocity.y;
 
-        if (pos.x < margin) {
-            Matter.Body.setPosition(body, { x: margin, y: pos.y });
-            Matter.Body.setVelocity(body, { x: Math.abs(vx) * 0.5, y: vy });
-        }
-        if (pos.x > area.clientWidth - margin) {
-            Matter.Body.setPosition(body, { x: area.clientWidth - margin, y: pos.y });
-            Matter.Body.setVelocity(body, { x: -Math.abs(vx) * 0.5, y: vy });
-        }
-        if (pos.y < margin) {
-            Matter.Body.setPosition(body, { x: pos.x, y: margin });
-            Matter.Body.setVelocity(body, { x: vx, y: Math.abs(vy) * 0.5 });
-        }
-        if (pos.y > 680 - margin) {
-            Matter.Body.setPosition(body, { x: pos.x, y: 680 - margin });
-            Matter.Body.setVelocity(body, { x: vx, y: -Math.abs(vy) * 0.5 });
-        }
-    });
+    if (pos.x < margin) {
+      Matter.Body.setPosition(body, { x: margin, y: pos.y });
+      Matter.Body.setVelocity(body, { x: Math.abs(vx) * 0.5, y: vy });
+    }
+    if (pos.x > area.clientWidth - margin) {
+      Matter.Body.setPosition(body, { x: area.clientWidth - margin, y: pos.y });
+      Matter.Body.setVelocity(body, { x: -Math.abs(vx) * 0.5, y: vy });
+    }
+    if (pos.y < margin) {
+      Matter.Body.setPosition(body, { x: pos.x, y: margin });
+      Matter.Body.setVelocity(body, { x: vx, y: Math.abs(vy) * 0.5 });
+    }
+    if (pos.y > 680 - margin) {
+      Matter.Body.setPosition(body, { x: pos.x, y: 680 - margin });
+      Matter.Body.setVelocity(body, { x: vx, y: -Math.abs(vy) * 0.5 });
+    }
+  });
 });
 
 // run
