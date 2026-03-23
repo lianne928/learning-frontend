@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>視訊教室 - Merge</title>
+    <link rel="stylesheet" href="./assets/scss/all.scss" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        /* ── Layout ──────────────────────────────────────────── */
+        #room-layout {
+            display: flex;
+            height: calc(100vh - 62px);
+            overflow: hidden;
+        }
+
+        /* ── Video Panel (left 70%) ──────────────────────────── */
+        #video-panel {
+            flex: 7;
+            position: relative;
+            background: #111;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-width: 0;
+        }
+
+        #remote-video-wrapper {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #remote-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        #remote-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 5rem;
+            background: #1a1a1a;
+            gap: 16px;
+        }
+
+        #remote-placeholder p {
+            font-size: 1rem;
+            color: #888;
+            margin: 0;
+        }
+
+        #remote-placeholder.hidden {
+            display: none;
+        }
+
+        #local-video-wrapper {
+            position: absolute;
+            bottom: 80px;
+            right: 16px;
+            width: 180px;
+            height: 120px;
+            border: 2px solid #464646;
+            box-shadow: 4px 4px 0 #464646;
+            background: #222;
+            overflow: hidden;
+            border-radius: 8px;
+            z-index: 10;
+        }
+
+        #local-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+            display: block;
+        }
+
+        #local-placeholder-icon {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #888;
+            background: #222;
+        }
+
+        /* ── Room Status Badge ───────────────────────────────── */
+        .room-status-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 10;
+            padding: 6px 14px;
+            border: 2px solid #464646;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 3px 3px 0 #464646;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .room-status-badge.waiting { background: #FFD500; color: #464646; }
+        .room-status-badge.active  { background: #CCFF00; color: #464646; }
+        .room-status-badge.ended   { background: #FF4433; color: #fff; }
+
+        /* ── Ended Overlay ───────────────────────────────────── */
+        #ended-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.75);
+            align-items: center;
+            justify-content: center;
+        }
+
+        #ended-overlay.show {
+            display: flex;
+        }
+
+        .ended-card {
+            background: #FFD500;
+            border: 2px solid #464646;
+            box-shadow: 6px 6px 0 #464646;
+            border-radius: 16px;
+            padding: 40px 48px;
+            text-align: center;
+        }
+
+        .ended-card h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #464646;
+            margin-bottom: 12px;
+        }
+
+        .ended-card p {
+            color: #464646;
+            margin-bottom: 24px;
+        }
+
+        .ended-card a {
+            display: inline-block;
+            padding: 10px 28px;
+            background: #464646;
+            color: #fff;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            border: 2px solid #464646;
+            box-shadow: 3px 3px 0 #222;
+        }
+
+        /* ── Control Bar ─────────────────────────────────────── */
+        #control-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 24px;
+            background: #fff;
+            border-top: 2px solid #464646;
+            flex-shrink: 0;
+        }
+
+        .ctrl-btn {
+            width: 52px;
+            height: 52px;
+            border: 2px solid #464646;
+            background: #fff;
+            font-size: 1.3rem;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 3px 3px 0 #464646;
+            transition: transform 0.08s, box-shadow 0.08s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #464646;
+        }
+
+        .ctrl-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0 #464646;
+        }
+
+        .ctrl-btn.muted   { background: #FF52D9; color: #fff; }
+        .ctrl-btn.cam-off { background: #464646; color: #fff; }
+        .ctrl-btn.sharing { background: #00E5FF; color: #464646; }
+        .ctrl-btn.danger  { background: #FF4433; color: #fff; border-color: #464646; }
+        .ctrl-btn.danger:hover { background: #cc2200; }
+
+        /* ── Chat Panel (right 30%) ──────────────────────────── */
+        #chat-panel {
+            flex: 3;
+            min-width: 280px;
+            max-width: 400px;
+            border-left: 2px solid #464646;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #chat-header {
+            padding: 14px 16px;
+            border-bottom: 2px solid #464646;
+            background: #0055FF;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        #chat-header h5 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        #chat-header small {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .peer-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            flex-shrink: 0;
+        }
+
+        .peer-dot.online  { background: #CCFF00; }
+        .peer-dot.offline { background: #aaa; }
+
+        /* ── Chat Messages ───────────────────────────────────── */
+        #chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #F4F6F8;
+        }
+
+        #chat-messages::-webkit-scrollbar { width: 4px; }
+        #chat-messages::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+
+        .msg-row {
+            display: flex;
+            flex-direction: column;
+            max-width: 85%;
+        }
+
+        .msg-row.mine   { align-self: flex-end; align-items: flex-end; }
+        .msg-row.theirs { align-self: flex-start; align-items: flex-start; }
+
+        .msg-bubble {
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 2px solid #464646;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .msg-row.mine .msg-bubble {
+            background: #0055FF;
+            color: #fff;
+            border-bottom-right-radius: 4px;
+            box-shadow: 3px 3px 0 #464646;
+        }
+
+        .msg-row.theirs .msg-bubble {
+            background: #fff;
+            color: #333;
+            border-bottom-left-radius: 4px;
+            box-shadow: 3px 3px 0 #464646;
+        }
+
+        .msg-meta {
+            font-size: 0.72rem;
+            color: #999;
+            margin-bottom: 3px;
+            padding: 0 2px;
+        }
+
+        .msg-image {
+            max-width: 200px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            display: block;
+        }
+
+        .msg-audio { width: 200px; }
+
+        .msg-video {
+            width: 100%;
+            max-width: 220px;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .msg-file-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: inherit;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .msg-file-link:hover { text-decoration: underline; }
+
+        /* ── Link Preview ────────────────────────────────────── */
+        .link-preview-card {
+            border: 2px solid #464646;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 3px 3px 0 #464646;
+            max-width: 240px;
+            margin-top: 6px;
+            cursor: pointer;
+        }
+
+        .link-preview-card img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .lp-body { padding: 8px 10px; }
+        .lp-title { font-weight: 700; font-size: 0.82rem; margin-bottom: 3px; color: #333; }
+        .lp-desc  {
+            font-size: 0.74rem;
+            color: #666;
+            margin-bottom: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .lp-url   { font-size: 0.7rem; color: #0055FF; }
+
+        /* ── Chat Input ──────────────────────────────────────── */
+        #chat-input-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border-top: 2px solid #464646;
+            background: #fff;
+            flex-shrink: 0;
+        }
+
+        #btn-attach {
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #464646;
+            padding: 6px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+        }
+
+        #btn-attach:hover { border-color: #464646; background: #F4F6F8; }
+
+        #chat-text-input {
+            flex: 1;
+            border: 2px solid #464646;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            outline: none;
+            min-width: 0;
+        }
+
+        #chat-text-input:focus {
+            border-color: #0055FF;
+            box-shadow: 0 0 0 2px rgba(0, 85, 255, 0.15);
+        }
+
+        #btn-send {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #464646;
+            background: #0055FF;
+            color: #fff;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 2px 2px 0 #464646;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        #btn-send:hover { background: #003ecc; }
+
+        /* ── Uploading indicator ─────────────────────────────── */
+        #btn-attach.uploading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* ── Responsive (mobile) ─────────────────────────────── */
+        @media (max-width: 767.98px) {
+            #room-layout {
+                flex-direction: column;
+                height: auto;
+                overflow: visible;
+            }
+
+            #video-panel {
+                flex: none;
+                height: 55vw;
+                min-height: 240px;
+            }
+
+            #chat-panel {
+                flex: none;
+                max-width: 100%;
+                border-left: none;
+                border-top: 2px solid #464646;
+                height: 50vh;
+            }
+
+            #local-video-wrapper {
+                width: 90px;
+                height: 60px;
+                bottom: 70px;
+                right: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body style="padding-top: 62px;">
+
+    <!-- ── Navbar ─────────────────────────────────────────── -->
+    <header class="border-bottom py-2 fixed-top navbar-light bg-light">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex">
+                    <a href="index.html" class="text-decoration-none">
+                        <h1 class="nunito fst-italic display-5 pt-2">Merge</h1>
+                    </a>
+                </div>
+                <nav class="ms-auto pt-2">
+                    <ul class="list-unstyled d-flex align-items-center mb-0">
+                        <li><a href="#" class="text-decoration-none px-3 ms-auto">我要找學生</a></li>
+                        <li><a href="explore.html" class="text-decoration-none px-3">我要找老師</a></li>
+                        <li><a href="#" class="text-decoration-none px-3">註冊送代幣</a></li>
+                        <li id="auth-nav-item">
+                            <a href="login.html" class="text-decoration-none px-3 pe-0 text-primary fw-bold">LOGIN</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── Room Layout ────────────────────────────────────── -->
+    <div id="room-layout">
+
+        <!-- Left: Video Panel -->
+        <section id="video-panel">
+
+            <!-- Status Badge -->
+            <div id="room-status-badge" class="room-status-badge waiting">
+                <span id="status-icon">⏳</span>
+                <span id="status-text">等待對方加入...</span>
+            </div>
+
+            <!-- Ended Overlay -->
+            <div id="ended-overlay">
+                <div class="ended-card">
+                    <h2>🎓 課程已結束</h2>
+                    <p>感謝參與本次課程！</p>
+                    <a href="index.html">回到首頁</a>
+                </div>
+            </div>
+
+            <!-- Remote Video -->
+            <div id="remote-video-wrapper">
+                <div id="remote-placeholder">
+                    <i class="bi bi-person-video3"></i>
+                    <p>等待對方開啟視訊...</p>
+                </div>
+                <video id="remote-video" autoplay playsinline></video>
+
+                <!-- Local Video PiP -->
+                <div id="local-video-wrapper">
+                    <video id="local-video" autoplay playsinline muted></video>
+                    <div id="local-placeholder-icon">
+                        <i class="bi bi-camera-video-off"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Bar -->
+            <div id="control-bar">
+                <button id="btn-mic" class="ctrl-btn" title="靜音">
+                    <i class="bi bi-mic-fill"></i>
+                </button>
+                <button id="btn-cam" class="ctrl-btn" title="關閉鏡頭">
+                    <i class="bi bi-camera-video-fill"></i>
+                </button>
+                <button id="btn-screen" class="ctrl-btn" title="分享螢幕">
+                    <i class="bi bi-display"></i>
+                </button>
+                <button id="btn-hangup" class="ctrl-btn danger" title="掛斷">
+                    <i class="bi bi-telephone-x-fill"></i>
+                </button>
+            </div>
+
+        </section>
+
+        <!-- Right: Chat Panel -->
+        <aside id="chat-panel">
+
+            <div id="chat-header">
+                <div>
+                    <h5>課程聊天室 💬</h5>
+                    <small>預約編號 #<span id="chat-booking-id">—</span></small>
+                </div>
+                <span id="peer-status-dot" class="peer-dot offline" title="對方連線狀態"></span>
+            </div>
+
+            <div id="chat-messages"></div>
+
+            <div id="chat-input-area">
+                <label id="btn-attach" title="附加檔案">
+                    <i class="bi bi-paperclip"></i>
+                    <input type="file" id="file-input" hidden
+                           accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.zip">
+                </label>
+                <input id="chat-text-input" type="text"
+                       placeholder="輸入訊息，按 Enter 送出..." autocomplete="off">
+                <button id="btn-send" title="送出">
+                    <i class="bi bi-send-fill"></i>
+                </button>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <!-- ── Scripts ────────────────────────────────────────── -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        // ═══════════════════════════════════════════════════
+        //  Config & Globals
+        // ═══════════════════════════════════════════════════
+        const API_BASE_URL = 'http://localhost:8080/api';
+        const WS_URL       = 'http://localhost:8080/ws';
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookingId = urlParams.get('bookingId');
+
+        const token    = localStorage.getItem('jwt_token');
+        const userId   = localStorage.getItem('userId');
+        // userRole stored as 'TUTOR' or 'STUDENT' from login.js
+        const userRole = (localStorage.getItem('userRole') || '').toLowerCase(); // 'tutor' | 'student'
+        const userName = localStorage.getItem('userName') || '我';
+
+        let stompClient       = null;
+        let peerConnection    = null;
+        let localStream       = null;
+        let screenStream      = null;
+        let isMicMuted        = false;
+        let isCamOff          = false;
+        let isSharingScreen   = false;
+        let isConnected       = false;
+        let iceCandidateQueue = [];
+
+        const ICE_CONFIG = {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' }
+            ]
+        };
+
+        // ═══════════════════════════════════════════════════
+        //  Init
+        // ═══════════════════════════════════════════════════
+        document.addEventListener('DOMContentLoaded', async () => {
+
+            // Guard: require token + bookingId
+            if (!token || !bookingId) {
+                alert('請先登入並透過有效連結進入教室');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            initNavbar();
+            document.getElementById('chat-booking-id').textContent = bookingId;
+
+            // Start in parallel
+            startLocalMedia();
+            connectStomp();
+            loadChatHistory();
+            fetchRoomStatus();
+
+            bindControls();
+            bindChat();
+        });
+
+        // ═══════════════════════════════════════════════════
+        //  Navbar (same pattern as explore.html)
+        // ═══════════════════════════════════════════════════
+        function initNavbar() {
+            const authNavItem = document.getElementById('auth-nav-item');
+            if (!token || !authNavItem) return;
+            try {
+                let base64Url = token.split('.')[1];
+                let base64    = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                while (base64.length % 4) { base64 += '='; }
+                const payload = JSON.parse(decodeURIComponent(
+                    atob(base64).split('').map(c =>
+                        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+                    ).join('')
+                ));
+                const realName = payload.name || userName || '會員';
+                authNavItem.innerHTML = `
+                    <span style="color:#2563EB;font-weight:bold;padding:0 15px;">👋 ${realName}</span>
+                    <a href="#" onclick="logout()" style="text-decoration:none;color:#d9534f;font-weight:bold;border-left:2px solid #d9534f;padding-left:15px;">登出</a>
+                `;
+            } catch (e) {
+                console.error('Token 解析失敗:', e);
+            }
+        }
+
+        function logout() {
+            if (confirm('確定要登出嗎？')) {
+                cleanup();
+                localStorage.removeItem('jwt_token');
+                localStorage.removeItem('userId');
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('userName');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  Local Media
+        // ═══════════════════════════════════════════════════
+        async function startLocalMedia() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                document.getElementById('local-video').srcObject = localStream;
+            } catch (err) {
+                console.warn('無法取得本地媒體：', err);
+                document.getElementById('local-placeholder-icon').style.display = 'flex';
+            }
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  STOMP / WebSocket
+        // ═══════════════════════════════════════════════════
+        function connectStomp() {
+            stompClient = new StompJs.Client({
+                webSocketFactory: () => new SockJS(WS_URL),
+                connectHeaders: {
+                    'Authorization': `Bearer ${token}`
+                },
+                reconnectDelay: 5000,
+                onConnect:    onStompConnected,
+                onDisconnect: () => { isConnected = false; },
+                onStompError: frame => console.error('STOMP error', frame)
+            });
+            stompClient.activate();
+        }
+
+        function onStompConnected() {
+            isConnected = true;
+
+            stompClient.subscribe(`/topic/room/${bookingId}/signal`, onSignalMessage);
+            stompClient.subscribe(`/topic/room/${bookingId}/chat`,   onChatMessage);
+            stompClient.subscribe(`/topic/room/${bookingId}/events`, onRoomEvent);
+            stompClient.subscribe(`/topic/room/${bookingId}/errors`, onRoomError);
+
+            publishEvent('joined');
+        }
+
+        function publishEvent(type) {
+            if (!isConnected || !stompClient) return;
+            stompClient.publish({
+                destination: `/app/event/${bookingId}`,
+                body: JSON.stringify({
+                    type:      type,
+                    role:      userRole,
+                    userId:    userId,
+                    timestamp: new Date().toISOString()
+                })
+            });
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  Room Status
+        // ═══════════════════════════════════════════════════
+        async function fetchRoomStatus() {
+            try {
+                const res = await axios.get(`${API_BASE_URL}/room/${bookingId}/participants`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                updateRoomStatusBadge(res.data.state);
+                if (res.data.state === 'ENDED') showEndedOverlay();
+            } catch (err) {
+                console.warn('無法取得房間狀態', err);
+            }
+        }
+
+        function updateRoomStatusBadge(state) {
+            const badge  = document.getElementById('room-status-badge');
+            const icons  = { WAITING: '⏳', ACTIVE: '🟢', ENDED: '🔴' };
+            const labels = { WAITING: '等待對方加入...', ACTIVE: '課程進行中', ENDED: '課程已結束' };
+            badge.className = 'room-status-badge ' + (state || 'waiting').toLowerCase();
+            document.getElementById('status-icon').textContent = icons[state]  || '⏳';
+            document.getElementById('status-text').textContent = labels[state] || state;
+        }
+
+        function showEndedOverlay() {
+            document.getElementById('ended-overlay').classList.add('show');
+            // Disable controls
+            ['btn-mic', 'btn-cam', 'btn-screen', 'btn-hangup'].forEach(id => {
+                document.getElementById(id).disabled = true;
+                document.getElementById(id).style.opacity = '0.4';
+            });
+            document.getElementById('btn-send').disabled = true;
+            document.getElementById('chat-text-input').disabled = true;
+            document.getElementById('btn-attach').style.pointerEvents = 'none';
+            document.getElementById('btn-attach').style.opacity = '0.4';
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  Room Events
+        // ═══════════════════════════════════════════════════
+        function onRoomEvent(frame) {
+            const evt = JSON.parse(frame.body);
+
+            if (evt.role === userRole) return; // ignore own events
+
+            if (evt.type === 'joined') {
+                document.getElementById('peer-status-dot').className = 'peer-dot online';
+                initiateCallIfCaller();
+            }
+
+            if (evt.type === 'left') {
+                document.getElementById('peer-status-dot').className = 'peer-dot offline';
+                if (peerConnection) { peerConnection.close(); peerConnection = null; }
+                const remoteVideo = document.getElementById('remote-video');
+                remoteVideo.srcObject = null;
+                document.getElementById('remote-placeholder').classList.remove('hidden');
+                updateRoomStatusBadge('WAITING');
+            }
+        }
+
+        function onRoomError(frame) {
+            const err = JSON.parse(frame.body);
+            console.error('Room error:', err.code, err.message);
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  WebRTC
+        // ═══════════════════════════════════════════════════
+        function createPeerConnection() {
+            if (peerConnection) { peerConnection.close(); }
+            peerConnection    = new RTCPeerConnection(ICE_CONFIG);
+            iceCandidateQueue = [];
+
+            // Add local tracks
+            if (localStream) {
+                localStream.getTracks().forEach(track => {
+                    peerConnection.addTrack(track, localStream);
+                });
+            }
+
+            // Receive remote stream
+            peerConnection.ontrack = event => {
+                const remoteVideo = document.getElementById('remote-video');
+                if (remoteVideo.srcObject !== event.streams[0]) {
+                    remoteVideo.srcObject = event.streams[0];
+                    document.getElementById('remote-placeholder').classList.add('hidden');
+                }
+            };
+
+            // Send ICE candidates via STOMP
+            peerConnection.onicecandidate = event => {
+                if (event.candidate && isConnected) {
+                    stompClient.publish({
+                        destination: `/app/signal/${bookingId}`,
+                        body: JSON.stringify({
+                            type:          'candidate',
+                            senderRole:    userRole,
+                            candidate:     event.candidate.candidate,
+                            sdpMid:        event.candidate.sdpMid,
+                            sdpMLineIndex: event.candidate.sdpMLineIndex
+                        })
+                    });
+                }
+            };
+
+            peerConnection.onconnectionstatechange = () => {
+                const state = peerConnection.connectionState;
+                if (state === 'connected')                        updateRoomStatusBadge('ACTIVE');
+                if (state === 'disconnected' || state === 'failed') updateRoomStatusBadge('WAITING');
+            };
+        }
+
+        // Student always initiates the offer
+        async function initiateCallIfCaller() {
+            if (userRole !== 'student') return;
+            createPeerConnection();
+            try {
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+                stompClient.publish({
+                    destination: `/app/signal/${bookingId}`,
+                    body: JSON.stringify({
+                        type:       'offer',
+                        senderRole: userRole,
+                        sdp:        peerConnection.localDescription.sdp
+                    })
+                });
+            } catch (err) {
+                console.error('建立 offer 失敗:', err);
+            }
+        }
+
+        async function onSignalMessage(frame) {
+            const msg = JSON.parse(frame.body);
+
+            // Ignore own signals
+            if (msg.senderRole === userRole) return;
+
+            if (msg.type === 'offer') {
+                createPeerConnection();
+                try {
+                    await peerConnection.setRemoteDescription({ type: 'offer', sdp: msg.sdp });
+                    await flushIceCandidates();
+                    const answer = await peerConnection.createAnswer();
+                    await peerConnection.setLocalDescription(answer);
+                    stompClient.publish({
+                        destination: `/app/signal/${bookingId}`,
+                        body: JSON.stringify({
+                            type:       'answer',
+                            senderRole: userRole,
+                            sdp:        answer.sdp
+                        })
+                    });
+                } catch (err) {
+                    console.error('處理 offer 失敗:', err);
+                }
+            }
+
+            else if (msg.type === 'answer') {
+                if (!peerConnection) return;
+                try {
+                    await peerConnection.setRemoteDescription({ type: 'answer', sdp: msg.sdp });
+                    await flushIceCandidates();
+                } catch (err) {
+                    console.error('處理 answer 失敗:', err);
+                }
+            }
+
+            else if (msg.type === 'candidate') {
+                const candidate = new RTCIceCandidate({
+                    candidate:     msg.candidate,
+                    sdpMid:        msg.sdpMid,
+                    sdpMLineIndex: msg.sdpMLineIndex
+                });
+                if (peerConnection && peerConnection.remoteDescription) {
+                    await peerConnection.addIceCandidate(candidate).catch(console.warn);
+                } else {
+                    iceCandidateQueue.push(candidate);
+                }
+            }
+        }
+
+        async function flushIceCandidates() {
+            while (iceCandidateQueue.length) {
+                await peerConnection.addIceCandidate(iceCandidateQueue.shift()).catch(console.warn);
+            }
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  Control Bar
+        // ═══════════════════════════════════════════════════
+        function bindControls() {
+            document.getElementById('btn-mic').addEventListener('click', toggleMic);
+            document.getElementById('btn-cam').addEventListener('click', toggleCam);
+            document.getElementById('btn-screen').addEventListener('click', toggleScreen);
+            document.getElementById('btn-hangup').addEventListener('click', hangUp);
+        }
+
+        function toggleMic() {
+            isMicMuted = !isMicMuted;
+            if (localStream) {
+                localStream.getAudioTracks().forEach(t => { t.enabled = !isMicMuted; });
+            }
+            const btn = document.getElementById('btn-mic');
+            btn.classList.toggle('muted', isMicMuted);
+            btn.querySelector('i').className = isMicMuted ? 'bi bi-mic-mute-fill' : 'bi bi-mic-fill';
+            btn.title = isMicMuted ? '取消靜音' : '靜音';
+        }
+
+        function toggleCam() {
+            isCamOff = !isCamOff;
+            if (localStream) {
+                localStream.getVideoTracks().forEach(t => { t.enabled = !isCamOff; });
+            }
+            const btn = document.getElementById('btn-cam');
+            btn.classList.toggle('cam-off', isCamOff);
+            btn.querySelector('i').className = isCamOff ? 'bi bi-camera-video-off-fill' : 'bi bi-camera-video-fill';
+            btn.title = isCamOff ? '開啟鏡頭' : '關閉鏡頭';
+            document.getElementById('local-placeholder-icon').style.display = isCamOff ? 'flex' : 'none';
+        }
+
+        async function toggleScreen() {
+            if (!isSharingScreen) {
+                try {
+                    screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                    const screenTrack = screenStream.getVideoTracks()[0];
+
+                    // Replace video track in peer connection
+                    if (peerConnection) {
+                        const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
+                        if (sender) sender.replaceTrack(screenTrack).catch(console.warn);
+                    }
+
+                    document.getElementById('local-video').srcObject = screenStream;
+                    isSharingScreen = true;
+                    document.getElementById('btn-screen').classList.add('sharing');
+                    document.getElementById('btn-screen').title = '停止分享';
+
+                    screenTrack.onended = stopScreenShare;
+                } catch (err) {
+                    console.warn('螢幕分享取消或失敗:', err);
+                }
+            } else {
+                stopScreenShare();
+            }
+        }
+
+        function stopScreenShare() {
+            if (screenStream) {
+                screenStream.getTracks().forEach(t => t.stop());
+                screenStream = null;
+            }
+            // Restore camera track
+            if (localStream && peerConnection) {
+                const camTrack = localStream.getVideoTracks()[0];
+                const sender   = peerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
+                if (sender && camTrack) sender.replaceTrack(camTrack).catch(console.warn);
+            }
+            if (localStream) document.getElementById('local-video').srcObject = localStream;
+            isSharingScreen = false;
+            document.getElementById('btn-screen').classList.remove('sharing');
+            document.getElementById('btn-screen').title = '分享螢幕';
+        }
+
+        function hangUp() {
+            if (!confirm('確定要離開教室嗎？')) return;
+            publishEvent('left');
+            cleanup();
+            window.location.href = 'index.html';
+        }
+
+        function cleanup() {
+            if (localStream)    { localStream.getTracks().forEach(t => t.stop());    localStream    = null; }
+            if (screenStream)   { screenStream.getTracks().forEach(t => t.stop());   screenStream   = null; }
+            if (peerConnection) { peerConnection.close();                             peerConnection = null; }
+            if (stompClient)    { stompClient.deactivate();                           stompClient    = null; }
+            isConnected = false;
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  Chat — History
+        // ═══════════════════════════════════════════════════
+        async function loadChatHistory() {
+            try {
+                const res = await axios.get(`${API_BASE_URL}/chatMessage/booking/${bookingId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                (res.data || []).forEach(msg => appendMessage(msg, msg.role === userRole));
+                scrollChatToBottom();
+            } catch (err) {
+                console.error('無法載入聊天記錄', err);
+            }
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  Chat — Incoming
+        // ═══════════════════════════════════════════════════
+        function onChatMessage(frame) {
+            const msg = JSON.parse(frame.body);
+            appendMessage(msg, msg.role === userRole);
+            scrollChatToBottom();
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  Chat — Send & Upload
+        // ═══════════════════════════════════════════════════
+        function bindChat() {
+            const input    = document.getElementById('chat-text-input');
+            const btnSend  = document.getElementById('btn-send');
+            const fileInput = document.getElementById('file-input');
+
+            input.addEventListener('keydown', e => {
+                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendTextMessage(); }
+            });
+            btnSend.addEventListener('click', sendTextMessage);
+            fileInput.addEventListener('change', handleFileUpload);
+        }
+
+        function sendTextMessage() {
+            if (!isConnected) { alert('尚未連線，請稍候再試'); return; }
+            const input = document.getElementById('chat-text-input');
+            const text  = input.value.trim();
+            if (!text) return;
+
+            stompClient.publish({
+                destination: `/app/chat/${bookingId}`,
+                body: JSON.stringify({
+                    bookingId:   parseInt(bookingId),
+                    role:        userRole,
+                    messageType: 1,
+                    message:     text
+                })
+            });
+            input.value = '';
+        }
+
+        async function handleFileUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            e.target.value = '';
+
+            const btnAttach = document.getElementById('btn-attach');
+            btnAttach.classList.add('uploading');
+
+            const formData = new FormData();
+            formData.append('file',      file);
+            formData.append('bookingId', bookingId);
+            formData.append('role',      userRole);
+
+            try {
+                const res = await axios.post(`${API_BASE_URL}/chatMessage/upload`, formData, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type':  'multipart/form-data'
+                    }
+                });
+                // Send message via STOMP so both parties receive it
+                const mediaUrl = res.data.mediaUrl || '';
+                const msgType  = detectMessageType(file.type);
+                if (isConnected) {
+                    stompClient.publish({
+                        destination: `/app/chat/${bookingId}`,
+                        body: JSON.stringify({
+                            bookingId:   parseInt(bookingId),
+                            role:        userRole,
+                            messageType: msgType,
+                            message:     file.name,
+                            mediaUrl:    mediaUrl
+                        })
+                    });
+                }
+            } catch (err) {
+                alert('檔案上傳失敗：' + (err.response?.data?.message || err.message));
+            } finally {
+                btnAttach.classList.remove('uploading');
+            }
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  Chat — Render
+        // ═══════════════════════════════════════════════════
+        function appendMessage(msg, isMine) {
+            const container = document.getElementById('chat-messages');
+            const type = msg.messageType || 1;
+
+            const row = document.createElement('div');
+            row.className = `msg-row ${isMine ? 'mine' : 'theirs'}`;
+
+            const meta = document.createElement('div');
+            meta.className = 'msg-meta';
+            const roleName = msg.role === 'tutor' ? '老師' : '學生';
+            meta.textContent = `${isMine ? '我' : roleName} · ${formatTime(msg.createdAt)}`;
+
+            const bubble = document.createElement('div');
+            bubble.className = 'msg-bubble';
+
+            if (type === 1) {
+                // TEXT
+                bubble.textContent = msg.message;
+                const url = extractUrl(msg.message);
+                if (url) fetchAndAppendLinkPreview(url, row);
+
+            } else if (type === 4) {
+                // IMAGE
+                const img = document.createElement('img');
+                img.className = 'msg-image';
+                img.src = resolveMediaUrl(msg.mediaUrl);
+                img.alt = '圖片';
+                img.onclick = () => window.open(img.src, '_blank');
+                bubble.appendChild(img);
+
+            } else if (type === 3) {
+                // VOICE
+                const audio = document.createElement('audio');
+                audio.className = 'msg-audio';
+                audio.src = resolveMediaUrl(msg.mediaUrl);
+                audio.controls = true;
+                bubble.appendChild(audio);
+
+            } else if (type === 5) {
+                // VIDEO
+                const video = document.createElement('video');
+                video.className = 'msg-video';
+                video.src = resolveMediaUrl(msg.mediaUrl);
+                video.controls = true;
+                bubble.appendChild(video);
+
+            } else if (type === 6) {
+                // FILE
+                const a = document.createElement('a');
+                a.className = 'msg-file-link';
+                a.href = buildDownloadUrl(msg.mediaUrl);
+                a.download = msg.message || '下載檔案';
+                a.target = '_blank';
+                const icon = document.createElement('i');
+                icon.className = 'bi bi-file-earmark-arrow-down';
+                a.appendChild(icon);
+                a.appendChild(document.createTextNode(' ' + (msg.message || '附件')));
+                bubble.appendChild(a);
+
+            } else if (type === 2) {
+                // STICKER
+                bubble.style.cssText += 'font-size:2.5rem;border:none;background:transparent;box-shadow:none;padding:4px;';
+                bubble.textContent = msg.message;
+            }
+
+            row.appendChild(meta);
+            row.appendChild(bubble);
+            container.appendChild(row);
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  Link Preview
+        // ═══════════════════════════════════════════════════
+        async function fetchAndAppendLinkPreview(url, rowEl) {
+            try {
+                const res = await axios.get(`${API_BASE_URL}/linkPreview`, {
+                    params:  { url },
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = res.data;
+                if (!data || !data.title) return;
+
+                const card = document.createElement('div');
+                card.className = 'link-preview-card';
+                card.onclick = () => window.open(url, '_blank');
+
+                if (data.imageUrl) {
+                    const img = document.createElement('img');
+                    img.src  = data.imageUrl;
+                    img.alt  = data.title;
+                    img.onerror = () => img.remove();
+                    card.appendChild(img);
+                }
+                const body = document.createElement('div');
+                body.className = 'lp-body';
+                body.innerHTML =
+                    `<div class="lp-title">${escapeHtml(data.title)}</div>` +
+                    (data.description ? `<div class="lp-desc">${escapeHtml(data.description)}</div>` : '') +
+                    `<div class="lp-url">${escapeHtml(safeHostname(data.url || url))}</div>`;
+                card.appendChild(body);
+                rowEl.appendChild(card);
+                scrollChatToBottom();
+            } catch { /* silent */ }
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  Helpers
+        // ═══════════════════════════════════════════════════
+        function scrollChatToBottom() {
+            const el = document.getElementById('chat-messages');
+            el.scrollTop = el.scrollHeight;
+        }
+
+        function formatTime(isoStr) {
+            if (!isoStr) return '';
+            try {
+                return new Date(isoStr).toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
+            } catch { return ''; }
+        }
+
+        function extractUrl(text) {
+            const m = (text || '').match(/https?:\/\/[^\s]+/);
+            return m ? m[0] : null;
+        }
+
+        function resolveMediaUrl(mediaUrl) {
+            if (!mediaUrl) return '';
+            if (mediaUrl.startsWith('http')) return mediaUrl;
+            return API_BASE_URL + (mediaUrl.startsWith('/') ? '' : '/') + mediaUrl;
+        }
+
+        function buildDownloadUrl(mediaUrl) {
+            const filename = (mediaUrl || '').split('/').pop();
+            return `${API_BASE_URL}/chatMessage/download/${filename}?name=${encodeURIComponent(filename)}`;
+        }
+
+        function detectMessageType(mimeType) {
+            if (mimeType.startsWith('image/')) return 4;
+            if (mimeType.startsWith('audio/')) return 3;
+            if (mimeType.startsWith('video/')) return 5;
+            return 6;
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function safeHostname(url) {
+            try { return new URL(url).hostname; } catch { return url; }
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  Cleanup on page unload
+        // ═══════════════════════════════════════════════════
+        window.addEventListener('beforeunload', () => {
+            publishEvent('left');
+            cleanup();
+        });
+    </script>
+
+</body>
+</html>
