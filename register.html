@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Merge - 登入</title>
+  <title>Merge - 註冊</title>
   <link rel="stylesheet" href="./assets/scss/all.scss" />
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
@@ -40,12 +40,12 @@
 
   <main class="pb-5">
     <div class="bg-line border-bottom">
-      <h2 class="sansTitle text-center pt-5 text-drak">LOGIN</h2>
+      <h2 class="sansTitle text-center pt-5 text-drak">REGISTER</h2>
     </div>
 
     <section class="container">
       <div class="row justify-content-center mt-4">
-        <div class="col-11 col-md-3 card border-0 shadow-lg rounded-4 mb-3">
+        <div class="col-11 col-md-5 card border-0 shadow-lg rounded-4 mb-3">
           <div class="card-body d-flex justify-content-center align-items-center flex-column position-relative">
             <div
               class="bg-dark rounded-circle border border-2 border-dark position-absolute top-0 start-50 translate-middle d-flex align-items-center justify-content-center shadow"
@@ -54,26 +54,62 @@
                 style="width: 140px; height: 150px" autoplay loop></dotlottie-wc>
             </div>
 
-            <form class="mt-5 pt-4 w-100" id="loginForm">
+            <form class="mt-5 pt-4 w-100" id="registerForm">
+              <!-- 姓名 -->
               <div class="mb-3">
-                <label for="emailInput" class="form-label">請輸入你的信箱</label>
-                <input type="email" class="form-control" id="emailInput" required />
+                <label for="nameInput" class="form-label">姓名</label>
+                <input type="text" class="form-control" id="nameInput" placeholder="請輸入你的姓名" required />
               </div>
+
+              <!-- Email -->
               <div class="mb-3">
-                <label for="passwordInput" class="form-label">請輸入你的密碼</label>
-                <input type="password" class="form-control" id="passwordInput" required />
+                <label for="emailInput" class="form-label">信箱</label>
+                <input type="email" class="form-control" id="emailInput" placeholder="請輸入你的信箱" required />
               </div>
-              <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="rememberCheck" />
-                <label class="form-check-label" for="rememberCheck">記得我</label>
+
+              <!-- 密碼 -->
+              <div class="mb-3">
+                <label for="passwordInput" class="form-label">密碼</label>
+                <input type="password" class="form-control" id="passwordInput" placeholder="至少 8 個字元" minlength="8" required />
               </div>
-              <button type="submit" class="btn btn-primary w-100" id="loginBtn">
-                上課去！
+
+              <!-- 確認密碼 -->
+              <div class="mb-3">
+                <label for="confirmPasswordInput" class="form-label">確認密碼</label>
+                <input type="password" class="form-control" id="confirmPasswordInput" placeholder="再輸入一次密碼" required />
+                <div class="invalid-feedback" id="passwordMismatch">密碼不一致，請重新確認</div>
+              </div>
+
+              <!-- 生日 -->
+              <div class="mb-3">
+                <label for="birthdayInput" class="form-label">生日</label>
+                <input type="date" class="form-control" id="birthdayInput" />
+              </div>
+
+              <!-- 身份 -->
+              <div class="mb-4">
+                <label class="form-label">我的身份</label>
+                <div class="d-flex gap-2 justify-content-center">
+                  <input type="radio" class="btn-check" name="role" id="roleStudent" value="STUDENT" checked />
+                  <label class="btn btn-outline-primary btn-sm px-3" for="roleStudent">
+                    <span class="fw-bold">🎓 學生</span>
+                     <div class="text-muted small">我想找老師學習</div>
+                  </label>
+
+                  <input type="radio" class="btn-check" name="role" id="roleTutor" value="TUTOR" />
+                  <label class="btn btn-outline-primary btn-sm px-3" for="roleTutor">
+                    <span class="fw-bold">👨‍🏫 老師</span>
+                     <div class="text-muted small">我想要開課教學</div>
+                  </label>
+                </div>
+              </div>
+
+              <button type="submit" class="btn w-100" id="registerBtn" style="background-color: rgb(126, 233, 76);">
+                立即註冊 🎉
               </button>
 
-              <!-- 新增：前往註冊 -->
               <p class="text-center mt-3 small text-muted">
-                還沒有帳號？<a href="register.html" class="fw-bold text-decoration-none" style="color: rgb(102, 156, 95);">免費註冊 🎉</a>
+                已有帳號？<a href="login.html" class="text-primary fw-bold text-decoration-none">前往登入</a>
               </p>
             </form>
           </div>
@@ -115,9 +151,8 @@
   </footer>
 
   <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
-  <!-- 改成這樣（不用 type="module"，因為有用到全域 axios） -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="./assets/js/login.js"></script>
+  <script src="./assets/js/register.js"></script>
 
 </body>
 
