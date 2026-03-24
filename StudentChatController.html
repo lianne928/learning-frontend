@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge | StudentChatController</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/scss/all.scss">
+
+    <style>
+        /* ── 學生 sidebar nav icon 顏色（補強 SCSS 屬性選擇器無法匹配的學生頁面 href）── */
+        .student-nav-home   .material-symbols-outlined { color: #FFD000; }
+        .student-nav-home.active::before               { background-color: #FFD000; }
+
+        .student-nav-courses .material-symbols-outlined { color: #60A5FA; }
+        .student-nav-courses.active::before             { background-color: #60A5FA; }
+
+        .student-nav-teachers .material-symbols-outlined { color: #34D399; }
+        .student-nav-teachers.active::before             { background-color: #34D399; }
+
+        .student-nav-messages .material-symbols-outlined { color: #FB923C; }
+        .student-nav-messages.active::before             { background-color: #FB923C; }
+
+        .student-nav-settings .material-symbols-outlined { color: #94A3B8; }
+        .student-nav-settings.active::before             { background-color: #94A3B8; }
+
+        /* ── 聯絡人列表 ── */
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color, #E2E8F0);
+            transition: background 0.15s;
+        }
+        .contact-item:hover  { background: #f8fafc; }
+        .contact-item.active { background: #FFF7E6; }
+
+        .contact-avatar-wrap { position: relative; flex-shrink: 0; }
+        .contact-avatar {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e2e8f0;
+        }
+        .contact-status-dot {
+            position: absolute;
+            bottom: 1px; right: 1px;
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #22c55e;
+            border: 2px solid #fff;
+        }
+
+        .contact-info     { flex: 1; min-width: 0; }
+        .contact-top      { display: flex; justify-content: space-between; align-items: center; }
+        .contact-name     { font-weight: 700; font-size: 0.88rem; color: #1e293b; }
+        .contact-time     { font-size: 0.72rem; color: #94a3b8; white-space: nowrap; }
+        .contact-bottom   { display: flex; justify-content: space-between; align-items: center; margin-top: 2px; }
+        .contact-last     { font-size: 0.78rem; color: #64748b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; }
+        .contact-badge    { background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 700; border-radius: 10px; padding: 1px 6px; flex-shrink: 0; }
+        .contact-subject  { font-size: 0.7rem; color: #FB923C; font-weight: 600; margin-top: 2px; }
+
+        /* ── 聊天視窗 ── */
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-color, #E2E8F0);
+            background: #fff;
+            border-radius: 16px 16px 0 0;
+        }
+        .chat-header-avatar {
+            width: 40px; height: 40px;
+            border-radius: 50%; object-fit: cover;
+        }
+        .chat-header-info .teacher-name { font-weight: 700; font-size: 0.9rem; color: #1e293b; }
+        .chat-header-info .subject-tag  {
+            font-size: 0.72rem; font-weight: 600;
+            background: #FFF7E6; color: #FB923C;
+            border-radius: 6px; padding: 1px 8px;
+            display: inline-block; margin-top: 2px;
+        }
+
+        #chat-messages {
+            height: 420px;
+            overflow-y: auto;
+            padding: 20px 16px;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        #chat-messages::-webkit-scrollbar       { width: 4px; }
+        #chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        .msg-row           { display: flex; align-items: flex-end; gap: 8px; }
+        .msg-row--me       { flex-direction: row-reverse; }
+        .msg-avatar        { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+
+        .msg-bubble {
+            max-width: 65%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            position: relative;
+            word-break: break-word;
+        }
+        .msg-bubble--teacher {
+            background: #fff;
+            color: #1e293b;
+            border-radius: 4px 18px 18px 18px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+        }
+        .msg-bubble--me {
+            background: linear-gradient(135deg, #FB923C, #f97316);
+            color: #fff;
+            border-radius: 18px 18px 4px 18px;
+        }
+        .msg-time {
+            font-size: 0.65rem;
+            margin-top: 4px;
+            opacity: 0.6;
+            text-align: right;
+        }
+
+        .chat-input-area {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border-color, #E2E8F0);
+            background: #fff;
+            border-radius: 0 0 16px 16px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        #msg-input {
+            flex: 1;
+            resize: none;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 0.88rem;
+            max-height: 100px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        #msg-input:focus { border-color: #FB923C; }
+        .send-btn {
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #FB923C, #f97316);
+            border: none;
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: opacity 0.2s, transform 0.15s;
+        }
+        .send-btn:hover   { opacity: 0.9; transform: translateY(-1px); }
+        .send-btn:active  { transform: scale(0.95); }
+        .send-btn .material-symbols-outlined { font-size: 20px; }
+
+        /* ── 手機響應式：聯絡人/聊天切換 ── */
+        @media (max-width: 767px) {
+            .contacts-panel--hidden { display: none !important; }
+            .chat-panel--visible    { display: flex !important; flex-direction: column; }
+            #chat-messages          { height: calc(100vh - 320px); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 手機版頂部 Header -->
+<header class="teacher-mobile-header">
+    <button class="btn btn-link text-white p-0" id="sidebar-toggle">
+        <span class="material-symbols-outlined">menu</span>
+    </button>
+    <span class="logo-text nunito fst-italic">Merge</span>
+    <div style="width: 40px;"></div>
+</header>
+
+<!-- 手機版遮罩 -->
+<div class="teacher-overlay" id="sidebar-overlay"></div>
+
+<div class="teacher-layout">
+
+    <!-- ===== 左側導覽列 ===== -->
+    <aside class="teacher-sidebar" id="student-sidebar">
+
+        <!-- Logo -->
+        <div class="teacher-sidebar-logo">
+            <div class="logo-icon nunito fst-italic">M</div>
+            <div class="logo-text">
+                Merge
+                <span>學生專區</span>
+            </div>
+        </div>
+
+        <!-- 選單 -->
+        <nav class="flex-grow-1 py-2">
+            <a href="index.html" class="teacher-nav-link student-nav-home">
+                <span class="material-symbols-outlined">home</span> 學習總覽
+            </a>
+            <a href="booking.html" class="teacher-nav-link student-nav-courses">
+                <span class="material-symbols-outlined">menu_book</span> 我的課程
+            </a>
+            <a href="explore.html" class="teacher-nav-link student-nav-teachers">
+                <span class="material-symbols-outlined">school</span> 探索老師
+            </a>
+            <a href="學生訊息中心.html" class="teacher-nav-link student-nav-messages active">
+                <span class="material-symbols-outlined">chat_bubble</span> 訊息中心
+            </a>
+            <a href="#" class="teacher-nav-link student-nav-settings">
+                <span class="material-symbols-outlined">settings</span> 設定
+            </a>
+        </nav>
+
+        <!-- 底部個人資訊 -->
+        <div class="teacher-sidebar-footer" id="logout-btn">
+            <img id="sidebar-avatar" src="https://i.pravatar.cc/38?img=5" alt="頭像" class="teacher-avatar">
+            <div class="teacher-info">
+                <div class="teacher-name" id="sidebar-name">載入中...</div>
+                <div class="teacher-role">學生</div>
+            </div>
+            <span class="material-symbols-outlined logout-icon">logout</span>
+        </div>
+    </aside>
+
+    <!-- ===== 右側主內容區 ===== -->
+    <main class="teacher-main">
+
+        <!-- 頁面標題 -->
+        <h1 class="teacher-page-title">訊息中心</h1>
+        <p class="teacher-page-subtitle">與你的老師保持聯絡</p>
+
+        <!-- 聊天主體 -->
+        <div class="row g-3" style="height: calc(100vh - 160px); min-height: 520px;">
+
+            <!-- 聯絡人列表 -->
+            <div class="col-12 col-md-4 d-flex flex-column" id="contacts-panel">
+                <div class="card border-0 shadow-sm rounded-4 flex-grow-1 overflow-hidden d-flex flex-column">
+
+                    <!-- 搜尋 -->
+                    <div class="p-3 border-bottom">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0 rounded-start-3">
+                                <span class="material-symbols-outlined" style="font-size:18px; color:#94a3b8;">search</span>
+                            </span>
+                            <input type="text" id="search-input" class="form-control bg-light border-0 rounded-end-3"
+                                placeholder="搜尋老師或科目…">
+                        </div>
+                    </div>
+
+                    <!-- 對話清單 -->
+                    <div id="contact-list" class="overflow-y-auto flex-grow-1">
+                        <!-- 由 JS 動態生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 聊天視窗 -->
+            <div class="col-12 col-md-8 d-flex flex-column" id="chat-panel">
+                <div class="card border-0 shadow-sm rounded-4 flex-grow-1 overflow-hidden d-flex flex-column">
+
+                    <!-- 聊天 Header -->
+                    <div class="chat-header">
+                        <!-- 返回按鈕（手機版） -->
+                        <button class="btn btn-link p-0 me-2 d-md-none text-secondary" id="chat-back-btn">
+                            <span class="material-symbols-outlined">arrow_back</span>
+                        </button>
+                        <img src="" alt="" class="chat-header-avatar" id="chat-teacher-avatar">
+                        <div class="chat-header-info">
+                            <div class="teacher-name" id="chat-teacher-name">—</div>
+                            <div class="subject-tag" id="chat-subject-tag">—</div>
+                        </div>
+                        <div class="ms-auto d-flex gap-2">
+                            <button class="btn btn-light btn-sm rounded-3 border-0" title="視訊通話">
+                                <span class="material-symbols-outlined" style="font-size:18px; color:#60a5fa;">videocam</span>
+                            </button>
+                            <button class="btn btn-light btn-sm rounded-3 border-0" title="更多選項">
+                                <span class="material-symbols-outlined" style="font-size:18px; color:#94a3b8;">more_vert</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 訊息區 -->
+                    <div id="chat-messages"></div>
+
+                    <!-- 輸入列 -->
+                    <div class="chat-input-area">
+                        <textarea id="msg-input" rows="1" placeholder="輸入訊息… (Enter 送出，Shift+Enter 換行)"></textarea>
+                        <button class="send-btn" onclick="sendMessage()" title="送出">
+                            <span class="material-symbols-outlined">send</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="./assets/js/student-layout.js"></script>
+<script src="./assets/js/student-messages.js"></script>
+</body>
+</html>
