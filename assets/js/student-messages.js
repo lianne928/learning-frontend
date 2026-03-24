@@ -3,9 +3,10 @@
 // 串接後端 REST API + WebSocket (STOMP)
 // ==========================================
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = '';                        // 相對路徑，走 Vite proxy
+const WS_BASE_URL = 'http://localhost:8080'; // WebSocket 需要絕對路徑
 
-let conversations = [];      // { bookingId, tutorId, tutorName, subject, avatar, lastMessage, time, unread }
+let conversations = [];      // { bookingId（最新，用於送訊息/WS）, bookingIds[], tutorId, tutorName, subject, avatar, lastMessage, time, unread }
 let currentBookingId = null;
 let stompClient = null;
 let stompSubscription = null;
@@ -13,7 +14,7 @@ let stompSubscription = null;
 // ── Helpers ──────────────────────────────
 
 function getJwt() {
-    return localStorage.getItem('jwt');
+    return localStorage.getItem('jwt_token');
 }
 
 function authHeaders() {
@@ -39,9 +40,20 @@ function formatTime(createdAt) {
     }
 }
 
+function getBookingIdFromQuery() {
+    const params = new URLSearchParams(window.location.search);
+    const rawBookingId = params.get('bookingId') || params.get('bookingid');
+    const bookingId = Number.parseInt(rawBookingId, 10);
+    return Number.isInteger(bookingId) && bookingId > 0 ? bookingId : null;
+}
+
 // ── 載入對話列表 ──────────────────────────
 
 async function loadConversations() {
+    if (!getJwt()) {
+        console.warn('尚未登入，取消載入對話列表');
+        return;
+    }
     try {
         const res = await axios.get(`${BASE_URL}/api/student/bookings`, {
             headers: authHeaders()
@@ -49,7 +61,7 @@ async function loadConversations() {
         const bookings = res.data;
 
         // 只顯示 status=1（已排課）的預約，並行取老師資訊
-        const active = bookings.filter(b => b.status === 1);
+        const active = bookings.filter(b => b.status !== 3);
         const tutorCache = {};
 
         const convList = await Promise.all(active.map(async b => {
@@ -69,21 +81,38 @@ async function loadConversations() {
                 tutorId: b.tutorId,
                 tutorName: tutor.name || '老師',
                 subject: b.courseName || '',
-                avatar: tutor.avatar || 'https://i.pravatar.cc/48?img=1',
+                avatar: tutor.avatar || '',
                 lastMessage: '',
                 time: b.date || '',
                 unread: 0
             };
         }));
 
-        conversations = convList;
+        // 依 tutorId + courseName 分組，同一課程只顯示一個聯絡人
+        const groupMap = new Map();
+        for (const c of convList) {
+            const key = `${c.tutorId}::${c.subject}`;
+            if (!groupMap.has(key)) {
+                groupMap.set(key, { ...c, bookingIds: [c.bookingId] });
+            } else {
+                const g = groupMap.get(key);
+                g.bookingIds.push(c.bookingId);
+                // 保留最新日期的 bookingId 作為 active（用於送訊息）
+                if (c.time > g.time) {
+                    g.bookingId = c.bookingId;
+                    g.time = c.time;
+                }
+            }
+        }
+        conversations = [...groupMap.values()].sort((a, b) => (b.time > a.time ? 1 : -1));
         renderContactList();
 
-        // 若 URL 帶有 bookingId 參數，自動選取
-        const params = new URLSearchParams(window.location.search);
-        const bid = parseInt(params.get('bookingId'));
-        if (bid && conversations.find(c => c.bookingId === bid)) {
-            selectConversation(bid);
+        // URL 帶的 bookingId 可能是群組內任一 booking → 找對應群組
+        const bid = getBookingIdFromQuery();
+        if (bid) {
+            const conv = conversations.find(c => c.bookingIds.includes(bid));
+            if (conv) selectConversation(conv.bookingId);
+            else if (conversations.length > 0) selectConversation(conversations[0].bookingId);
         } else if (conversations.length > 0) {
             selectConversation(conversations[0].bookingId);
         }
@@ -232,10 +261,10 @@ function connectWebSocket(bookingId) {
 
     // 建立新連線
     if (stompClient) {
-        try { stompClient.disconnect(); } catch {}
+        try { stompClient.disconnect(); } catch { }
     }
 
-    const socket = new SockJS(`${BASE_URL}/ws`);
+    const socket = new SockJS(`${WS_BASE_URL}/ws`);
     stompClient = Stomp.over(socket);
     stompClient.debug = null; // 關閉 debug log
 
