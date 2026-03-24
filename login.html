@@ -29,7 +29,7 @@
             <li>
               <a href="#" class="text-decoration-none px-3">註冊送代幣</a>
             </li>
-            <li>
+            <li id="auth-nav-item">
               <a href="login.html" class="text-decoration-none px-3 pe-0 text-primary fw-bold">LOGIN</a>
             </li>
           </ul>
@@ -114,64 +114,6 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="./assets/js/login.js"></script>
 
-  <script>
-    // 🔗 【API 串接處 1】：後端伺服器網址
-    const API_BASE_URL = "http://localhost:8080/api";
-
-    document
-      .getElementById("loginForm")
-      .addEventListener("submit", async function (e) {
-        e.preventDefault(); // 阻止表單送出導致網頁重新整理
-
-        const email = document.getElementById("emailInput").value;
-        const password = document.getElementById("passwordInput").value;
-        const loginBtn = document.getElementById("loginBtn");
-
-        // 按鈕變成 loading 狀態防連點
-        loginBtn.disabled = true;
-        loginBtn.innerText = "登入中... ⏳";
-
-        try {
-          // 🔗 【API 串接處 2】：向 Spring Boot 發送登入請求 (對應 LoginReq)
-          // 如果你的後端 Controller 網址不同，請修改 `/auth/login`
-          const response = await axios.post(`${API_BASE_URL}/auth/login`, {
-            email: email,
-            password: password,
-          });
-
-          // 🔗 【API 串接處 3】：取得後端回傳的 Token (對應 LoginResp)
-          const token = response.data.token;
-
-          if (token) {
-            // 將 Token 存入瀏覽器的 localStorage，讓後續購課 API 都可以抓出來用
-            localStorage.setItem("jwt_token", token);
-
-            // （選用）如果後端有回傳 userId，也可以存在這裡供結帳防呆使用
-            if (response.data.userId) {
-              localStorage.setItem("userId", response.data.userId);
-            }
-
-            alert("🎉 登入成功！準備開始學習！");
-
-            // 🔗 跳轉回「課程大廳」或是「首頁」
-            window.location.href = "index.html";
-          } else {
-            throw new Error("伺服器未回傳 Token");
-          }
-        } catch (error) {
-          console.error("登入錯誤:", error);
-          if (error.response && error.response.status === 401) {
-            alert("❌ 登入失敗：帳號或密碼錯誤！");
-          } else {
-            alert("🚨 系統連線異常，請確認後端是否啟動。");
-          }
-        } finally {
-          // 恢復按鈕狀態
-          loginBtn.disabled = false;
-          loginBtn.innerText = "上課去！";
-        }
-      });
-  </script>
 </body>
 
 </html>

@@ -11,33 +11,23 @@
 </head>
 <body>
 
-<!-- 手機版頂部 Header -->
 <header class="teacher-mobile-header">
-    <button class="btn btn-light border-0" id="sidebar-toggle">
+    <button class="btn btn-sm" id="sidebar-toggle" style="color:#fff;">
         <span class="material-symbols-outlined">menu</span>
     </button>
     <span class="logo-text">Merge</span>
-    <div style="width: 40px;"></div>
+    <div style="width: 36px;"></div>
 </header>
 
-<!-- 手機版遮罩 -->
 <div class="teacher-overlay" id="sidebar-overlay"></div>
 
 <div class="teacher-layout">
 
-    <!-- ===== 左側導覽列 ===== -->
     <aside class="teacher-sidebar" id="teacher-sidebar">
-
-        <!-- Logo -->
         <div class="teacher-sidebar-logo">
             <div class="logo-icon">M</div>
-            <div class="logo-text">
-                Merge
-                <span>老師專用後台</span>
-            </div>
+            <div class="logo-text">Merge<span>老師專用後台</span></div>
         </div>
-
-        <!-- 選單 -->
         <nav class="flex-grow-1 py-2">
             <a href="teacher-dashboard.html" class="teacher-nav-link">
                 <span class="material-symbols-outlined">grid_view</span> 控制台
@@ -61,8 +51,6 @@
                 <span class="material-symbols-outlined">settings</span> 設定
             </a>
         </nav>
-
-        <!-- 底部個人資訊 -->
         <div class="teacher-sidebar-footer" id="logout-btn">
             <img id="sidebar-avatar" src="https://via.placeholder.com/38" alt="頭像" class="teacher-avatar">
             <div class="teacher-info">
@@ -73,19 +61,102 @@
         </div>
     </aside>
 
-    <!-- ===== 右側主內容區 ===== -->
     <main class="teacher-main">
 
-        <!-- 頁面標題 -->
         <h1 class="teacher-page-title">行程與排課</h1>
-        <p class="teacher-page-subtitle"></p>
+        <p class="teacher-page-subtitle">管理你的課程行程與每週開放時段</p>
 
-        <!-- ★ 這裡放頁面內容 ★ -->
+        <!-- 頁籤 -->
+        <div class="schedule-tabs">
+            <button class="schedule-tab-btn active" data-tab="schedule">
+                <span class="material-symbols-outlined">calendar_month</span> 行程
+            </button>
+            <button class="schedule-tab-btn" data-tab="manage">
+                <span class="material-symbols-outlined">tune</span> 課表管理
+            </button>
+        </div>
+
+        <!-- 頁籤一：行程 -->
+        <div class="tab-panel active" id="tab-schedule">
+
+            <div class="teacher-card mb-4">
+                <div class="teacher-card-header">
+                    <h3>週行事曆</h3>
+                </div>
+                <div class="teacher-card-body">
+                    <div class="week-nav">
+                        <button id="prev-week" disabled>← 上週</button>
+                        <span class="week-label" id="week-label">載入中...</span>
+                        <button id="next-week">下週 →</button>
+                    </div>
+                    <div class="week-grid" id="week-grid">
+                        <div class="text-center text-muted py-4" style="grid-column: span 7;">⏳ 載入中...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="teacher-card">
+                <div class="teacher-card-header">
+                    <h3>未來預約清單</h3>
+                    <span id="upcoming-count" style="font-size:0.8rem; color:#94a3b8; font-weight:700;">0 筆</span>
+                </div>
+                <div id="upcoming-list">
+                    <div class="text-center text-muted py-4">⏳ 載入中...</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 頁籤二：課表管理 -->
+        <div class="tab-panel" id="tab-manage">
+
+            <div class="teacher-card">
+                <div class="teacher-card-header">
+                    <h3>常態課表設定</h3>
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+
+                        <!-- 圖例（編輯模式才顯示變更中）-->
+                        <div class="legend">
+                            <span>
+                                <span class="legend-dot" style="background:#ECFDF5; border:1px solid #A7F3D0;"></span>開放中
+                            </span>
+                            <span>
+                                <span class="legend-dot" style="background:#f1f5f9; border:1px solid #e2e8f0;"></span>未開放
+                            </span>
+                            <span id="legend-pending" style="display:none;">
+                                <span class="legend-dot" style="background:#FEF9C3; border:1px solid #FDE047;"></span>已變更
+                            </span>
+                        </div>
+
+                        <!-- 按鈕群組 -->
+                        <div id="schedule-btn-group">
+                            <!-- 預設：編輯按鈕 -->
+                            <button class="btn-teacher" id="btn-edit-schedule">
+                                <span class="material-symbols-outlined" style="font-size:16px;">edit_calendar</span>
+                                編輯課表
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="teacher-card-body">
+                    <p class="small mb-3" id="schedule-hint" style="color:#94a3b8;">
+                        點擊「編輯課表」開始設定開放時段。
+                    </p>
+                    <div id="schedule-grid-table" class="schedule-grid-table">
+                        <div class="text-center text-muted py-4">⏳ 載入中...</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
 
     </main>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="./assets/js/teacher-layout.js"></script>
+<script src="./assets/js/teacher-schedule.js"></script>
 </body>
 </html>

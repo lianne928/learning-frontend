@@ -3,10 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>tutor/${id}</title>
+    <title>老師個人頁 - Merge</title>
     <link rel="stylesheet" href="./assets/scss/all.scss" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
-  <body>
+
+  <body style="padding-top: 70px">
+    <!-- Navbar -->
     <header class="border-bottom py-2 fixed-top navbar-light bg-light">
       <div class="container">
         <div class="d-flex justify-content-between align-items-center">
@@ -18,25 +21,16 @@
           <nav class="ms-auto pt-2">
             <ul class="list-unstyled d-flex align-items-center mb-0">
               <li>
-                <a href="#" class="text-decoration-none px-3 ms-auto"
-                  >我要找學生</a
-                >
+                <a href="#" class="text-decoration-none px-3 ms-auto">我要找學生</a>
               </li>
               <li>
-                <a href="explore.html" class="text-decoration-none px-3"
-                  >我要找老師</a
-                >
+                <a href="explore.html" class="text-decoration-none px-3">我要找老師</a>
               </li>
               <li>
                 <a href="#" class="text-decoration-none px-3">註冊送代幣</a>
               </li>
-
               <li id="auth-nav-item">
-                <a
-                  href="login.html"
-                  class="text-decoration-none px-3 pe-0 text-primary fw-bold"
-                  >LOGIN</a
-                >
+                <a href="login.html" class="text-decoration-none px-3 pe-0 text-primary fw-bold">LOGIN</a>
               </li>
             </ul>
           </nav>
@@ -44,196 +38,113 @@
       </div>
     </header>
 
-    <section class="bg-gray vh-100">
-      <div class="container mt-5 pt-5">
-        <div class="text-center my-5">
-          <h3 class="zen-maru-gothic-light display-4">PICK YOUR TUTOR</h3>
-          <p>老師列表</p>
-        </div>
-        <div class="row mx-auto mt-5">
-          <div class="row row-cols-lg-4 row-cols-md-2">
-            <div class="col">
-              <div class="card bg-success border position-relative h-100">
-                <span
-                  class="badge border border-dark text-drak bg-secondary position-absolute translate-middle-y top-0"
-                  style="left: -2px"
-                  >Teacher From TW.</span
-                >
-                <img
-                  src="./assets/img/Ms.Lianne.png"
-                  class="border-bottom bg-line h-50 object-fit-cover"
-                  alt="..."
-                />
-                <div class="card-body position-relative">
-                  <div class="d-flex align-items-center">
-                    <h5
-                      class="mb-0 sansTeg border border-2 d-inline-block border-secondary rounded-circle"
-                    >
-                      Ms.Lianne
-                    </h5>
+    <!-- 主內容 -->
+    <div class="teacher-profile-wrapper">
+      
+      <!-- ===== 左側主要內容 ===== -->
+      <div class="profile-main">
 
-                    <span
-                      class="ms-auto badge text-dark border rounded-pill bg-light"
-                      >★ 4.9</span
-                    >
-                  </div>
-                  <span
-                    class="position-absolute translate-middle-y display-5 text-secondary end-0"
-                    style="top: -2px"
-                    >✦</span
-                  >
-
-                  <div class="card-text">
-                    <p class="nunito ps-1 mb-0 d-inline-block px-1">
-                      兒童生活情景對話
-                    </p>
-                    <br />
-                    <small class="fw-light bg-light ps-1"
-                      >Adult Speaking / GEPT</small
-                    >
-                    <small class="fw-light bg-light ps-1">1200+ lessons</small>
-                  </div>
-                </div>
-
-                <div class="card-footer border-bottom">
-                  <div class="row pt-2">
-                    <div class="col">
-                      <div class="d-flex flex-column ps-1">
-                        <span class="mb-0" style="font-size: 14px"
-                          >體驗課<span
-                            class="fw-light bg-secondary text-light ms-1"
-                            style="font-size: 12px"
-                            >首堂優惠</span
-                          ></span
-                        >
-
-                        <p class="sansTeg text-secondary mb-0">
-                          400
-                          <span class="mb-0 fw-light" style="font-size: 14px">
-                            / 60 mins
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="col">
-                      <div class="d-flex flex-column ps-1">
-                        <span class="mb-0" style="font-size: 14px"
-                          >單堂<span
-                            class="fw-light bg-primary text-light ms-1"
-                            style="font-size: 12px"
-                            >一般方案</span
-                          ></span
-                        >
-                        <p class="sansTeg text-primary mb-0">
-                          600
-                          <span class="mb-0 fw-light" style="font-size: 14px">
-                            / 60 mins
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    class="btn btn-primary ms-auto my-2 border border-light shadow-sm w-100"
-                  >
-                    <p class="fs-5 mb-0 fw-bold">LET'S TALK +</p>
-                  </button>
-                </div>
-              </div>
+        <!-- 老師基本資料 -->
+        <div class="profile-card">
+          <div class="tutor-header">
+            <div class="tutor-avatar-wrap">
+              <img id="tutor-avatar" src="https://via.placeholder.com/120" alt="老師頭像">
             </div>
-            <div class="col">
-              <div class="card bg-success border position-relative h-100">
-                <span
-                  class="badge border border-dark text-drak bg-secondary position-absolute translate-middle-y top-0"
-                  style="left: -2px"
-                  >Teacher From TW.</span
-                >
-                <img
-                  src="./assets/img/tutor.png"
-                  class="border-bottom bg-line h-50 object-fit-cover"
-                  alt="..."
-                />
-                <div class="card-body position-relative">
-                  <div class="d-flex align-items-center">
-                    <h5
-                      class="mb-0 sansTeg border border-2 d-inline-block border-secondary rounded-circle"
-                    >
-                      Ms.Emma
-                    </h5>
-                    <span
-                      class="ms-auto badge text-dark border rounded-pill bg-light"
-                      >★ 4.9</span
-                    >
-                  </div>
-                  <span
-                    class="position-absolute translate-middle-y display-5 text-secondary end-0"
-                    style="top: -2px"
-                    >✦</span
-                  >
-
-                  <div class="card-text">
-                    <p class="nunito ps-1 mb-0 d-inline-block px-1">
-                      兒童生活情景對話
-                    </p>
-                    <br />
-                    <small class="fw-light bg-light ps-1"
-                      >Adult Speaking / GEPT</small
-                    >
-                    <small class="fw-light bg-light ps-1">1200+ lessons</small>
-                  </div>
-                </div>
-
-                <div class="card-footer border-bottom">
-                  <div class="row pt-2">
-                    <div class="col">
-                      <div class="d-flex flex-column ps-1">
-                        <span class="mb-0" style="font-size: 14px"
-                          >體驗課<span
-                            class="fw-light bg-secondary text-light ms-1"
-                            style="font-size: 12px"
-                            >首堂優惠</span
-                          ></span
-                        >
-
-                        <p class="sansTeg text-secondary mb-0">
-                          400
-                          <span class="mb-0 fw-light" style="font-size: 14px">
-                            / 60 mins
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="col">
-                      <div class="d-flex flex-column ps-1">
-                        <span class="mb-0" style="font-size: 14px"
-                          >單堂<span
-                            class="fw-light bg-primary text-light ms-1"
-                            style="font-size: 12px"
-                            >一般方案</span
-                          ></span
-                        >
-                        <p class="sansTeg text-primary mb-0">
-                          600
-                          <span class="mb-0 fw-light" style="font-size: 14px">
-                            / 60 mins
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    class="btn btn-primary ms-auto my-2 border border-light shadow-sm w-100"
-                  >
-                    <p class="fs-5 mb-0 fw-bold">LET'S TALK +</p>
-                  </button>
-                </div>
-              </div>
+            <div class="tutor-meta">
+              <h2 id="tutor-name">載入中...</h2>
+              <p class="tutor-headline" id="tutor-headline"></p>
+              <span class="tutor-rating" id="tutor-rating">⭐ --</span>
+              <p class="tutor-intro" id="tutor-intro"></p>
             </div>
           </div>
         </div>
+
+        <!-- 課程選擇 -->
+        <div class="profile-card">
+          <h3 class="profile-section-title">📚 課程列表</h3>
+          <div class="course-btn-group" id="course-buttons"></div>
+          <div class="course-desc-box">
+            <h4 id="course-name">課程名稱</h4>
+            <p id="course-desc">課程描述載入中...</p>
+          </div>
+        </div>
+
+        <!-- 影片區 -->
+        <div class="profile-card">
+          <h3 class="profile-section-title">🎬 教學影片</h3>
+          <div class="videos-grid" id="videos-container">
+            <p style="color:#999;">載入中...</p>
+          </div>
+        </div>
+
+        <!-- 證照區 -->
+        <div class="profile-card">
+          <h3 class="profile-section-title">🏅 專業證照</h3>
+          <ul class="certificates-list" id="certificates-container">
+            <li style="list-style:none; color:#999;">載入中...</li>
+          </ul>
+        </div>
+
+        <!-- 課表區 -->
+        <div class="profile-card">
+          <h3 class="profile-section-title">📅 可預約時段</h3>
+          <div class="schedule-grid" id="schedule-container">
+            <p style="color:#999;">載入中...</p>
+          </div>
+        </div>
+
+        <!-- 評價區 -->
+        <div class="profile-card">
+          <h3 class="profile-section-title">💬 學生評價</h3>
+          <div id="reviews-container">
+            <p style="color:#999;">載入中...</p>
+          </div>
+        </div>
+
       </div>
-    </section>
+
+      <!-- ===== 右側價格欄 ===== -->
+      <aside class="teacher-aside">
+        <div class="price-card">
+          <h3>💰 課程方案</h3>
+
+          <div class="price-row">
+            <div>
+              <strong id="price-single">NT$ --</strong>
+              <small>單堂 / 60 分鐘</small>
+            </div>
+          </div>
+
+          <div class="price-row">
+            <div>
+              <strong id="price-5">NT$ --</strong>
+              <small>5 堂方案</small>
+            </div>
+            <span class="discount-badge">95 折</span>
+          </div>
+
+          <div class="price-row">
+            <div>
+              <strong id="price-10">NT$ --</strong>
+              <small>10 堂方案</small>
+            </div>
+            <span class="discount-badge">9 折</span>
+          </div>
+
+          <button class="btn-booking-main" id="btn-booking">
+            🚀 立即預約
+          </button>
+
+          <div class="secure-badge">
+            🔒 安全結帳<br>
+            購課後可隨時於個人頁面查看紀錄
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <script src="./assets/js/teacher-profile.js"></script>
+    <script src="./assets/js/navbar.js"></script>
   </body>
 </html>

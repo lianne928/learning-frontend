@@ -23,8 +23,9 @@ $success:        #CCFF00;
 }
 
 // 左側主要內容
-.teacher-main {
+.profile-main {
     flex: 7;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 20px;

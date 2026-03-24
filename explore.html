@@ -1,272 +1,325 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-TW">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>探索好老師 - Merge</title>
     <link rel="stylesheet" href="./assets/scss/all.scss" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
 
-</head>
-
-<body style="padding-top: 70px;">
-
+  <body style="padding-top: 70px">
     <header class="border-bottom py-2 fixed-top navbar-light bg-light">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex">
-                    <a href="index.html" class="text-decoration-none">
-                        <h1 class="nunito fst-italic display-5 pt-2">Merge</h1>
-                    </a>
-                </div>
-                <nav class="ms-auto pt-2">
-                    <ul class="list-unstyled d-flex align-items-center mb-0">
-                        <li>
-                            <a href="#" class="text-decoration-none px-3 ms-auto">我要找學生</a>
-                        </li>
-                        <li>
-                            <a href="explore.html" class="text-decoration-none px-3">我要找老師</a>
-                        </li>
-                        <li>
-                            <a href="#" class="text-decoration-none px-3">註冊送代幣</a>
-                        </li>
-                        <li id="auth-nav-item">
-                            <a href="login.html" class="text-decoration-none px-3 pe-0 text-primary fw-bold">LOGIN</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex">
+            <a href="index.html" class="text-decoration-none">
+              <h1 class="nunito fst-italic display-5 pt-2">Merge</h1>
+            </a>
+          </div>
+          <nav class="ms-auto pt-2">
+            <ul class="list-unstyled d-flex align-items-center mb-0">
+              <li>
+                <a href="#" class="text-decoration-none px-3 ms-auto"
+                  >我要找學生</a
+                >
+              </li>
+              <li>
+                <a href="explore.html" class="text-decoration-none px-3"
+                  >我要找老師</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-decoration-none px-3">註冊送代幣</a>
+              </li>
+              <li id="auth-nav-item">
+                <a
+                  href="login.html"
+                  class="text-decoration-none px-3 pe-0 text-primary fw-bold"
+                  >LOGIN</a
+                >
+              </li>
+            </ul>
+          </nav>
         </div>
+      </div>
     </header>
 
     <div class="explore-container">
+      <header class="explore-header">
+        <h1>探索好老師 🔍</h1>
+        <p>
+          在 Merge 找到最適合孩子的啟蒙導師，讓學習變成每天最期待的遊戲時間！
+        </p>
+      </header>
 
-        <header class="explore-header">
-            <h1>探索好老師 🔍</h1>
-            <p>在 Merge 找到最適合孩子的啟蒙導師，讓學習變成每天最期待的遊戲時間！</p>
-        </header>
+      <section class="explore-search-bar">
+        <div class="search-item">
+          🔍
+          <input
+            type="text"
+            id="searchInput"
+            oninput="handleSearch()"
+            placeholder="搜尋老師或課程名稱..."
+          />
+        </div>
+        <div class="divider"></div>
 
-        <section class="explore-search-bar">
-            <div class="search-item">
-                🔍 <input type="text" id="searchInput" oninput="handleSearch()" placeholder="搜尋老師或課程名稱...">
-            </div>
-            <div class="divider"></div>
+        <div class="search-item">
+          📖
+          <select id="subjectSelect" onchange="handleSearch()">
+            <option value="">所有課程</option>
+            <option value="11">低年級課程</option>
+            <option value="12">中年級課程</option>
+            <option value="13">高年級課程</option>
+            <option value="21">GEPT 全民英檢</option>
+            <option value="22">YLE 劍橋兒童</option>
+            <option value="23">國中先修</option>
+            <option value="31">其他科目</option>
+          </select>
+        </div>
+        <div class="divider"></div>
 
-            <div class="search-item">
-                📖 <select id="subjectSelect" onchange="handleSearch()">
-                    <option value="">所有課程</option>
-                    <option value="11">低年級課程</option>
-                    <option value="12">中年級課程</option>
-                    <option value="13">高年級課程</option>
-                    <option value="21">GEPT 全民英檢</option>
-                    <option value="22">YLE 劍橋兒童</option>
-                    <option value="23">國中先修</option>
-                    <option value="31">其他科目</option>
-                </select>
-            </div>
-            <div class="divider"></div>
+        <div class="search-item">
+          📅
+          <select id="daySelect" onchange="handleSearch()">
+            <option value="">所有日期</option>
+            <option value="1">星期一</option>
+            <option value="2">星期二</option>
+            <option value="3">星期三</option>
+            <option value="4">星期四</option>
+            <option value="5">星期五</option>
+            <option value="6">星期六</option>
+            <option value="7">星期日</option>
+          </select>
+        </div>
+        <div class="divider"></div>
 
-            <div class="search-item">
-                📅 <select id="daySelect" onchange="handleSearch()">
-                    <option value="">所有日期</option>
-                    <option value="1">星期一</option>
-                    <option value="2">星期二</option>
-                    <option value="3">星期三</option>
-                    <option value="4">星期四</option>
-                    <option value="5">星期五</option>
-                    <option value="6">星期六</option>
-                    <option value="7">星期日</option>
-                </select>
-            </div>
-            <div class="divider"></div>
+        <div class="search-item">
+          🕒
+          <select id="timeSelect" onchange="handleSearch()">
+            <option value="">所有時段</option>
+            <option value="morning">上午 (09:00 - 13:00)</option>
+            <option value="afternoon">下午 (13:00 - 17:00)</option>
+            <option value="evening">晚上 (17:00 - 21:00)</option>
+          </select>
+        </div>
 
-            <div class="search-item">
-                🕒 <select id="timeSelect" onchange="handleSearch()">
-                    <option value="">所有時段</option>
-                    <option value="morning">上午 (09:00 - 13:00)</option>
-                    <option value="afternoon">下午 (13:00 - 17:00)</option>
-                    <option value="evening">晚上 (17:00 - 21:00)</option>
-                </select>
-            </div>
+        <button class="btn-search" onclick="handleSearch()">🔍 開始尋找</button>
+      </section>
 
-            <button class="btn-search" onclick="handleSearch()">🔍 開始尋找</button>
-        </section>
-
-        <section id="course-list-container" class="course-grid">
-            <h3 style="text-align: center; width: 100%; color: #666;">⏳ 課程資料載入中...</h3>
-        </section>
+      <!-- 課程卡片區 -->
+      <section class="bg-gray">
+        <div class="container">
+          <div
+            id="course-list-container"
+            class="row row-cols-lg-4 row-cols-md-2 row-cols-1 g-4"
+          >
+            <h3 style="text-align: center; width: 100%; color: #666">
+              ⏳ 課程資料載入中...
+            </h3>
+          </div>
+        </div>
+      </section>
     </div>
 
     <script>
-        // --- JWT 導覽列邏輯 ---
-        document.addEventListener('DOMContentLoaded', () => {
-            const token = localStorage.getItem('jwt_token');
-            const authNavItem = document.getElementById('auth-nav-item');
+      const API_BASE_URL = "http://localhost:8080/api";
+      let allCoursesData = [];
 
-            if (token && authNavItem) {
-                try {
-                    let base64Url = token.split('.')[1];
-                    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                    while (base64.length % 4) { base64 += '='; }
-                    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                    }).join(''));
+      // Google Drive 連結轉換
+      function convertGoogleDriveUrl(url) {
+        if (!url) return "https://via.placeholder.com/400x300";
+        const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (match) return `https://lh3.googleusercontent.com/d/${match[1]}`;
+        return url;
+      }
 
-                    const payload = JSON.parse(jsonPayload);
-                    const realName = payload.name || "會員";
+      // 建立 hover 課表 HTML
+      function buildSchedulePopup(slots) {
+        const days = ["一", "二", "三", "四", "五", "六", "日"];
+        const periods = [
+          { key: "morning", label: "上午" },
+          { key: "afternoon", label: "下午" },
+          { key: "evening", label: "晚上" },
+        ];
 
-                    authNavItem.innerHTML = `
-                        <span style="color: #2563EB; font-weight: bold; padding: 0 15px;">👋 ${realName}</span>
-                        <a href="#" onclick="logout()" style="text-decoration: none; color: #d9534f; font-weight: bold; border-left: 2px solid #d9534f; padding-left: 15px;">登出</a>
-                    `;
-                } catch (e) {
-                    console.error("Token 解析失敗:", e);
-                }
-            }
-            fetchCourses();
+        let html = '<div class="schedule-popup-title">📅 開課時段</div>';
+        html += '<div class="schedule-grid-popup">';
+
+        html += '<div class="row-label"></div>';
+        days.forEach((d) => {
+          html += `<div class="col-header">週${d}</div>`;
         });
 
-        function logout() {
-            if (confirm('確定要登出嗎？')) {
-                localStorage.removeItem('jwt_token');
-                localStorage.removeItem('userId');
-                alert('已成功登出！');
-                window.location.reload();
-            }
+        periods.forEach((period) => {
+          html += `<div class="row-label">${period.label}</div>`;
+          for (let day = 1; day <= 7; day++) {
+            const hasSlot = slots.some((s) => s === `${day}-${period.key}`);
+            html += `<div class="schedule-cell${hasSlot ? " available" : ""}"></div>`;
+          }
+        });
+
+        html += "</div>";
+        return html;
+      }
+
+      // 取得課程科目標籤文字
+      function getSubjectLabel(subject) {
+        const map = {
+          11: "低年級",
+          12: "中年級",
+          13: "高年級",
+          21: "GEPT",
+          22: "YLE",
+          23: "國中先修",
+          31: "其他",
+        };
+        return map[subject] || "";
+      }
+
+      async function fetchCourses() {
+        const container = document.getElementById("course-list-container");
+        container.innerHTML =
+          '<h3 style="text-align: center; width: 100%; color: #666;">⏳ 課程資料載入中...</h3>';
+
+        try {
+          const response = await axios.get(`${API_BASE_URL}/view/courses`);
+          allCoursesData = response.data.content;
+          console.log("成功拿到資料：", allCoursesData);
+          renderCards(allCoursesData);
+        } catch (error) {
+          console.error("撈取課程資料失敗:", error);
+          container.innerHTML =
+            '<h3 style="text-align: center; width: 100%; color: #d9534f;">🚨 無法連線到伺服器</h3>';
+        }
+      }
+
+      function renderCards(coursesToRender) {
+        const container = document.getElementById("course-list-container");
+        container.innerHTML = "";
+
+        if (coursesToRender.length === 0) {
+          container.innerHTML =
+            '<h3 style="text-align: center; width: 100%; color: #999;">沒有找到符合條件的課程喔！換個關鍵字試試吧 🥺</h3>';
+          return;
         }
 
-        const API_BASE_URL = 'http://localhost:8080/api';
-        let allCoursesData = [];
+        coursesToRender.forEach((course) => {
+          const scheduleHTML = buildSchedulePopup(course.availableSlots || []);
+          const subjectLabel = getSubjectLabel(course.subject);
 
-        // Google Drive 連結轉換
-        function convertGoogleDriveUrl(url) {
-            if (!url) return 'https://via.placeholder.com/80';
-            const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-            if (match) return `https://lh3.googleusercontent.com/d/${match[1]}`;
-            return url;
-        }
+          const cardHTML = `
+            <div class="col">
+              <div class="card bg-success border position-relative h-100 explore-card">
+                <!-- Teacher From TW Badge -->
+                <span class="badge border border-dark text-dark bg-secondary position-absolute translate-middle-y top-0" style="left: -2px; z-index: 2;">
+                  Teacher From TW.
+                </span>
 
-        // 建立 hover 課表 HTML
-        function buildSchedulePopup(slots) {
-            const days = ['一', '二', '三', '四', '五', '六', '日'];
-            const periods = [
-                { key: 'morning',   label: '上午' },
-                { key: 'afternoon', label: '下午' },
-                { key: 'evening',   label: '晚上' },
-            ];
+                <!-- 老師頭像 -->
+                <img src="${convertGoogleDriveUrl(course.avatarUrl)}" class="border-bottom bg-line object-fit-cover" style="height: 220px;" alt="${course.teacherName}">
 
-            let html = '<div class="schedule-popup-title">📅 開課時段</div>';
-            html += '<div class="schedule-grid-popup">';
+                <!-- 老師資訊 -->
+                <div class="card-body position-relative">
+                  <div class="d-flex align-items-center">
+                    <h5 class="mb-0 sansTeg border border-2 d-inline-block border-secondary rounded-circle">
+                      ${course.teacherName || "老師"}
+                    </h5>
+                    <span class="ms-auto badge text-dark border rounded-pill bg-light">★ 4.9</span>
+                  </div>
+                  <span class="position-absolute translate-middle-y display-5 text-secondary end-0" style="top: -2px">✦</span>
 
-            // 星期標題列
-            html += '<div class="row-label"></div>';
-            days.forEach(d => {
-                html += `<div class="col-header">週${d}</div>`;
+                  <div class="card-text mt-2">
+                    <p class="nunito ps-1 mb-0 d-inline-block px-1">${course.courseName || "課程名稱"}</p>
+                    <br>
+                    ${subjectLabel ? `<small class="fw-light bg-light ps-1">${subjectLabel}</small>` : ""}
+                    ${course.title ? `<small class="fw-light bg-light ps-1">${course.title}</small>` : ""}
+                  </div>
+                </div>
+
+                <div class="d-flex gap-3 ps-1 pt-2">
+                  <!-- 體驗課 -->
+                  <div class="flex-fill">
+                      <span class="mb-0 d-block" style="font-size: 14px">
+                          體驗課 <span class="fw-light bg-secondary text-light ms-1 px-1" style="font-size: 12px">首堂優惠</span>
+                      </span>
+                      <p class="mb-1 d-flex align-items-baseline">
+                          <span class="sansTeg text-secondary" style="font-size: 1.75rem; font-weight: 900;">200</span>
+                          <span class="fw-light text-dark" style="font-size: 13px; margin-left: 2px;">/ 60 mins</span>
+                      </p>
+                  </div>
+
+                  <!-- 正式課 -->
+                  <div class="flex-fill">
+                      <span class="mb-0 d-block" style="font-size: 14px">
+                          單堂 <span class="fw-light bg-primary text-light ms-1 px-1" style="font-size: 12px">一般方案</span>
+                      </span>
+                      <p class="mb-1 d-flex align-items-baseline">
+                          <span class="sansTeg text-primary" style="font-size: 1.75rem; font-weight: 900;">${course.price || 0}</span>
+                          <span class="fw-light text-dark" style="font-size: 13px; margin-left: 2px;">/ 60 mins</span>
+                      </p>
+                  </div>
+                </div>
+
+                  <a href="teacher-profile.html?tutorId=${course.tutorId}&courseId=${course.id}" class="text-decoration-none">
+                    <button type="button" class="btn btn-primary ms-auto my-2 border border-light shadow-sm w-100">
+                      <p class="fs-5 mb-0 fw-bold">LET'S TALK +</p>
+                    </button>
+                  </a>
+                </div>
+
+                <!-- Hover 課表彈出 -->
+                <div class="schedule-popup">
+                  ${scheduleHTML}
+                </div>
+              </div>
+            </div>
+          `;
+          container.innerHTML += cardHTML;
+        });
+      }
+
+      function handleSearch() {
+        const keyword = document
+          .getElementById("searchInput")
+          .value.toLowerCase()
+          .trim();
+        const subjectValue = document.getElementById("subjectSelect").value;
+        const dayValue = document.getElementById("daySelect").value;
+        const timeValue = document.getElementById("timeSelect").value;
+
+        const filteredCourses = allCoursesData.filter((course) => {
+          const matchKeyword =
+            !keyword ||
+            (course.teacherName &&
+              course.teacherName.toLowerCase().includes(keyword)) ||
+            (course.courseName &&
+              course.courseName.toLowerCase().includes(keyword));
+
+          const matchSubject = !subjectValue || course.subject == subjectValue;
+
+          let matchSchedule = true;
+          if (dayValue || timeValue) {
+            matchSchedule = course.availableSlots.some((slot) => {
+              const [sDay, sTime] = slot.split("-");
+              const dayCondition = !dayValue || sDay === dayValue;
+              const timeCondition = !timeValue || sTime === timeValue;
+              return dayCondition && timeCondition;
             });
+          }
 
-            // 三個時段列
-            periods.forEach(period => {
-                html += `<div class="row-label">${period.label}</div>`;
-                for (let day = 1; day <= 7; day++) {
-                    const hasSlot = slots.some(s => s === `${day}-${period.key}`);
-                    html += `<div class="schedule-cell${hasSlot ? ' available' : ''}"></div>`;
-                }
-            });
+          return matchKeyword && matchSubject && matchSchedule;
+        });
 
-            html += '</div>';
-            return html;
-        }
+        renderCards(filteredCourses);
+      }
 
-        async function fetchCourses() {
-            const container = document.getElementById('course-list-container');
-            container.innerHTML = '<h3 style="text-align: center; width: 100%; color: #666;">⏳ 課程資料載入中...</h3>';
-
-            try {
-                const response = await axios.get(`${API_BASE_URL}/view/courses`);
-                allCoursesData = response.data.content;
-                console.log("成功拿到資料：", allCoursesData);
-                renderCards(allCoursesData);
-            } catch (error) {
-                console.error("撈取課程資料失敗:", error);
-                container.innerHTML = '<h3 style="text-align: center; width: 100%; color: #d9534f;">🚨 無法連線到伺服器</h3>';
-            }
-        }
-
-        function renderCards(coursesToRender) {
-            const container = document.getElementById('course-list-container');
-            container.innerHTML = '';
-
-            if (coursesToRender.length === 0) {
-                container.innerHTML = '<h3 style="text-align: center; width: 100%; color: #999;">沒有找到符合條件的課程喔！換個關鍵字試試吧 🥺</h3>';
-                return;
-            }
-
-            coursesToRender.forEach(course => {
-                const scheduleHTML = buildSchedulePopup(course.availableSlots || []);
-                const cardHTML = `
-                    <div class="course-card">
-                        <div class="tutor-avatar">
-                            <img src="${convertGoogleDriveUrl(course.avatarUrl)}" alt="頭像">
-                        </div>
-
-                        <div class="tutor-info">
-                            <h2>${course.teacherName || '老師名字'}</h2>
-                            <span class="badge">⭐ ${course.title || '優質教師'}</span>
-                        </div>
-
-                        <h3 class="course-title">${course.courseName || '課程名稱'}</h3>
-                        <p class="course-desc">${course.description || '這是一堂非常棒的課程！'}</p>
-
-                        <div class="card-footer">
-                            <div class="price-info">
-                                <div class="label">正式課單堂</div>
-                                <div class="price">NT$ ${course.price || 0}</div>
-                            </div>
-                            <a href="teacher-profile.html?tutorId=${course.tutorId}&courseId=${course.id}" style="text-decoration:none;">
-                                <button class="btn-book">立即預約 👉</button>
-                            </a>
-                        </div>
-
-                        <!-- Hover 課表彈出 -->
-                        <div class="schedule-popup">
-                            ${scheduleHTML}
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += cardHTML;
-            });
-        }
-
-        function handleSearch() {
-            const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
-            const subjectValue = document.getElementById('subjectSelect').value;
-            const dayValue = document.getElementById('daySelect').value;
-            const timeValue = document.getElementById('timeSelect').value;
-
-            const filteredCourses = allCoursesData.filter(course => {
-                const matchKeyword = !keyword ||
-                    (course.teacherName && course.teacherName.toLowerCase().includes(keyword)) ||
-                    (course.courseName && course.courseName.toLowerCase().includes(keyword));
-
-                const matchSubject = !subjectValue || course.subject == subjectValue;
-
-                let matchSchedule = true;
-                if (dayValue || timeValue) {
-                    matchSchedule = course.availableSlots.some(slot => {
-                        const [sDay, sTime] = slot.split('-');
-                        const dayCondition = !dayValue || sDay === dayValue;
-                        const timeCondition = !timeValue || sTime === timeValue;
-                        return dayCondition && timeCondition;
-                    });
-                }
-
-                return matchKeyword && matchSubject && matchSchedule;
-            });
-
-            renderCards(filteredCourses);
-        }
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchCourses();
+      });
     </script>
-</body>
 
+    <script src="./assets/js/navbar.js"></script>
+  </body>
 </html>

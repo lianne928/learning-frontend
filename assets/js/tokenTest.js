@@ -27,36 +27,6 @@
     // A. 注入觀測站 HTML
     document.body.insertAdjacentHTML('beforeend', debugPanelHTML);
 
-    // B. 解析 JWT 並更新導覽列
-    const token = localStorage.getItem("jwt_token");
-    const authNavItem = document.getElementById("auth-nav-item");
-
-    if (token && authNavItem) {
-      try {
-        let base64Url = token.split(".")[1];
-        let base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-
-        // 幫 atob 補齊 '='
-        while (base64.length % 4) { base64 += "="; }
-
-        // 解析 JSON 並處理中文
-        const jsonPayload = decodeURIComponent(
-          atob(base64).split("").map(c => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)).join("")
-        );
-
-        const payload = JSON.parse(jsonPayload);
-        const realName = payload.name || "會員";
-
-        // 動態替換導覽列內容
-        authNavItem.innerHTML = `
-          <span class="text-primary fw-bold px-3">👋 ${realName}</span>
-          <a href="#" onclick="window.logout()" class="text-decoration-none px-2 text-danger fw-bold border-start border-2 border-danger ms-1 pl-2">登出</a>
-        `;
-      } catch (e) {
-        console.error("JWT 解析失敗:", e);
-      }
-    }
-
     // C. 啟動觀測站第一次顯示
     setTimeout(window.refreshDevToken, 300);
   });
