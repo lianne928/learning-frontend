@@ -13,58 +13,152 @@ body {
     padding: 20px;
 }
 
-// ── 頁首標題 ──
-.explore-header {
-    border: 2px solid #000;
-    padding: 30px 15px;
-    margin: 20px 0;
-    text-align: center;
-    background-color: #fff;
+// ==========================================
+// Hero 區塊（標題 + 搜尋列）
+// ==========================================
 
-    h1 { margin: 0 0 10px 0; }
-    p  { margin: 0; color: #666; }
+.explore-hero {
+    background: #FFFDF0;
+    border: 2px solid #1A1A1A;
+    border-radius: 20px;
+    padding: 48px 32px 36px;
+    margin: 20px 0 30px;
+    position: relative;
+    overflow: hidden;
 }
 
-// ── 搜尋列 ──
+// Blob 裝飾
+.explore-blob { position: absolute; pointer-events: none; z-index: 0; }
+
+.explore-blob-1 {
+    top: -50px; left: -50px;
+    width: 260px; height: 240px;
+    background: #CCFF00; opacity: 0.35;
+    border-radius: 67% 33% 58% 42% / 44% 56% 44% 56%;
+}
+.explore-blob-2 {
+    bottom: -30px; right: -30px;
+    width: 200px; height: 180px;
+    background: #FF3399; opacity: 0.15;
+    border-radius: 42% 58% 35% 65% / 60% 40% 60% 40%;
+}
+.explore-blob-3 {
+    top: 30px; right: 80px;
+    width: 80px; height: 75px;
+    background: #1A2238; opacity: 0.06;
+    border-radius: 50% 50% 65% 35% / 40% 60% 40% 60%;
+}
+.explore-blob-4 {
+    bottom: 60px; left: 140px;
+    width: 60px; height: 55px;
+    background: #FF3399; opacity: 0.12;
+    border-radius: 60% 40% 50% 50% / 50% 50% 60% 40%;
+}
+
+// 標題區
+.explore-hero-title {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-bottom: 28px;
+
+    h1 {
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: #1A1A1A;
+        margin: 8px 0 10px;
+        line-height: 1.2;
+    }
+
+    p {
+        font-size: 0.92rem;
+        color: #555;
+        margin: 0;
+    }
+}
+
+.explore-hero-badge {
+    display: inline-block;
+    background: #fff;
+    color: #1A2238;
+    border: 1.5px solid #1A2238;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+}
+
+.explore-hero-highlight { color: #FF3399; }
+
+// 搜尋列
 .explore-search-bar {
-    border: 2px solid #000;
-    padding: 15px;
-    background-color: #fff;
-    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+    background: #fff;
+    border: 2px solid #1A1A1A;
+    border-radius: 14px;
+    padding: 6px 6px 6px 8px;
     display: flex;
-    gap: 10px;
+    gap: 4px;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    box-shadow: 3px 3px 0px #1A1A1A;
+    margin-bottom: 0;
 
     .search-item {
         flex: 1;
-        min-width: 150px;
-        border: 1px solid #ccc;
-        padding: 10px;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        transition: background 0.15s;
+
+        &:hover { background: #f5f5f0; }
 
         input, select {
             border: none;
             outline: none;
             background: transparent;
-            width: 80%;
+            width: 100%;
             cursor: pointer;
+            font-size: 0.85rem;
+            color: #333;
         }
+    }
+
+    .search-icon-img {
+        width: 24px !important;
+        height: 24px !important;
+        max-width: 24px;
+        max-height: 24px;
+        object-fit: contain;
+        flex-shrink: 0;
     }
 
     .divider {
         width: 1px;
-        height: 30px;
-        background-color: #ccc;
+        height: 26px;
+        background-color: #e0e0e0;
+        flex-shrink: 0;
     }
 
     .btn-search {
         padding: 10px 20px;
-        background-color: #000;
+        background: #1A2238;
         color: #fff;
-        font-weight: bold;
-        border: none;
+        font-weight: 800;
+        font-size: 0.85rem;
+        border: 2px solid #1A1A1A;
+        border-radius: 10px;
         cursor: pointer;
-        min-width: 120px;
+        white-space: nowrap;
+        flex-shrink: 0;
+        transition: all 0.15s;
+
+        &:hover { background: #2d3a5e; }
     }
 }
 
@@ -87,9 +181,7 @@ body {
     pointer-events: none;
 }
 
-.explore-card:hover .schedule-popup {
-    display: block;
-}
+// .explore-card:hover .schedule-popup { display: block; } // 已改為翻轉效果
 
 .schedule-popup-title {
     font-size: 0.78rem;
@@ -155,14 +247,14 @@ body {
 .explore-tw-badge {
     position: absolute;
     top: 10px;
-    left: -2px;
+    left: 0;                    // ← 改成 0，緊貼左邊
     background: #FF3399;
     color: #fff;
     font-size: 0.72rem;
     font-weight: 700;
     padding: 3px 10px;
     border-radius: 0 4px 4px 0;
-    z-index: 2;
+    z-index: 10;                // ← 拉高 z-index
     letter-spacing: 0.5px;
 }
 
@@ -229,18 +321,20 @@ body {
     color: #1A1A1A;
 }
 
+// 改這個
 .explore-tag {
     font-size: 0.7rem;
     font-weight: 600;
-    background: rgba(0,0,0,0.08);
+    background: #f0f0f0;        // ← 灰白背景
+    border: 1px solid #ccc;     // ← 加邊框
     border-radius: 4px;
-    padding: 2px 6px;
-    color: #1A1A1A;
+    padding: 2px 8px;
+    color: #555;                // ← 深灰文字
 }
 
 // 價格區
 .explore-card-footer {
-    padding: 10px 20px 20px;
+    padding: 10px 14px 14px;
     border-top: 2px solid rgba(0,0,0,0.1);
 }
 
@@ -249,7 +343,7 @@ body {
     font-weight: 600;
     color: #1A1A1A;
     display: block;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 }
 
 .explore-price-badge {
@@ -299,4 +393,170 @@ body {
         background: #0a58ca;
         transform: scale(0.98);
     }
+}
+
+// ==========================================
+// 卡片翻轉效果
+// ==========================================
+
+.flip-card {
+    perspective: 1000px;
+    -webkit-perspective: 1000px;
+    cursor: pointer;
+    height: 520px;
+    transform: translateZ(0); // ← 強制 GPU 加速
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;  // ← 加這行
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    // 加上這行，強制 GPU 加速
+    will-change: transform;
+}
+
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.flip-card-front {
+    transform: rotateY(0deg);
+    position: relative;
+}
+
+// 背面樣式
+.flip-card-back {
+    background: #CCFF00;
+    border: 3px solid #1A1A1A;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+}
+
+.flip-back-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    gap: 8px;
+}
+
+.flip-back-name {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #1A1A1A;
+    line-height: 1.2;
+}
+
+.flip-back-course {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #333;
+    margin-top: 2px;
+}
+
+// 課表格子
+.flip-back-schedule-wrap {
+    flex-grow: 1;
+    background: rgba(255,255,255,0.5);
+    border: 2px solid #1A1A1A;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 14px;
+}
+
+.flip-schedule-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.flip-schedule-grid {
+    display: grid;
+    grid-template-columns: 28px repeat(7, 1fr);
+    gap: 3px;
+    font-size: 0.6rem;
+}
+
+.flip-sg-corner { }
+
+.flip-sg-header {
+    text-align: center;
+    font-weight: 700;
+    color: #555;
+    padding: 2px 0;
+    font-size: 0.6rem;
+}
+
+.flip-sg-label {
+    font-size: 0.58rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.flip-sg-cell {
+    height: 16px;
+    border-radius: 3px;
+    background: rgba(0,0,0,0.08);
+
+    &.on {
+        background: #1A1A1A;
+    }
+}
+
+// 背面底部按鈕
+.flip-back-footer {
+    display: flex;
+    gap: 8px;
+}
+
+.flip-btn-back {
+    padding: 8px 14px;
+    background: transparent;
+    border: 2px solid #1A1A1A;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: #1A1A1A;
+    white-space: nowrap;
+
+    &:hover { background: rgba(0,0,0,0.08); }
+}
+
+// 正面新增「查看課表」按鈕
+.explore-btn-schedule {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    background: transparent;
+    color: #1A1A1A;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border: 2px solid #1A1A1A;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover { background: rgba(0,0,0,0.08); }
 }

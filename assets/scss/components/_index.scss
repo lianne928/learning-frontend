@@ -1,0 +1,102 @@
+// ==========================================
+// 首頁老師卡片橫向滑動樣式
+// ==========================================
+
+// 外層控制區（含箭頭 + 滑動區）
+.teacher-slide-section {
+    position: relative;
+}
+
+.teacher-slide-wrapper {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    // ★ 頂部加大 padding，避免 badge 被裁切
+    padding: 28px 24px 20px;
+    cursor: grab;
+
+    // ★ 顯示美化過的滑軌
+    scrollbar-width: thin;
+    scrollbar-color: #adb5bd transparent;
+
+    &::-webkit-scrollbar {
+        height: 8px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #adb5bd;
+        border-radius: 4px;
+        &:hover {
+            background-color: #6c757d;
+        }
+    }
+
+    &:active { cursor: grabbing; }
+}
+
+.teacher-slide-item {
+    flex: 0 0 calc(25% - 16px); // 一排顯示 4 張
+    min-width: 220px;
+    scroll-snap-align: start;
+
+    .teacherItem {
+        height: 100%;
+
+        .card {
+            height: 100%;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+            &:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            }
+        }
+    }
+}
+
+// ★ 左右箭頭按鈕
+.slide-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #212529;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+        background: #f8f9fa;
+    }
+
+    &.slide-prev { left: -16px; }
+    &.slide-next { right: -16px; }
+}
+
+// 平板顯示 2 張
+@media (max-width: 992px) {
+    .teacher-slide-item {
+        flex: 0 0 calc(50% - 12px);
+    }
+    .slide-arrow { display: none; }
+}
+
+// 手機顯示 1 張
+@media (max-width: 576px) {
+    .teacher-slide-item {
+        flex: 0 0 85%;
+    }
+}
