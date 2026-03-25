@@ -8,17 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
 
-  <body
-    style="
-      font-family: sans-serif;
-      color: #333;
-      line-height: 1.5;
-      padding: 20px;
-      padding-top: 90px;
-      background-color: #f5f5f5;
-    "
-  >
-    <!-- 導覽列 -->
+  <body>
     <header class="border-bottom py-2 fixed-top navbar-light bg-light">
       <div class="container">
         <div class="d-flex justify-content-between align-items-center">
@@ -45,7 +35,7 @@
               <li id="auth-nav-item">
                 <a
                   href="login.html"
-                  class="text-decoration-none px-3 pe-0 text-primary fw-bold"
+                  class="text-decoration-none px-3 pe-0 text-gary fw-bold"
                   >LOGIN</a
                 >
               </li>
@@ -55,96 +45,234 @@
       </div>
     </header>
 
-    <div class="booking-wrapper">
-      <main class="booking-main">
-        <!-- 課程資訊 -->
-        <section class="booking-card">
-          <div class="booking-course-info">
-            <img
-              id="tutor-avatar"
-              src="https://via.placeholder.com/70"
-              alt="老師頭像"
-              class="booking-avatar"
-            />
-            <div class="booking-course-text">
-              <h2 id="display-course-name">載入中...</h2>
-              <p id="teacher-name">載入中...</p>
-              <p class="booking-price-label">
-                單堂：<strong
-                  >NT$ <span id="display-unit-price">0</span></strong
-                >
-              </p>
-            </div>
+    <main class="pt-5 mt-5">
+      <div class="container">
+        <div class="mt-5">
+          <div class="d-inline-block sansTitle text-primary">
+            <p class="display-1 mb-0">Reservation</p>
           </div>
-        </section>
+          <p class="fw-light ms-2 d-inline-block">預約單</p>
+        </div>
 
-        <!-- 週行事曆 -->
-        <section class="booking-card">
-          <h3 class="booking-section-title">
-            📅 請選擇您想預約的時段
-            <span class="booking-section-hint">最多顯示未來 4 週</span>
-          </h3>
+        <div class="row pt-5">
+          <div class="col-12 col-md-8">
+            <div class="border-top border-bottom py-4">
+              <div class="border-bottom">
+                <div class="d-flex align-items-center mt-3">
+                  <p
+                    class="ms-1 mb-4 tilt-warp display-3 border rounded-circle d-inline-block text-primary"
+                  >
+                    Ms.Emma
+                  </p>
+                  <span class="ms-2 fw-light">低年級英文</span>
+                  <div class="ms-auto row">
+                    <div class="col">
+                      <p class="mb-0">正式課程單價</p>
+                      <p class="sansTeg fs-3 text-end">
+                        500<span style="font-size: 12px"> / 點</span>
+                      </p>
+                    </div>
+                    <div class="col">
+                      <p class="mb-0">體驗課程單價</p>
+                      <p class="sansTeg fs-3 text-end">
+                        300<span style="font-size: 12px"> / 點</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="ms-1 mt-4">✦ 已選擇的預約時間</p>
+              <div class="row row-cols-md-3 g-3">
+                <div class="col">
+                  <div class="border">
+                    <div
+                      class="border-bottom bg-gray d-flex align-items-center"
+                    >
+                      <p class="ps-3 pt-3 sansTeg d-inline-block">26 Mar.</p>
+                      <button
+                        type="button"
+                        class="btn-close ms-auto me-3"
+                        style="font-size: 12px"
+                        aria-label="Close"
+                      ></button>
+                    </div>
 
-          <div class="calendar-wrapper">
-            <div class="calendar-nav">
-              <button id="prev-week" disabled>←</button>
-              <span class="calendar-week-label" id="week-label">載入中...</span>
-              <button id="next-week">→</button>
-            </div>
+                    <div class="d-flex align-items-center">
+                      <div>
+                        <p
+                          class="display-5 sansTeg ps-3 pt-3 mb-0 pb-3 text-gary border-end pe-4"
+                        >
+                          18:00
+                        </p>
+                      </div>
 
-            <div class="calendar-track-wrapper">
-              <div class="calendar-track" id="calendar-track">
-                <div class="calendar-loading">⏳ 正在載入班表...</div>
+                      <div class="mx-auto">
+                        <small class="border px-3 rounded-3 bg-light"
+                          >60mins</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="border">
+                    <div
+                      class="border-bottom bg-gray d-flex align-items-center"
+                    >
+                      <p class="ps-3 pt-3 sansTeg d-inline-block">26 Mar.</p>
+                      <button
+                        type="button"
+                        class="btn-close ms-auto me-3"
+                        style="font-size: 12px"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+
+                    <div class="d-flex align-items-center">
+                      <div>
+                        <p
+                          class="display-5 sansTeg ps-3 pt-3 mb-0 pb-3 text-gary border-end pe-4"
+                        >
+                          19:00
+                        </p>
+                      </div>
+
+                      <div class="mx-auto">
+                        <small class="border px-3 rounded-3 bg-light"
+                          >60mins</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="border">
+                    <div
+                      class="border-bottom bg-gray d-flex align-items-center"
+                    >
+                      <p class="ps-3 pt-3 sansTeg d-inline-block">27 Mar.</p>
+                      <button
+                        type="button"
+                        class="btn-close ms-auto me-3"
+                        style="font-size: 12px"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+
+                    <div class="d-flex align-items-center">
+                      <div>
+                        <p
+                          class="display-5 sansTeg ps-3 pt-3 mb-0 pb-3 text-gary border-end pe-4"
+                        >
+                          18:00
+                        </p>
+                      </div>
+
+                      <div class="mx-auto">
+                        <small class="border px-3 rounded-3 bg-light"
+                          >60mins</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col">
+                  <div class="border">
+                    <div
+                      class="border-bottom bg-gray d-flex align-items-center"
+                    >
+                      <p class="ps-3 pt-3 sansTeg d-inline-block">28 Mar.</p>
+                      <button
+                        type="button"
+                        class="btn-close ms-auto me-3"
+                        style="font-size: 12px"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+
+                    <div class="d-flex align-items-center">
+                      <div>
+                        <p
+                          class="display-5 sansTeg ps-3 pt-3 mb-0 pb-3 text-gary border-end pe-4"
+                        >
+                          18:00
+                        </p>
+                      </div>
+
+                      <div class="mx-auto">
+                        <small class="border px-3 rounded-3 bg-light"
+                          >60mins</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
 
-            <div class="calendar-dots" id="calendar-dots">
-              <div class="calendar-dot active" data-week="0"></div>
-              <div class="calendar-dot" data-week="1"></div>
-              <div class="calendar-dot" data-week="2"></div>
-              <div class="calendar-dot" data-week="3"></div>
+          <div class="col-12 col-md-4">
+            <div class="border-top border-bottom pt-3 pb-4">
+              <div class="d-flex justify-content-between border-bottom py-3">
+                <div>
+                  <p
+                    class="border d-inline-block px-3 bg-light py-1 rounded-pill"
+                  >
+                    課程總時長
+                  </p>
+                </div>
+                <div>
+                  <p class="sansTeg d-inline-block fs-4">240</p>
+                  <span class="fw-light"> / mins</span>
+                </div>
+              </div>
+              <div class="d-flex justify-content-between border-bottom py-3">
+                <div class="pt-3">
+                  <p
+                    class="border d-inline-block px-3 bg-light py-1 rounded-pill"
+                  >
+                    予約總堂數
+                  </p>
+                </div>
+                <div class="pt-3">
+                  <p class="sansTeg d-inline-block fs-4">4</p>
+                  <span class="fw-light"> / 堂</span>
+                </div>
+              </div>
+              <div class="d-flex">
+                <div class="mt-auto ms-auto">
+                  <div class="d-flex flex-column align-items-center">
+                    <p class="mb-0 ms-auto mt-5">共計點數花費</p>
+                    <div class="d-flex align-items-center">
+                      <div class="ms-auto">
+                        <p
+                          class="sansTeg display-2 text-primary d-inline-block mb-0 pe-2"
+                        >
+                          2000
+                        </p>
+                        <span>/ 點</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="btn btn-success border border-1 p-3 w-100"
+              >
+                <p class="mb-0 px-5 nunito">確定預約</p>
+              </button>
             </div>
           </div>
-        </section>
-      </main>
-
-      <!-- 右側購物車 -->
-      <aside class="booking-aside">
-        <div class="booking-aside-header">
-          <h3>正式課預約</h3>
-          <p>單價：NT$ <span id="display-unit-price-2">0</span> / 堂</p>
         </div>
 
-        <div class="booking-cart-box">
-          <p class="booking-cart-title">已選取的時段：</p>
-          <div id="cart-list">
-            <p class="booking-cart-empty">尚未選擇任何時段</p>
-          </div>
+        <div>
+          <p class="ms-1 pt-4">✦ 請選擇預約時間</p>
         </div>
-
-        <div class="booking-summary">
-          <div class="booking-summary-row">
-            <p>
-              共選取 <span id="summary-count" class="booking-count">0</span> 堂
-            </p>
-            <div class="booking-total">
-              <p>總計金額</p>
-              <strong>NT$ <span id="summary-price">0</span></strong>
-            </div>
-          </div>
-          <button
-            id="checkout-btn"
-            disabled
-            class="booking-checkout-btn booking-checkout-btn--disabled"
-          >
-            請先選擇時段
-          </button>
-          <div class="booking-secure">
-            🔒 256-bit 加密結帳 ｜ ECPay 綠界科技
-          </div>
-        </div>
-      </aside>
-    </div>
+      </div>
+    </main>
 
     <script src="./assets/js/navbar.js"></script>
     <script src="./assets/js/booking.js"></script>
