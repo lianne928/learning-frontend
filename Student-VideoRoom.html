@@ -22,9 +22,8 @@
                 </div>
                 <nav class="ms-auto pt-2">
                     <ul class="list-unstyled d-flex align-items-center mb-0">
-                        <li><a href="#" class="text-decoration-none px-3 ms-auto">我要找學生</a></li>
-                        <li><a href="explore.html" class="text-decoration-none px-3">我要找老師</a></li>
-                        <li><a href="#" class="text-decoration-none px-3">註冊送代幣</a></li>
+                        <li><a href="StudentChat.html" class="text-decoration-none px-3 ms-auto">訊息中心</a></li>
+                        <li><a href="booking.html" class="text-decoration-none px-3">我的課程</a></li>
                         <li id="auth-nav-item">
                             <a href="login.html" class="text-decoration-none px-3 pe-0 text-primary fw-bold">LOGIN</a>
                         </li>
@@ -34,8 +33,43 @@
         </div>
     </header>
 
+    <!-- ── Pre-join Overlay ───────────────────────────────── -->
+    <div id="prejoin-overlay">
+        <div class="prejoin-card">
+
+            <div class="prejoin-header">
+                <h2>視訊教室</h2>
+                <p class="prejoin-booking">預約編號 <strong>#<span id="prejoin-booking-id">—</span></strong></p>
+            </div>
+
+            <!-- 本地鏡頭預覽 -->
+            <div class="prejoin-preview-wrap">
+                <video id="prejoin-video" autoplay playsinline muted></video>
+                <div id="prejoin-cam-off-icon">
+                    <i class="bi bi-camera-video-off"></i>
+                </div>
+            </div>
+
+            <!-- 麥克風 / 攝影機切換 -->
+            <div class="prejoin-toggles">
+                <button id="btn-pre-mic" class="ctrl-btn" title="麥克風">
+                    <i class="bi bi-mic-fill"></i>
+                </button>
+                <button id="btn-pre-cam" class="ctrl-btn" title="攝影機">
+                    <i class="bi bi-camera-video-fill"></i>
+                </button>
+            </div>
+
+            <!-- 進入按鈕 -->
+            <button id="btn-enter-room" class="btn-enter-room">
+                <i class="bi bi-play-fill"></i> 進入教室
+            </button>
+
+        </div>
+    </div>
+
     <!-- ── Room Layout ────────────────────────────────────── -->
-    <div id="room-layout" >
+    <div id="room-layout" style="display: none;">
 
         <!-- Left: Video Panel -->
         <section id="video-panel">
@@ -51,7 +85,7 @@
                 <div class="ended-card">
                     <h2>🎓 課程已結束</h2>
                     <p>感謝參與本次課程！</p>
-                    <a href="index.html">回到首頁</a>
+                    <a href="booking.html">回到我的課程</a>
                 </div>
             </div>
 

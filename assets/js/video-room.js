@@ -52,15 +52,78 @@ document.addEventListener('DOMContentLoaded', async () => {
     initNavbar();
     document.getElementById('chat-booking-id').textContent = bookingId;
 
-    // Start in parallel
+    if (document.getElementById('prejoin-overlay')) {
+        initPreJoin();   // 顯示前置畫面，等待使用者點擊「進入教室」
+    } else {
+        enterRoom();     // 無前置畫面時直接進入（相容舊行為）
+    }
+});
+
+// ═══════════════════════════════════════════════════
+//  Pre-join
+// ═══════════════════════════════════════════════════
+async function initPreJoin() {
+    const bookingLabel = document.getElementById('prejoin-booking-id');
+    if (bookingLabel) bookingLabel.textContent = bookingId;
+
+    let previewStream = null;
+    try {
+        previewStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        document.getElementById('prejoin-video').srcObject = previewStream;
+    } catch (err) {
+        console.warn('無法取得預覽媒體：', err);
+        const icon = document.getElementById('prejoin-cam-off-icon');
+        if (icon) icon.style.display = 'flex';
+    }
+
+    // 麥克風切換
+    document.getElementById('btn-pre-mic').addEventListener('click', () => {
+        if (!previewStream) return;
+        const tracks = previewStream.getAudioTracks();
+        tracks.forEach(t => { t.enabled = !t.enabled; });
+        const btn = document.getElementById('btn-pre-mic');
+        const muted = tracks[0] ? !tracks[0].enabled : true;
+        btn.classList.toggle('muted', muted);
+        btn.querySelector('i').className = muted ? 'bi bi-mic-mute-fill' : 'bi bi-mic-fill';
+        btn.title = muted ? '取消靜音' : '靜音';
+    });
+
+    // 攝影機切換
+    document.getElementById('btn-pre-cam').addEventListener('click', () => {
+        if (!previewStream) return;
+        const tracks = previewStream.getVideoTracks();
+        tracks.forEach(t => { t.enabled = !t.enabled; });
+        const btn = document.getElementById('btn-pre-cam');
+        const off = tracks[0] ? !tracks[0].enabled : true;
+        btn.classList.toggle('cam-off', off);
+        btn.querySelector('i').className = off ? 'bi bi-camera-video-off-fill' : 'bi bi-camera-video-fill';
+        btn.title = off ? '開啟鏡頭' : '關閉鏡頭';
+        const icon = document.getElementById('prejoin-cam-off-icon');
+        const vid  = document.getElementById('prejoin-video');
+        if (icon) icon.style.display = off ? 'flex' : 'none';
+        if (vid)  vid.style.visibility = off ? 'hidden' : 'visible';
+    });
+
+    // 進入教室按鈕
+    document.getElementById('btn-enter-room').addEventListener('click', () => {
+        if (previewStream) previewStream.getTracks().forEach(t => t.stop());
+        document.getElementById('prejoin-overlay').style.display = 'none';
+        document.getElementById('room-layout').style.display = '';
+        enterRoom();
+    });
+}
+
+// ═══════════════════════════════════════════════════
+//  Enter Room (actual session start)
+// ═══════════════════════════════════════════════════
+function enterRoom() {
     startLocalMedia();
     connectStomp();
     loadChatHistory();
     fetchRoomStatus();
-
     bindControls();
     bindChat();
-});
+}
 
 // ═══════════════════════════════════════════════════
 //  Navbar (same pattern as explore.html)

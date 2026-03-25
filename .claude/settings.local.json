@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -l \"teacher-messages\\\\|tutor.*message\" /d/learning-frontend01/learning-frontend/assets/js/*.js)"
+    ]
+  }
+}
