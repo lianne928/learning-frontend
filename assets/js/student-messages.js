@@ -1,6 +1,5 @@
 // ==========================================
 // 學生訊息中心邏輯 (student-messages.js)
-// 串接後端 REST API + WebSocket (STOMP)
 // ==========================================
 
 const BASE_URL = '';                        // 相對路徑，走 Vite proxy
@@ -50,7 +49,7 @@ function formatTime(createdAt) {
     } else {
         return `${d.getMonth() + 1}/${d.getDate()}`;
     }
-}
+];
 
 function getBookingIdFromQuery() {
     const params = new URLSearchParams(window.location.search);
@@ -137,20 +136,20 @@ async function loadConversations() {
 
 function renderContactList(filter = '') {
     const list = document.getElementById('contact-list');
-    const filtered = conversations.filter(c =>
-        c.tutorName.toLowerCase().includes(filter.toLowerCase()) ||
+    const filtered = mockConversations.filter(c =>
+        c.teacherName.toLowerCase().includes(filter.toLowerCase()) ||
         c.subject.includes(filter)
     );
 
     list.innerHTML = filtered.map(c => `
-        <div class="contact-item ${c.bookingId === currentBookingId ? 'active' : ''}" data-id="${c.bookingId}" onclick="selectConversation(${c.bookingId})">
+        <div class="contact-item ${c.id === currentConvId ? 'active' : ''}" data-id="${c.id}" onclick="selectConversation(${c.id})">
             <div class="contact-avatar-wrap">
-                <img src="${c.avatar}" alt="${c.tutorName}" class="contact-avatar">
+                <img src="${c.avatar}" alt="${c.teacherName}" class="contact-avatar">
                 <span class="contact-status-dot"></span>
             </div>
             <div class="contact-info">
                 <div class="contact-top">
-                    <span class="contact-name">${c.tutorName}</span>
+                    <span class="contact-name">${c.teacherName}</span>
                     <span class="contact-time">${c.time}</span>
                 </div>
                 <div class="contact-bottom">
@@ -163,13 +162,16 @@ function renderContactList(filter = '') {
     `).join('');
 }
 
-// ── 渲染聊天視窗 ──────────────────────────
+function renderChatWindow(convId) {
+    const conv = mockConversations.find(c => c.id === convId);
+    if (!conv) return;
 
-function renderChatWindow(conv, messages) {
+    // Header
     document.getElementById('chat-teacher-avatar').src = conv.avatar;
-    document.getElementById('chat-teacher-name').textContent = conv.tutorName;
+    document.getElementById('chat-teacher-name').textContent = conv.teacherName;
     document.getElementById('chat-subject-tag').textContent = conv.subject;
 
+    // Messages
     const msgArea = document.getElementById('chat-messages');
     msgArea.innerHTML = messages.map(m => buildMsgHtml(m, conv)).join('');
     msgArea.scrollTop = msgArea.scrollHeight;
@@ -211,55 +213,23 @@ function buildMsgHtml(m, conv) {
                 <div class="msg-time">${timeStr}</div>
             </div>
         </div>
-    `;
-}
+    `).join('');
 
-function escapeHtml(str) {
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
+    // Clear unread
+    conv.unread = 0;
 
-function appendMessage(m) {
-    const conv = conversations.find(c => c.bookingId === currentBookingId);
-    if (!conv) return;
-    const msgArea = document.getElementById('chat-messages');
-    msgArea.insertAdjacentHTML('beforeend', buildMsgHtml(m, conv));
+    // Scroll to bottom
     msgArea.scrollTop = msgArea.scrollHeight;
-
-    // 更新聯絡人最後一則
-    conv.lastMessage = m.message || '';
-    conv.time = formatTime(m.createdAt);
-    renderContactList(document.getElementById('search-input').value);
 }
 
-// ── 選取對話 ──────────────────────────────
+function selectConversation(id) {
+    currentConvId = id;
+    renderContactList(document.getElementById('search-input').value);
+    renderChatWindow(id);
 
-async function selectConversation(bookingId) {
-    currentBookingId = bookingId;
-    const conv = conversations.find(c => c.bookingId === bookingId);
-    if (!conv) return;
-
-    // 手機版切換
+    // On mobile, show chat panel
     document.getElementById('chat-panel').classList.add('chat-panel--visible');
     document.getElementById('contacts-panel').classList.add('contacts-panel--hidden');
-
-    try {
-        const res = await axios.get(`${BASE_URL}/api/chatMessage/booking/${bookingId}`, {
-            headers: authHeaders()
-        });
-        const messages = res.data;
-        renderChatWindow(conv, messages);
-
-        // 更新聯絡人最後一則
-        if (messages.length > 0) {
-            const last = messages[messages.length - 1];
-            conv.lastMessage = last.message || '';
-            conv.time = formatTime(last.createdAt);
-        }
-    } catch (err) {
-        console.error('載入訊息失敗', err);
-    }
-
-    connectWebSocket(bookingId);
 }
 
 // ── WebSocket / STOMP ─────────────────────
@@ -311,31 +281,21 @@ function subscribeBooking(bookingId) {
 async function sendMessage() {
     const input = document.getElementById('msg-input');
     const text = input.value.trim();
-    if (!text || !currentBookingId) return;
+    if (!text) return;
 
-    const payload = {
-        bookingId: currentBookingId,
-        role: 'student',
-        messageType: 1,
-        message: text,
-        mediaUrl: null
-    };
+    const conv = mockConversations.find(c => c.id === currentConvId);
+    if (!conv) return;
 
-    // 立即在 UI 顯示
-    const now = new Date().toISOString();
-    appendMessage({ ...payload, createdAt: now });
+    const now = new Date();
+    const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+    conv.messages.push({ from: 'me', text, time });
+    conv.lastMessage = text;
+    conv.time = time;
+
     input.value = '';
-
-    if (stompClient && stompClient.connected) {
-        stompClient.send(`/app/chat/${currentBookingId}`, {}, JSON.stringify(payload));
-    } else {
-        // fallback REST
-        try {
-            await axios.post(`${BASE_URL}/api/chatMessage`, payload, { headers: authHeaders() });
-        } catch (err) {
-            console.error('傳送訊息失敗', err);
-        }
-    }
+    renderContactList(document.getElementById('search-input').value);
+    renderChatWindow(currentConvId);
 }
 
 // ── 上傳檔案 ──────────────────────────────
@@ -417,12 +377,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadConversations();
 
-    // 搜尋
+    // Search
     document.getElementById('search-input').addEventListener('input', e => {
         renderContactList(e.target.value);
     });
 
-    // Enter 送出（Shift+Enter 換行）
+    // Send on Enter (Shift+Enter = newline)
     document.getElementById('msg-input').addEventListener('keydown', e => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -430,16 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 附件上傳
-    document.getElementById('file-input').addEventListener('change', e => {
-        const file = e.target.files[0];
-        if (file) {
-            uploadFile(file);
-            e.target.value = '';
-        }
-    });
-
-    // 手機版返回
+    // Back button (mobile)
     const backBtn = document.getElementById('chat-back-btn');
     if (backBtn) {
         backBtn.addEventListener('click', () => {
