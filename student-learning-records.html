@@ -300,27 +300,30 @@
 
             <!-- 篩選列 -->
             <div class="s-filter-bar">
-                <input type="text" class="s-filter-input" placeholder="搜尋老師或科目…" style="width: 180px;">
+                <input type="text" id="filter-keyword" class="s-filter-input" placeholder="搜尋老師或科目…" style="width: 180px;">
                 <div class="s-filter-divider"></div>
-                <select class="s-filter-input">
+                <select id="filter-subject" class="s-filter-input">
                     <option value="">全部科目</option>
                     <option>英語</option>
                     <option>日語</option>
                     <option>數學</option>
                     <option>程式設計</option>
                     <option>音樂</option>
+                    <option>物理</option>
+                    <option>化學</option>
+                    <option>國語</option>
                 </select>
                 <div class="s-filter-divider"></div>
-                <select class="s-filter-input">
+                <select id="filter-status" class="s-filter-input">
                     <option value="">全部狀態</option>
                     <option>已完成</option>
                     <option>已取消</option>
                 </select>
                 <div class="s-filter-divider"></div>
-                <input type="date" class="s-filter-input">
+                <input type="date" id="filter-date-from" class="s-filter-input">
                 <span style="font-size:0.78rem; color:#aaa; font-weight:600;">至</span>
-                <input type="date" class="s-filter-input">
-                <button class="s-filter-btn">
+                <input type="date" id="filter-date-to" class="s-filter-input">
+                <button id="btn-filter" class="s-filter-btn">
                     <span class="material-symbols-outlined" style="font-size:16px;">search</span>
                     搜尋
                 </button>
@@ -333,147 +336,20 @@
                         <span class="material-symbols-outlined" style="font-size:18px; color:#0055FF; margin-right:6px;">history</span>
                         上課紀錄
                     </h3>
-                    <span style="font-size:0.78rem; color:#aaa; font-weight:600;">共 6 筆</span>
+                    <span id="record-count" style="font-size:0.78rem; color:#aaa; font-weight:600;">載入中…</span>
                 </div>
 
                 <!-- 摘要列 -->
                 <div class="s-summary-bar">
-                    <div class="s-summary-item">總堂數：<span>18 堂</span></div>
-                    <div class="s-summary-item">已完成：<span>16 堂</span></div>
-                    <div class="s-summary-item">已取消：<span>2 堂</span></div>
-                    <div class="s-summary-item">總學習時數：<span>32 hr</span></div>
+                    <div class="s-summary-item">總堂數：<span id="summary-total">--</span></div>
+                    <div class="s-summary-item">已完成：<span id="summary-done">--</span></div>
+                    <div class="s-summary-item">已取消：<span id="summary-cancel">--</span></div>
+                    <div class="s-summary-item">總學習時數：<span id="summary-hours">--</span></div>
                 </div>
 
-                <!-- 紀錄項目 -->
-                <div class="record-item">
-                    <img src="https://i.pravatar.cc/44?img=11" alt="老師" class="record-avatar">
-                    <div class="record-info">
-                        <div class="record-title">英語會話 A1</div>
-                        <div class="record-meta">
-                            <span>林美玲 老師</span>
-                            <span>2026/03/20 14:00</span>
-                            <span class="record-subject">英語</span>
-                        </div>
-                    </div>
-                    <div class="record-right">
-                        <div class="record-duration">60 分鐘</div>
-                        <span class="record-status status-done">已完成</span>
-                        <div class="record-stars">
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="record-item">
-                    <img src="https://i.pravatar.cc/44?img=23" alt="老師" class="record-avatar">
-                    <div class="record-info">
-                        <div class="record-title">日語入門 N5</div>
-                        <div class="record-meta">
-                            <span>佐藤一郎 老師</span>
-                            <span>2026/03/18 10:00</span>
-                            <span class="record-subject">日語</span>
-                        </div>
-                    </div>
-                    <div class="record-right">
-                        <div class="record-duration">60 分鐘</div>
-                        <span class="record-status status-done">已完成</span>
-                        <div class="record-stars">
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined star-empty">star</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="record-item">
-                    <img src="https://i.pravatar.cc/44?img=32" alt="老師" class="record-avatar">
-                    <div class="record-info">
-                        <div class="record-title">數學衝刺班</div>
-                        <div class="record-meta">
-                            <span>王志明 老師</span>
-                            <span>2026/03/15 16:00</span>
-                            <span class="record-subject">數學</span>
-                        </div>
-                    </div>
-                    <div class="record-right">
-                        <div class="record-duration">90 分鐘</div>
-                        <span class="record-status status-done">已完成</span>
-                        <div class="record-stars">
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined star-empty">star</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="record-item">
-                    <img src="https://i.pravatar.cc/44?img=45" alt="老師" class="record-avatar">
-                    <div class="record-info">
-                        <div class="record-title">Python 程式設計入門</div>
-                        <div class="record-meta">
-                            <span>陳大偉 老師</span>
-                            <span>2026/03/12 19:00</span>
-                            <span class="record-subject">程式設計</span>
-                        </div>
-                    </div>
-                    <div class="record-right">
-                        <div class="record-duration">60 分鐘</div>
-                        <span class="record-status status-done">已完成</span>
-                        <div class="record-stars">
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="record-item">
-                    <img src="https://i.pravatar.cc/44?img=11" alt="老師" class="record-avatar">
-                    <div class="record-info">
-                        <div class="record-title">英語會話 A1</div>
-                        <div class="record-meta">
-                            <span>林美玲 老師</span>
-                            <span>2026/03/10 14:00</span>
-                            <span class="record-subject">英語</span>
-                        </div>
-                    </div>
-                    <div class="record-right">
-                        <div class="record-duration">60 分鐘</div>
-                        <span class="record-status status-cancel">已取消</span>
-                    </div>
-                </div>
-
-                <div class="record-item">
-                    <img src="https://i.pravatar.cc/44?img=60" alt="老師" class="record-avatar">
-                    <div class="record-info">
-                        <div class="record-title">吉他入門班</div>
-                        <div class="record-meta">
-                            <span>蘇雅雯 老師</span>
-                            <span>2026/03/08 11:00</span>
-                            <span class="record-subject">音樂</span>
-                        </div>
-                    </div>
-                    <div class="record-right">
-                        <div class="record-duration">60 分鐘</div>
-                        <span class="record-status status-done">已完成</span>
-                        <div class="record-stars">
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                            <span class="material-symbols-outlined">star</span>
-                        </div>
-                    </div>
+                <!-- 紀錄項目（動態載入） -->
+                <div id="records-list">
+                    <div style="text-align:center; padding:40px; color:#aaa; font-size:0.85rem;">載入中…</div>
                 </div>
 
             </div>
@@ -484,6 +360,100 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./assets/js/student-layout.js"></script>
+    <script>
+        const SUBJECT_MAP = { 1:'英語', 2:'日語', 3:'數學', 4:'程式設計', 5:'音樂', 6:'物理', 7:'化學', 8:'國語' };
+        const STATUS_MAP  = { 1:'已排課', 2:'已完成', 3:'已取消' };
+        let allRecords = [];
+
+        function handleApiError(err) {
+            if (!err.response) { alert('無法連線至伺服器，請確認網路'); return; }
+            if (err.response.status === 401) { localStorage.clear(); window.location.href = 'login.html'; return; }
+            if (err.response.status === 403) { alert('權限不足'); return; }
+            alert('伺服器發生錯誤，請稍後再試');
+        }
+
+        function renderRecords(records) {
+            const container = document.getElementById('records-list');
+            document.getElementById('record-count').textContent = '共 ' + records.length + ' 筆';
+            if (!records.length) {
+                container.innerHTML = '<div class="s-empty"><span class="material-symbols-outlined">history</span>查無符合條件的紀錄</div>';
+                return;
+            }
+            const avatarNums = [11, 23, 32, 45, 60, 7, 14, 20, 33, 50];
+            container.innerHTML = records.map((r, i) => {
+                const subjectName = SUBJECT_MAP[r.subject] || ('科目' + r.subject);
+                const statusClass = r.status === 2 ? 'status-done' : r.status === 3 ? 'status-cancel' : 'status-ongoing';
+                const statusText = STATUS_MAP[r.status] || '';
+                const dateStr = r.date ? r.date.replace(/-/g, '/') : '';
+                const timeStr = r.hour != null ? r.hour + ':00' : '';
+                const avatarNum = avatarNums[i % avatarNums.length];
+                const starsHtml = r.status === 2
+                    ? '<div class="record-stars"><span class="material-symbols-outlined">star</span><span class="material-symbols-outlined">star</span><span class="material-symbols-outlined">star</span><span class="material-symbols-outlined">star</span><span class="material-symbols-outlined">star</span></div>'
+                    : '';
+                return `<div class="record-item">
+                    <img src="https://i.pravatar.cc/44?img=${avatarNum}" alt="老師" class="record-avatar">
+                    <div class="record-info">
+                        <div class="record-title">${subjectName}</div>
+                        <div class="record-meta">
+                            <span>${r.tutorName || ''} 老師</span>
+                            <span>${dateStr} ${timeStr}</span>
+                            <span class="record-subject">${subjectName}</span>
+                        </div>
+                    </div>
+                    <div class="record-right">
+                        <div class="record-duration">60 分鐘</div>
+                        <span class="record-status ${statusClass}">${statusText}</span>
+                        ${starsHtml}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function updateSummary(records) {
+            const done   = records.filter(r => r.status === 2).length;
+            const cancel = records.filter(r => r.status === 3).length;
+            document.getElementById('summary-total').textContent  = records.length + ' 堂';
+            document.getElementById('summary-done').textContent   = done + ' 堂';
+            document.getElementById('summary-cancel').textContent = cancel + ' 堂';
+            document.getElementById('summary-hours').textContent  = done + ' hr';
+        }
+
+        function applyFilters() {
+            const keyword   = document.getElementById('filter-keyword').value.toLowerCase().trim();
+            const subject   = document.getElementById('filter-subject').value;
+            const statusVal = document.getElementById('filter-status').value;
+            const dateFrom  = document.getElementById('filter-date-from').value;
+            const dateTo    = document.getElementById('filter-date-to').value;
+            const statusNum = statusVal === '已完成' ? 2 : statusVal === '已取消' ? 3 : 0;
+
+            const filtered = allRecords.filter(r => {
+                const subjectName = SUBJECT_MAP[r.subject] || '';
+                const tutorName = (r.tutorName || '').toLowerCase();
+                if (keyword && !tutorName.includes(keyword) && !subjectName.toLowerCase().includes(keyword)) return false;
+                if (subject && subjectName !== subject) return false;
+                if (statusNum && r.status !== statusNum) return false;
+                if (dateFrom && r.date < dateFrom) return false;
+                if (dateTo && r.date > dateTo) return false;
+                return true;
+            });
+            renderRecords(filtered);
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userId = localStorage.getItem('userId');
+            try {
+                const res = await axios.get(API_BASE_URL + '/courses/me?userId=' + userId);
+                allRecords = res.data || [];
+                // 依日期降序排列
+                allRecords.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+                updateSummary(allRecords);
+                renderRecords(allRecords);
+            } catch (err) {
+                handleApiError(err);
+            }
+            document.getElementById('btn-filter').addEventListener('click', applyFilters);
+        });
+    </script>
 </body>
 
 </html>

@@ -464,13 +464,21 @@
                         <div class="s-form-row">
                             <div class="s-form-group">
                                 <label class="s-label">暱稱 <span class="req">*</span></label>
-                                <input type="text" class="s-input" placeholder="輸入你的暱稱" value="小明同學">
+                                <input type="text" id="input-name" class="s-input" placeholder="輸入你的暱稱" value="小明同學">
                             </div>
                             <div class="s-form-group">
                                 <label class="s-label">電子郵件</label>
-                                <input type="email" class="s-input" value="student@example.com" disabled>
+                                <input type="email" id="input-email" class="s-input" value="student@example.com" disabled>
                                 <span class="s-input-hint">電子郵件不可修改，如需變更請聯絡客服</span>
                             </div>
+                        </div>
+
+                        <div class="s-form-row">
+                            <div class="s-form-group">
+                                <label class="s-label">生日</label>
+                                <input type="date" id="input-birthday" class="s-input">
+                            </div>
+                            <div class="s-form-group"></div>
                         </div>
 
                         <div class="s-form-row">
@@ -539,7 +547,7 @@
                         <div class="s-form-row">
                             <div class="s-form-group full">
                                 <label class="s-label">目前密碼 <span class="req">*</span></label>
-                                <input type="password" class="s-input" placeholder="輸入目前密碼">
+                                <input type="password" id="input-old-password" class="s-input" placeholder="輸入目前密碼">
                             </div>
                         </div>
 
@@ -559,12 +567,12 @@
                             </div>
                             <div class="s-form-group">
                                 <label class="s-label">確認新密碼 <span class="req">*</span></label>
-                                <input type="password" class="s-input" placeholder="再次輸入新密碼">
+                                <input type="password" id="input-confirm-password" class="s-input" placeholder="再次輸入新密碼">
                             </div>
                         </div>
 
                         <div class="d-flex justify-content-end mt-2">
-                            <button class="s-save-btn">
+                            <button id="btn-save-password" class="s-save-btn">
                                 <span class="material-symbols-outlined" style="font-size:16px;">lock_reset</span>
                                 更新密碼
                             </button>
@@ -740,6 +748,80 @@
             label.textContent = val.length === 0 ? '輸入新密碼以檢查強度' : `密碼強度：${labels[score]}`;
             label.style.color = colors[score] || '#aaa';
         }
+    </script>
+    <script>
+        // ── Settings API 串接 ──
+        function handleApiError(err) {
+            if (!err.response) { alert('無法連線至伺服器，請確認網路'); return; }
+            if (err.response.status === 401) { localStorage.clear(); window.location.href = 'login.html'; return; }
+            if (err.response.status === 403) { alert('權限不足'); return; }
+            alert('伺服器發生錯誤，請稍後再試');
+        }
+
+        // ── 載入個人資料 ──
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await axios.get(API_BASE_URL + '/users/me');
+                const u = res.data;
+                document.getElementById('input-name').value = u.name || '';
+                document.getElementById('input-email').value = u.email || '';
+                if (u.birthday) {
+                    document.getElementById('input-birthday').value = u.birthday;
+                }
+            } catch (err) {
+                handleApiError(err);
+            }
+        });
+
+        // ── 儲存個人資料 ──
+        document.getElementById('btn-save-profile').addEventListener('click', async () => {
+            const name = document.getElementById('input-name').value.trim();
+            const birthday = document.getElementById('input-birthday').value;
+            if (!name) { alert('暱稱不能為空'); return; }
+            const btn = document.getElementById('btn-save-profile');
+            btn.disabled = true;
+            try {
+                const body = { name };
+                if (birthday) body.birthday = birthday;
+                await axios.put(API_BASE_URL + '/users/me', body);
+                localStorage.setItem('userName', name);
+                const nameEl = document.getElementById('sidebar-name');
+                if (nameEl) nameEl.textContent = name;
+                alert('個人資料已更新');
+            } catch (err) {
+                handleApiError(err);
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // ── 更改密碼 ──
+        document.getElementById('btn-save-password').addEventListener('click', async () => {
+            const oldPwd = document.getElementById('input-old-password').value;
+            const newPwd = document.getElementById('new-password').value;
+            const confirmPwd = document.getElementById('input-confirm-password').value;
+            if (!oldPwd || !newPwd || !confirmPwd) { alert('請填寫所有密碼欄位'); return; }
+            if (newPwd.length < 8) { alert('新密碼至少需要 8 個字元'); return; }
+            if (newPwd !== confirmPwd) { alert('兩次密碼不一致'); return; }
+            const btn = document.getElementById('btn-save-password');
+            btn.disabled = true;
+            try {
+                await axios.put(API_BASE_URL + '/users/me/password', { oldPassword: oldPwd, newPassword: newPwd });
+                document.getElementById('input-old-password').value = '';
+                document.getElementById('new-password').value = '';
+                document.getElementById('input-confirm-password').value = '';
+                updateStrength('');
+                alert('密碼已成功更新');
+            } catch (err) {
+                if (err.response && (err.response.status === 400 || err.response.status === 401)) {
+                    alert('目前密碼不正確');
+                } else {
+                    handleApiError(err);
+                }
+            } finally {
+                btn.disabled = false;
+            }
+        });
     </script>
 </body>
 

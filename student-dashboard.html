@@ -545,6 +545,93 @@
         const greeting = hour < 12 ? '早安' : hour < 18 ? '午安' : '晚安';
         document.getElementById('greeting-text').textContent = greeting + '，歡迎回來';
     </script>
+    <script>
+        function handleApiError(err) {
+            if (!err.response) return;
+            if (err.response.status === 401) { localStorage.clear(); window.location.href = 'login.html'; }
+        }
+
+        function dateDiffDays(dateStr) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const target = new Date(dateStr);
+            target.setHours(0, 0, 0, 0);
+            return Math.round((target - today) / 86400000);
+        }
+
+        function formatDate(d) { return d ? d.replace(/-/g, '/') : ''; }
+
+        function renderUpcomingList(todayList, futureList) {
+            const container = document.getElementById('upcoming-list');
+            const all = [...todayList, ...futureList];
+            if (!all.length) {
+                container.innerHTML = '<div class="s-empty-state"><span class="material-symbols-outlined">event_busy</span>近期無排課</div>';
+                return;
+            }
+            container.innerHTML = all.map(item => {
+                const diff = dateDiffDays(item.date);
+                let dotColor, badgeClass, badgeText;
+                if (diff === 0) {
+                    dotColor = '#CCFF00'; badgeClass = 'badge-today'; badgeText = '今天';
+                } else if (diff === 1) {
+                    dotColor = '#FF52D9'; badgeClass = 'badge-soon'; badgeText = '明天';
+                } else {
+                    dotColor = '#aaa'; badgeClass = 'badge-future'; badgeText = diff + '天後';
+                }
+                const h = item.hour != null ? item.hour : (item.tutorname != null ? item.hour : '--');
+                const timeStr = h != null ? h + ':00 – ' + (h + 1) + ':00' : '';
+                const tutor = item.tutorname || item.tutorName || '';
+                return `<div class="upcoming-item">
+                    <div class="upcoming-dot" style="background:${dotColor};"></div>
+                    <div class="upcoming-info">
+                        <div class="upcoming-title">${tutor} 老師</div>
+                        <div class="upcoming-meta">
+                            <span>${formatDate(item.date)}</span>
+                            <span>${timeStr}</span>
+                        </div>
+                    </div>
+                    <span class="upcoming-badge ${badgeClass}">${badgeText}</span>
+                </div>`;
+            }).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userId = localStorage.getItem('userId');
+
+            const results = await Promise.allSettled([
+                axios.get(API_BASE_URL + '/users/me'),
+                axios.get(API_BASE_URL + '/courses/me?userId=' + userId),
+                axios.get(API_BASE_URL + '/today/me?userId=' + userId),
+                axios.get(API_BASE_URL + '/future/me?userId=' + userId)
+            ]);
+
+            // 個人資料
+            if (results[0].status === 'fulfilled') {
+                const u = results[0].value.data;
+                document.getElementById('welcome-name').textContent = u.name || '同學';
+                document.getElementById('stat-tokens').textContent = u.wallet != null ? u.wallet : '--';
+            } else {
+                handleApiError(results[0].reason);
+            }
+
+            // 完成課程 & 時數
+            if (results[1].status === 'fulfilled') {
+                const courses = results[1].value.data || [];
+                const done = courses.filter(c => c.status === 2).length;
+                document.getElementById('stat-courses').textContent = done;
+                document.getElementById('stat-hours').textContent = done;
+            }
+
+            // 今日課程
+            const todayList = results[2].status === 'fulfilled' ? (results[2].value.data || []) : [];
+            document.getElementById('today-count').textContent = todayList.length;
+
+            // 未來課程
+            const futureList = results[3].status === 'fulfilled' ? (results[3].value.data || []) : [];
+
+            renderUpcomingList(todayList, futureList);
+        });
+    </script>
 </body>
 
 </html>

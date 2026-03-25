@@ -389,7 +389,7 @@
                         目前代幣餘額
                     </div>
                     <div class="s-balance-amount">
-                        120 <span class="s-balance-unit">枚</span>
+                        <span id="balance-amount">--</span> <span class="s-balance-unit">枚</span>
                     </div>
                     <div class="s-balance-sub">每枚代幣 = NT$30 課程價值</div>
                 </div>
@@ -447,97 +447,11 @@
                         <span class="material-symbols-outlined" style="font-size:18px; color:#0055FF; margin-right:6px;">receipt_long</span>
                         交易明細
                     </h3>
-                    <span style="font-size:0.78rem; color:#aaa; font-weight:600;">近 30 天</span>
+                    <span id="tx-count" style="font-size:0.78rem; color:#aaa; font-weight:600;">載入中…</span>
                 </div>
 
-                <div class="tx-item">
-                    <div class="tx-icon" style="background:#d1fae5;">
-                        <span class="material-symbols-outlined" style="font-size:18px; color:#065f46;">add_circle</span>
-                    </div>
-                    <div class="tx-info">
-                        <div class="tx-desc">儲值代幣 × 120</div>
-                        <div class="tx-date">2026/03/15 10:32</div>
-                    </div>
-                    <div class="tx-right">
-                        <div class="tx-amount plus">+120</div>
-                        <div class="tx-balance">餘額 240 枚</div>
-                        <span class="tx-type topup">儲值</span>
-                    </div>
-                </div>
-
-                <div class="tx-item">
-                    <div class="tx-icon" style="background:#fee2e2;">
-                        <span class="material-symbols-outlined" style="font-size:18px; color:#dc2626;">remove_circle</span>
-                    </div>
-                    <div class="tx-info">
-                        <div class="tx-desc">英語會話 A1 — 林美玲 老師</div>
-                        <div class="tx-date">2026/03/20 14:00</div>
-                    </div>
-                    <div class="tx-right">
-                        <div class="tx-amount minus">-40</div>
-                        <div class="tx-balance">餘額 200 枚</div>
-                        <span class="tx-type deduct">扣款</span>
-                    </div>
-                </div>
-
-                <div class="tx-item">
-                    <div class="tx-icon" style="background:#fee2e2;">
-                        <span class="material-symbols-outlined" style="font-size:18px; color:#dc2626;">remove_circle</span>
-                    </div>
-                    <div class="tx-info">
-                        <div class="tx-desc">日語入門 N5 — 佐藤一郎 老師</div>
-                        <div class="tx-date">2026/03/18 10:00</div>
-                    </div>
-                    <div class="tx-right">
-                        <div class="tx-amount minus">-40</div>
-                        <div class="tx-balance">餘額 160 枚</div>
-                        <span class="tx-type deduct">扣款</span>
-                    </div>
-                </div>
-
-                <div class="tx-item">
-                    <div class="tx-icon" style="background:#fee2e2;">
-                        <span class="material-symbols-outlined" style="font-size:18px; color:#dc2626;">remove_circle</span>
-                    </div>
-                    <div class="tx-info">
-                        <div class="tx-desc">數學衝刺班 — 王志明 老師</div>
-                        <div class="tx-date">2026/03/15 16:00</div>
-                    </div>
-                    <div class="tx-right">
-                        <div class="tx-amount minus">-60</div>
-                        <div class="tx-balance">餘額 180 枚</div>
-                        <span class="tx-type deduct">扣款</span>
-                    </div>
-                </div>
-
-                <div class="tx-item">
-                    <div class="tx-icon" style="background:#fee2e2;">
-                        <span class="material-symbols-outlined" style="font-size:18px; color:#dc2626;">remove_circle</span>
-                    </div>
-                    <div class="tx-info">
-                        <div class="tx-desc">Python 程式設計入門 — 陳大偉 老師</div>
-                        <div class="tx-date">2026/03/12 19:00</div>
-                    </div>
-                    <div class="tx-right">
-                        <div class="tx-amount minus">-40</div>
-                        <div class="tx-balance">餘額 240 枚</div>
-                        <span class="tx-type deduct">扣款</span>
-                    </div>
-                </div>
-
-                <div class="tx-item">
-                    <div class="tx-icon" style="background:#d1fae5;">
-                        <span class="material-symbols-outlined" style="font-size:18px; color:#065f46;">add_circle</span>
-                    </div>
-                    <div class="tx-info">
-                        <div class="tx-desc">儲值代幣 × 50</div>
-                        <div class="tx-date">2026/03/01 09:15</div>
-                    </div>
-                    <div class="tx-right">
-                        <div class="tx-amount plus">+50</div>
-                        <div class="tx-balance">餘額 280 枚</div>
-                        <span class="tx-type topup">儲值</span>
-                    </div>
+                <div id="tx-list">
+                    <div class="tx-item" style="justify-content:center; color:#aaa; font-size:0.85rem; padding:24px;">載入中…</div>
                 </div>
 
             </div>
@@ -548,6 +462,87 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./assets/js/student-layout.js"></script>
+    <script>
+        function handleApiError(err) {
+            if (!err.response) { alert('無法連線至伺服器，請確認網路'); return; }
+            if (err.response.status === 401) { localStorage.clear(); window.location.href = 'login.html'; return; }
+            if (err.response.status === 403) { alert('權限不足'); return; }
+            alert('伺服器發生錯誤，請稍後再試');
+        }
+
+        function formatDateTime(iso) {
+            const d = new Date(iso);
+            return d.getFullYear() + '/' +
+                String(d.getMonth() + 1).padStart(2, '0') + '/' +
+                String(d.getDate()).padStart(2, '0') + ' ' +
+                String(d.getHours()).padStart(2, '0') + ':' +
+                String(d.getMinutes()).padStart(2, '0');
+        }
+
+        function renderTxList(logs, currentBalance) {
+            const container = document.getElementById('tx-list');
+            if (!logs || logs.length === 0) {
+                container.innerHTML = '<div class="tx-item" style="justify-content:center; color:#aaa; font-size:0.85rem; padding:24px;">尚無交易紀錄</div>';
+                document.getElementById('tx-count').textContent = '共 0 筆';
+                return;
+            }
+
+            // 依 createdAt 降序排列（最新在最前）
+            const sorted = [...logs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            let running = currentBalance;
+            let html = '';
+
+            sorted.forEach(log => {
+                const amount = log.amount || 0;
+                const type = log.transactionType;
+                const isPlus = type === 1 || type === 3;
+                const iconBg = isPlus ? '#d1fae5' : '#fee2e2';
+                const iconColor = isPlus ? '#065f46' : '#dc2626';
+                const iconName = isPlus ? 'add_circle' : 'remove_circle';
+                const amountClass = isPlus ? 'plus' : 'minus';
+                const amountText = isPlus ? '+' + amount : '-' + Math.abs(amount);
+                const badgeClass = isPlus ? 'topup' : 'deduct';
+                const badgeText = type === 1 ? '儲值' : type === 2 ? '扣款' : '教學收入';
+                const desc = type === 1 ? '儲值代幣 × ' + amount :
+                             type === 2 ? '課程扣款' : '教學收入';
+                const balanceAfter = running;
+                running -= amount;
+
+                html += `<div class="tx-item">
+                    <div class="tx-icon" style="background:${iconBg};">
+                        <span class="material-symbols-outlined" style="font-size:18px; color:${iconColor};">${iconName}</span>
+                    </div>
+                    <div class="tx-info">
+                        <div class="tx-desc">${desc}</div>
+                        <div class="tx-date">${log.createdAt ? formatDateTime(log.createdAt) : ''}</div>
+                    </div>
+                    <div class="tx-right">
+                        <div class="tx-amount ${amountClass}">${amountText}</div>
+                        <div class="tx-balance">餘額 ${balanceAfter} 枚</div>
+                        <span class="tx-type ${badgeClass}">${badgeText}</span>
+                    </div>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('tx-count').textContent = '共 ' + sorted.length + ' 筆';
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const [userRes, logsRes] = await Promise.all([
+                    axios.get(API_BASE_URL + '/users/me'),
+                    axios.get(API_BASE_URL + '/users/wallet-logs')
+                ]);
+                const wallet = userRes.data.wallet || 0;
+                document.getElementById('balance-amount').textContent = wallet;
+                renderTxList(logsRes.data, wallet);
+            } catch (err) {
+                handleApiError(err);
+            }
+        });
+    </script>
 </body>
 
 </html>
