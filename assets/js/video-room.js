@@ -63,8 +63,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 //  Pre-join
 // ═══════════════════════════════════════════════════
 async function initPreJoin() {
-    const bookingLabel = document.getElementById('prejoin-booking-id');
-    if (bookingLabel) bookingLabel.textContent = bookingId;
+    const courseNameEl = document.getElementById('prejoin-course-name');
+    if (courseNameEl) {
+        try {
+            const endpoint = userRole === 'tutor'
+                ? `${API_BASE_URL}/tutor/bookings`
+                : `${API_BASE_URL}/student/bookings`;
+            const res = await axios.get(endpoint, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const booking = (res.data || []).find(b =>
+                String(b.id) === String(bookingId) || String(b.orderId) === String(bookingId)
+            );
+            courseNameEl.textContent = booking?.courseName || `#${bookingId}`;
+        } catch (err) {
+            console.warn('無法取得課程名稱', err);
+            courseNameEl.textContent = `#${bookingId}`;
+        }
+    }
 
     let previewStream = null;
     try {
