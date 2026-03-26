@@ -46,7 +46,7 @@ document
 
         // 依角色跳轉
         if (payload.role === 'ADMIN') {
-          window.location.href = "index.html";
+          window.location.href = "admin-dashboard.html";
         } else {
           // TUTOR 和 STUDENT 都跳首頁
           window.location.href = "index.html";
