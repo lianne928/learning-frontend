@@ -1,5 +1,3 @@
-const API_BASE_URL = "http://localhost:8080/api";
-
 document
   .getElementById("loginForm")
   .addEventListener("submit", async function (e) {

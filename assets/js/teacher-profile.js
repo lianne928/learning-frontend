@@ -1,9 +1,6 @@
 // ==========================================
 // 老師個人頁邏輯 (teacher-profile.js)
 // ==========================================
-
-const API_BASE_URL = "http://localhost:8080/api";
-
 // 從網址列取得參數
 const urlParams = new URLSearchParams(window.location.search);
 const tutorId = urlParams.get("tutorId");

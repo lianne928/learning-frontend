@@ -1,124 +1,172 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Merge - 登入</title>
+    <link rel="stylesheet" href="./assets/scss/all.scss" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Merge - 登入</title>
-  <link rel="stylesheet" href="./assets/scss/all.scss" />
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</head>
-
-<body>
-  <header class="border-bottom py-2">
-    <div class="container">
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="d-flex">
-          <a href="index.html" class="text-decoration-none">
-            <h1 class="nunito fst-italic display-5 pt-2">Merge</h1>
-          </a>
+  <body>
+    <header class="border-bottom py-2">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex">
+            <a href="index.html" class="text-decoration-none">
+              <h1 class="nunito fst-italic display-5 pt-2">Merge</h1>
+            </a>
+          </div>
+          <nav class="ms-auto pt-2">
+            <ul class="list-unstyled d-flex">
+              <li>
+                <a href="explore.html" class="text-decoration-none px-3"
+                  >我要找老師</a
+                >
+              </li>
+              <li>
+                <a
+                  href="register.html"
+                  class="text-decoration-none px-3 text-primary fw-bold"
+                  >註冊送代幣</a
+                >
+              </li>
+            </ul>
+          </nav>
         </div>
-        <nav class="ms-auto pt-2">
-          <ul class="list-unstyled d-flex">
-            <li>
-              <a href="#" class="text-decoration-none px-3 ms-auto">我要找學生</a>
-            </li>
-            <li>
-              <a href="explore.html" class="text-decoration-none px-3">我要找老師</a>
-            </li>
-            <li>
-              <a href="register.html" class="text-decoration-none px-3 text-success fw-bold">註冊送代幣</a>
-            </li>
-            <li id="auth-nav-item">
-              <a href="login.html" class="text-decoration-none px-3 pe-0 text-primary fw-bold">LOGIN</a>
-            </li>
-          </ul>
-        </nav>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <main class="pb-5">
-    <div class="bg-line border-bottom">
-      <h2 class="sansTitle text-center pt-5 text-drak">LOGIN</h2>
-    </div>
+    <main class="pb-5">
+      <div class="bg-line border-bottom">
+        <h2 class="sansTitle text-center pt-5 text-drak">LOGIN</h2>
+      </div>
 
-    <section class="container">
-      <div class="row justify-content-center mt-4">
-        <div class="col-11 col-md-3 card border-0 shadow-lg rounded-4 mb-3">
-          <div class="card-body d-flex justify-content-center align-items-center flex-column position-relative">
+      <section class="container">
+        <div class="row justify-content-center mt-4">
+          <div class="col-11 col-md-3 card border-0 shadow-lg rounded-4 mb-3">
             <div
-              class="bg-dark rounded-circle border border-2 border-dark position-absolute top-0 start-50 translate-middle d-flex align-items-center justify-content-center shadow"
-              style="width: 130px; height: 130px; overflow: hidden">
-              <dotlottie-wc src="https://lottie.host/3ad56864-47bd-490b-92ab-25274f9773d5/R3RFdr3ZjP.lottie"
-                style="width: 140px; height: 150px" autoplay loop></dotlottie-wc>
+              class="card-body d-flex justify-content-center align-items-center flex-column position-relative"
+            >
+              <div
+                class="bg-dark rounded-circle border border-2 border-dark position-absolute top-0 start-50 translate-middle d-flex align-items-center justify-content-center shadow"
+                style="width: 130px; height: 130px; overflow: hidden"
+              >
+                <dotlottie-wc
+                  src="https://lottie.host/3ad56864-47bd-490b-92ab-25274f9773d5/R3RFdr3ZjP.lottie"
+                  style="width: 140px; height: 150px"
+                  autoplay
+                  loop
+                ></dotlottie-wc>
+              </div>
+
+              <form class="mt-5 pt-4 w-100" id="loginForm">
+                <div class="mb-3">
+                  <label for="emailInput" class="form-label"
+                    >請輸入你的信箱</label
+                  >
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="emailInput"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="passwordInput" class="form-label"
+                    >請輸入你的密碼</label
+                  >
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="passwordInput"
+                    required
+                  />
+                </div>
+                <div class="mb-3 form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="rememberCheck"
+                  />
+                  <label class="form-check-label" for="rememberCheck"
+                    >記得我</label
+                  >
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn-primary w-100"
+                  id="loginBtn"
+                >
+                  上課去！
+                </button>
+
+                <!-- 新增：前往註冊 -->
+                <p class="text-center mt-3 small text-muted">
+                  還沒有帳號？<a
+                    href="register.html"
+                    class="fw-bold text-decoration-none"
+                    style="color: rgb(102, 156, 95)"
+                    >免費註冊 🎉</a
+                  >
+                </p>
+              </form>
             </div>
+          </div>
+        </div>
+      </section>
+    </main>
 
-            <form class="mt-5 pt-4 w-100" id="loginForm">
-              <div class="mb-3">
-                <label for="emailInput" class="form-label">請輸入你的信箱</label>
-                <input type="email" class="form-control" id="emailInput" required />
-              </div>
-              <div class="mb-3">
-                <label for="passwordInput" class="form-label">請輸入你的密碼</label>
-                <input type="password" class="form-control" id="passwordInput" required />
-              </div>
-              <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="rememberCheck" />
-                <label class="form-check-label" for="rememberCheck">記得我</label>
-              </div>
-              <button type="submit" class="btn btn-primary w-100" id="loginBtn">
-                上課去！
-              </button>
-
-              <!-- 新增：前往註冊 -->
-              <p class="text-center mt-3 small text-muted">
-                還沒有帳號？<a href="register.html" class="fw-bold text-decoration-none" style="color: rgb(102, 156, 95);">免費註冊 🎉</a>
-              </p>
-            </form>
+    <footer class="bg-white border-top py-5 mt-auto">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
+            <a
+              href="index.html"
+              class="text-decoration-none d-flex align-items-center justify-content-center justify-content-md-start"
+            >
+              <h3 class="nunito fst-italic mb-0 me-2 text-primary">Merge</h3>
+              <span class="text-muted small">&copy; 2026</span>
+            </a>
+          </div>
+          <div class="col-md-4 mb-3 mb-md-0">
+            <ul class="list-unstyled d-flex justify-content-center mb-0 small">
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >服務條款</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >隱私政策</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >聯絡我們</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4 text-center text-md-end">
+            <a href="#" class="text-muted me-3"
+              ><i class="bi bi-facebook"></i
+            ></a>
+            <a href="#" class="text-muted me-3"
+              ><i class="bi bi-instagram"></i
+            ></a>
+            <a href="#" class="text-muted"><i class="bi bi-github"></i></a>
           </div>
         </div>
       </div>
-    </section>
-  </main>
+    </footer>
 
-  <footer class="bg-white border-top py-5 mt-auto">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
-          <a href="index.html"
-            class="text-decoration-none d-flex align-items-center justify-content-center justify-content-md-start">
-            <h3 class="nunito fst-italic mb-0 me-2 text-primary">Merge</h3>
-            <span class="text-muted small">&copy; 2026</span>
-          </a>
-        </div>
-        <div class="col-md-4 mb-3 mb-md-0">
-          <ul class="list-unstyled d-flex justify-content-center mb-0 small">
-            <li>
-              <a href="#" class="text-muted text-decoration-none px-2">服務條款</a>
-            </li>
-            <li>
-              <a href="#" class="text-muted text-decoration-none px-2">隱私政策</a>
-            </li>
-            <li>
-              <a href="#" class="text-muted text-decoration-none px-2">聯絡我們</a>
-            </li>
-          </ul>
-        </div>
-        <div class="col-md-4 text-center text-md-end">
-          <a href="#" class="text-muted me-3"><i class="bi bi-facebook"></i></a>
-          <a href="#" class="text-muted me-3"><i class="bi bi-instagram"></i></a>
-          <a href="#" class="text-muted"><i class="bi bi-github"></i></a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
-  <!-- 改成這樣（不用 type="module"，因為有用到全域 axios） -->
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="./assets/js/login.js"></script>
-
-</body>
-
+    <script
+      src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js"
+      type="module"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- ⚠️ 重要：先載入 navbar.js，再載入 login.js -->
+    <script src="./assets/js/navbar.js"></script>
+    <script src="./assets/js/login.js"></script>
+  </body>
 </html>

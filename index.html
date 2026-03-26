@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Merge - 首頁</title>
     <link rel="stylesheet" href="./assets/scss/all.scss" />
-    <script src="./assets/scss/components/_index.scss"></script>
   </head>
 
   <body>
@@ -20,11 +19,6 @@
           <nav class="ms-auto pt-2">
             <ul class="list-unstyled d-flex align-items-center mb-0">
               <li>
-                <a href="#" class="text-decoration-none px-3 ms-auto"
-                  >我要找學生</a
-                >
-              </li>
-              <li>
                 <a href="explore.html" class="text-decoration-none px-3"
                   >我要找老師</a
                 >
@@ -33,20 +27,13 @@
                 <a href="#" class="text-decoration-none px-3">註冊送代幣</a>
               </li>
 
-              <li id="auth-nav-item" class="position-relative">
-                <a
-                  href="login.html"
-                  class="text-decoration-none px-3 pe-0 text-primary fw-bold"
-                  >
-                  <span class="position-relative text-light z-1">登入</span>
-                  <div class="d-flex position-absolute translate-middle-y w-100 top-50 z-0" style="left: 7px;">
-                    <div class="w-25 bg-primary rounded-pill border-bottom border-top" style="height: 45px"></div>
-                    <div class="w-25 bg-primary rounded-pill border-bottom border-top" style="height: 45px"></div>
-                    <div class="w-25 bg-primary rounded-pill border-bottom border-top" style="height: 45px"></div>
-                    <div class="w-25 bg-primary rounded-pill border-bottom border-top" style="height: 45px"></div>
-                </div>
-                  </a
-                >
+              <li id="auth-nav-item">
+                <a class="fancy" href="login.html">
+                  <span class="top-key"></span>
+                  <span class="text">登入</span>
+                  <span class="bottom-key-1"></span>
+                  <span class="bottom-key-2"></span>
+                </a>
               </li>
             </ul>
           </nav>
@@ -146,7 +133,9 @@
             </li>
           </ul>
           <div
-            class="my-5 mb-4 border border-dark border-2 rounded-5 p-5 bg-white shadow-sm bg-dark" style="min-height: 420px;">
+            class="my-5 mb-4 border border-dark border-2 rounded-5 p-5 bg-white shadow-sm bg-dark"
+            style="min-height: 420px"
+          >
             <div class="row position-relative">
               <div class="col-12 col-lg-7 text-dark">
                 <h3 class="display-4 tilt-warp">LEARNING ✦</h3>
@@ -176,11 +165,13 @@
         </div>
 
         <div class="container py-5">
-            <!-- teacher card start -->
-            <div id="teacher-card-container">
-              <div class="col-12 text-center py-5 text-muted">⏳ 載入老師資料中...</div>
+          <!-- teacher card start -->
+          <div id="teacher-card-container">
+            <div class="col-12 text-center py-5 text-muted">
+              ⏳ 載入老師資料中...
             </div>
-            <!-- teacher card end -->
+          </div>
+          <!-- teacher card end -->
         </div>
       </section>
 
@@ -238,7 +229,5 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./assets/js/index.js"></script>
     <script src="./assets/js/navbar.js"></script>
-    <script src="./assets/js/tokenTest.js"></script>
-  
   </body>
 </html>

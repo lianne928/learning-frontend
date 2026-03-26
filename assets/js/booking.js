@@ -5,8 +5,6 @@ if (_bookingToken) {
 }
 
 // 🔗 【API 串接處 1】
-const API_BASE_URL = "http://localhost:8080/api";
-
 const urlParams = new URLSearchParams(window.location.search);
 const tutorId = urlParams.get("tutorId") || 1;
 const courseId = urlParams.get("courseId") || 101;

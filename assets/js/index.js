@@ -1,9 +1,6 @@
 // ==========================================
 // 首頁老師卡片動態渲染 (index.js)
 // ==========================================
-
-const API_BASE_URL = "http://localhost:8080/api";
-
 // Google Drive 連結轉換
 function convertGoogleDriveUrl(url) {
     if (!url) return "./assets/img/tutor.png";

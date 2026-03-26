@@ -20,11 +20,6 @@
           <nav class="ms-auto pt-2">
             <ul class="list-unstyled d-flex align-items-center mb-0">
               <li>
-                <a href="#" class="text-decoration-none px-3 ms-auto"
-                  >我要找學生</a
-                >
-              </li>
-              <li>
                 <a href="explore.html" class="text-decoration-none px-3"
                   >我要找老師</a
                 >
@@ -33,11 +28,12 @@
                 <a href="#" class="text-decoration-none px-3">註冊送代幣</a>
               </li>
               <li id="auth-nav-item">
-                <a
-                  href="login.html"
-                  class="text-decoration-none px-3 pe-0 text-primary fw-bold"
-                  >LOGIN</a
-                >
+                <a class="fancy" href="login.html">
+                  <span class="top-key"></span>
+                  <span class="text">登入</span>
+                  <span class="bottom-key-1"></span>
+                  <span class="bottom-key-2"></span>
+                </a>
               </li>
             </ul>
           </nav>
@@ -320,7 +316,6 @@
                           <span class="explore-price-label">單堂 <span class="explore-price-badge explore-badge-blue">一般方案</span></span>
                           <div class="explore-price explore-price-blue text-center">${course.price || 0}<span class="explore-price-unit"> / 60 mins</span></div>
                         </div>
-                      </div>
                       </div>
                       <a href="teacher-profile.html?tutorId=${course.tutorId}&courseId=${course.id}"
                         class="text-decoration-none" onclick="event.stopPropagation()">

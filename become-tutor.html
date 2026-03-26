@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Merge - 申請成為老師</title>
+    <link rel="stylesheet" href="./assets/scss/all.scss" />
+  </head>
+
+  <body>
+    <!-- Toast 容器 -->
+    <div
+      class="toast-container position-fixed top-0 end-0 p-3"
+      style="z-index: 9999"
+      id="toastContainer"
+    ></div>
+
+    <header class="border-bottom py-2">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex">
+            <a href="index.html" class="text-decoration-none">
+              <h1 class="nunito fst-italic display-5 pt-2">Merge</h1>
+            </a>
+          </div>
+          <nav class="ms-auto pt-2">
+            <ul class="list-unstyled d-flex">
+              <li>
+                <a href="explore.html" class="text-decoration-none px-3"
+                  >我要找老師</a
+                >
+              </li>
+              <li id="auth-nav-item">
+                <!-- 將由 JS 動態填入 -->
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="pb-5">
+      <div class="bg-line border-bottom">
+        <h2 class="sansTitle text-center pt-5 text-dark">BECOME A TUTOR</h2>
+        <p class="text-center text-muted pb-3">
+          申請成為老師，開始你的教學之旅
+        </p>
+      </div>
+
+      <section class="container">
+        <div class="row justify-content-center mt-4">
+          <div class="col-11 col-md-8">
+            <div class="card border-0 shadow-lg rounded-4 mb-3">
+              <div class="card-body p-5">
+                <div class="mb-4 text-center">
+                  <h3 class="mb-2">👨‍🏫 填寫老師資料</h3>
+                  <p class="text-muted">請完整填寫以下資料，讓學生更了解你</p>
+                </div>
+
+                <form id="becomeTutorForm">
+                  <!-- 職稱 -->
+                  <div class="mb-4">
+                    <label for="titleInput" class="form-label fw-bold">
+                      職稱 <span class="text-danger">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control form-control-lg"
+                      id="titleInput"
+                      placeholder="例如：TESL認證英語教師、資深數學家教"
+                      required
+                    />
+                    <div class="form-text">
+                      這會顯示在你的名片上，建議簡潔有力
+                    </div>
+                  </div>
+
+                  <!-- 自我介紹 -->
+                  <div class="mb-4">
+                    <label for="introInput" class="form-label fw-bold">
+                      自我介紹 <span class="text-danger">*</span>
+                    </label>
+                    <textarea
+                      class="form-control"
+                      id="introInput"
+                      rows="5"
+                      placeholder="請介紹你的教學理念、風格，以及為什麼學生應該選擇你..."
+                      required
+                    ></textarea>
+                    <div class="form-text">建議 100-500 字</div>
+                  </div>
+
+                  <!-- 最高學歷 -->
+                  <div class="mb-4">
+                    <label for="educationInput" class="form-label fw-bold">
+                      最高學歷 <span class="text-danger">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="educationInput"
+                      placeholder="例如：台灣大學外文系碩士、政治大學教育學院博士"
+                      required
+                    />
+                  </div>
+
+                  <hr class="my-4" />
+
+                  <!-- 教學經歷 -->
+                  <h5 class="mb-3">📚 教學經歷（選填）</h5>
+
+                  <div class="mb-3">
+                    <label for="experience1Input" class="form-label"
+                      >經歷 1</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="experience1Input"
+                      placeholder="例如：XX補習班英文老師 (2018-2023)"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label for="experience2Input" class="form-label"
+                      >經歷 2</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="experience2Input"
+                      placeholder="例如：YY語言中心講師 (2016-2018)"
+                    />
+                  </div>
+
+                  <hr class="my-4" />
+
+                  <!-- 證照 -->
+                  <h5 class="mb-3">🏆 證照（選填）</h5>
+
+                  <div class="mb-3">
+                    <label for="cert1Input" class="form-label">證照 1</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="cert1Input"
+                      placeholder="例如：TESL證照、多益金色證書"
+                    />
+                    <div class="form-text">證照圖片可稍後在老師後台上傳</div>
+                  </div>
+
+                  <div class="mb-4">
+                    <label for="cert2Input" class="form-label">證照 2</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="cert2Input"
+                      placeholder="例如：教師證、專業講師認證"
+                    />
+                  </div>
+
+                  <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>提醒：</strong
+                    >申請成為老師後，你可以在老師後台上傳頭貼、證照圖片、自我介紹影片等資料。
+                  </div>
+
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-lg w-100 mt-3"
+                    id="submitBtn"
+                  >
+                    提交申請 🚀
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-white border-top py-5 mt-auto">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
+            <a
+              href="index.html"
+              class="text-decoration-none d-flex align-items-center justify-content-center justify-content-md-start"
+            >
+              <h3 class="nunito fst-italic mb-0 me-2 text-primary">Merge</h3>
+              <span class="text-muted small">&copy; 2026</span>
+            </a>
+          </div>
+          <div class="col-md-4 mb-3 mb-md-0">
+            <ul class="list-unstyled d-flex justify-content-center mb-0 small">
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >服務條款</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >隱私政策</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >聯絡我們</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4 text-center text-md-end">
+            <a href="#" class="text-muted me-3"
+              ><i class="bi bi-facebook"></i
+            ></a>
+            <a href="#" class="text-muted me-3"
+              ><i class="bi bi-instagram"></i
+            ></a>
+            <a href="#" class="text-muted"><i class="bi bi-github"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ⚠️ 先載入 navbar.js（包含 API_BASE_URL 和 showToast） -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./assets/js/navbar.js"></script>
+    <!-- ← 1️⃣ 先載入這個 -->
+    <script src="./assets/js/become-tutor.js"></script>
+    <!-- ← 2️⃣ 後載入這個 -->
+  </body>
+</html>

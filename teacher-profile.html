@@ -21,11 +21,6 @@
           <nav class="ms-auto pt-2">
             <ul class="list-unstyled d-flex align-items-center mb-0">
               <li>
-                <a href="#" class="text-decoration-none px-3 ms-auto"
-                  >我要找學生</a
-                >
-              </li>
-              <li>
                 <a href="explore.html" class="text-decoration-none px-3"
                   >我要找老師</a
                 >
@@ -35,11 +30,11 @@
               </li>
 
               <li id="auth-nav-item" class="position-relative">
-                <a
-                  href="login.html"
-                  class="text-decoration-none px-3 pe-0 text-primary fw-bold"
-                >
-                  <span class="position-relative text-light z-1">登入</span>
+                <a class="fancy" href="login.html">
+                  <span class="top-key"></span>
+                  <span class="text">登入</span>
+                  <span class="bottom-key-1"></span>
+                  <span class="bottom-key-2"></span>
                   <div
                     class="d-flex position-absolute translate-middle-y w-100 top-50 z-0"
                     style="left: 7px"
@@ -74,45 +69,52 @@
         <div class="row row-cols-md-2 g-3 align-items-stretch">
           <div class="col-12 col-md-7 pb-3">
             <div class="border rounded-4 bg-light h-100">
-
-    <div>
-              <p class="ms-5 mt-4 mb-4 tilt-warp display-5 mb-0 border rounded-circle d-inline-block text-primary">
-                About <span id="tutor-name">老師</span>
-              </p>
-              <p class="ms-5 mb-1 fw-bold text-primary" id="tutor-headline"></p>
-              <p class="ms-5 mb-2"><span id="tutor-rating">⭐ —</span></p>
-              <p class="fw-light pb-3 mb-0 border-bottom border-1 px-5"><span id="tutor-intro">載入中...</span></p>
-             </div>
+              <div>
+                <p
+                  class="ms-5 mt-4 mb-4 tilt-warp display-5 mb-0 border rounded-circle d-inline-block text-primary"
+                >
+                  About <span id="tutor-name">老師</span>
+                </p>
+                <p
+                  class="ms-5 mb-1 fw-bold text-primary"
+                  id="tutor-headline"
+                ></p>
+                <p class="ms-5 mb-2"><span id="tutor-rating">⭐ —</span></p>
+                <p class="fw-light pb-3 mb-0 border-bottom border-1 px-5">
+                  <span id="tutor-intro">載入中...</span>
+                </p>
+              </div>
               <h3 class="sansTeg bg-primary border-bottom text-success ps-5">
-                
-                <span id='tutor-name-bg'>老師</span>'s background
+                <span id="tutor-name-bg">老師</span>'s background
               </h3>
 
-            <div class="row  row-cols-md-2 pt-4">
+              <div class="row row-cols-md-2 pt-4">
                 <div class="col-12 border-end border-1 px-5">
-                    <div class=" pt-3">
-                       <h5 class="ps-3">學歷</h5>
+                  <div class="pt-3">
+                    <h5 class="ps-3">學歷</h5>
                     <ul class="list-unstyled ps-3" id="education-list">
-                        <li><span class="text-secondary"> ✦ </span> 載入中...</li>
+                      <li><span class="text-secondary"> ✦ </span> 載入中...</li>
                     </ul>
                     <h5 class="ps-3">經歷</h5>
                     <ul class="list-unstyled ps-3" id="experience-list">
-                        <li><span class="text-secondary"> ✦ </span> 載入中...</li>
-                    </ul> 
-                    </div>
+                      <li><span class="text-secondary"> ✦ </span> 載入中...</li>
+                    </ul>
+                  </div>
                 </div>
                 <div class="col-12 ps-5 ps-md-1">
-                    <div class=" pt-3">
-                       <h5 class="ps-3"> 證照</h5>
+                  <div class="pt-3">
+                    <h5 class="ps-3">證照</h5>
                     <ul class="list-unstyled ps-3" id="certificates-container">
-                        <li>載入中...</li>
+                      <li>載入中...</li>
                     </ul>
-                    </div>
+                  </div>
                 </div>
               </div>
 
-            <h3 class="sansTeg text-primary mt-5 py-1 ps-5 border-top border-1 pt-5">
-               <span class="text-secondary"> ✦ </span> Choose Subject
+              <h3
+                class="sansTeg text-primary mt-5 py-1 ps-5 border-top border-1 pt-5"
+              >
+                <span class="text-secondary"> ✦ </span> Choose Subject
               </h3>
               <div class="ps-5 pb-3 d-flex gap-2 flex-wrap" id="course-buttons">
                 <!-- JS 動態產生 -->
@@ -121,30 +123,44 @@
               <p class="px-5" id="course-desc">課程描述載入中...</p>
               <div>
                 <h3 class="sansTeg text-primary mt-5 py-1 ps-5 d-inline-block">
-                    <span class="text-secondary"> ✦ </span> Student Review</h3>
-                      <small class="fw-light ps-2 d-inline-block">學生評價</small>
+                  <span class="text-secondary"> ✦ </span> Student Review
+                </h3>
+                <small class="fw-light ps-2 d-inline-block">學生評價</small>
                 <div class="px-5" id="reviews-container">
-                  <p style="color:#999;">載入中...</p>
+                  <p style="color: #999">載入中...</p>
                 </div>
               </div>
 
-            <h3 class="sansTeg text-primary mt-5 py-1 ps-5 d-inline-block">
-               <span class="text-secondary"> ✦ </span>Choose Time
+              <h3 class="sansTeg text-primary mt-5 py-1 ps-5 d-inline-block">
+                <span class="text-secondary"> ✦ </span>Choose Time
               </h3>
-  <small class="fw-light ps-2 d-inline-block">近期可立即預約時間</small>
-              <div class="ps-5 pb-5 d-flex flex-wrap gap-2" id="schedule-container">
-                <p style="color:#999;">載入中...</p>
+              <small class="fw-light ps-2 d-inline-block"
+                >近期可立即預約時間</small
+              >
+              <div
+                class="ps-5 pb-5 d-flex flex-wrap gap-2"
+                id="schedule-container"
+              >
+                <p style="color: #999">載入中...</p>
               </div>
-
             </div>
           </div>
           <!-- 右側：大頭貼 → 影片 → 預約按鈕，填滿整欄 -->
-          <div class="col-12 col-md-5 d-flex flex-column" style="min-height:100%;">
-
+          <div
+            class="col-12 col-md-5 d-flex flex-column"
+            style="min-height: 100%"
+          >
             <!-- 大頭貼 -->
-            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-              <div class="carousel-inner" style="height: 600px;">
-                <div class="carousel-item active h-100 bg-line rounded-4" id="carousel-main">
+            <div
+              id="carouselExampleControls"
+              class="carousel slide"
+              data-bs-ride="carousel"
+            >
+              <div class="carousel-inner" style="height: 600px">
+                <div
+                  class="carousel-item active h-100 bg-line rounded-4"
+                  id="carousel-main"
+                >
                   <img
                     id="tutor-avatar"
                     src="./assets/img/tutor-1.png"
@@ -153,13 +169,27 @@
                   />
                 </div>
               </div>
-              <button class="carousel-control-prev" type="button"
-                data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleControls"
+                data-bs-slide="prev"
+              >
+                <span
+                  class="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
               </button>
-              <button class="carousel-control-next" type="button"
-                data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleControls"
+                data-bs-slide="next"
+              >
+                <span
+                  class="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
               </button>
             </div>
 
@@ -176,7 +206,6 @@
                 <p class="mb-0 px-5 nunito">預約上課！</p>
               </button>
             </div>
-
           </div>
         </div>
       </div>

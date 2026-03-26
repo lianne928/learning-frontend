@@ -25,7 +25,7 @@ if (!loginForm) {
     };
 
     axios
-      .post("/api/auth/login", inputPost)
+      .post(`${API_BASE_URL}/auth/login`, inputPost)
       .then(function (resp) {
         console.log(resp.data);
         alert("OK");
