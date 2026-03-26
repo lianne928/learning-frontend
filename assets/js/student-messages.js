@@ -35,6 +35,26 @@ function authHeaders() {
     };
 }
 
+async function downloadFile(storedName, originalName) {
+    try {
+        const res = await axios.get(
+            `${BASE_URL}/api/chatMessage/download/${storedName}?name=${encodeURIComponent(originalName)}`,
+            { headers: authHeaders(), responseType: 'blob' }
+        );
+        const url = URL.createObjectURL(res.data);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = originalName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    } catch (err) {
+        console.error('下載失敗', err);
+        alert('檔案下載失敗，請重試。');
+    }
+}
+
 function formatTime(createdAt) {
     if (!createdAt) return '';
     const d = new Date(createdAt);
@@ -196,10 +216,11 @@ function buildMsgHtml(m, conv) {
         } else {
             const storedName   = m.mediaUrl ? m.mediaUrl.split('/').pop() : '';
             const originalName = m.message || storedName || '下載檔案';
-            const downloadUrl  = m.mediaUrl && !m.mediaUrl.startsWith('blob:')
-                ? `${BASE_URL}/api/chatMessage/download/${encodeURIComponent(storedName)}?name=${encodeURIComponent(originalName)}`
-                : m.mediaUrl;
-            content = `<a href="${downloadUrl}" download="${escapeHtml(originalName)}" class="msg-file-link">📎 ${escapeHtml(originalName)}</a>`;
+            if (m.mediaUrl && !m.mediaUrl.startsWith('blob:')) {
+                content = `<button class="msg-file-link" onclick="downloadFile('${encodeURIComponent(storedName)}','${escapeHtml(originalName).replace(/'/g, "\\'")}')">📎 ${escapeHtml(originalName)}</button>`;
+            } else {
+                content = `<a href="${m.mediaUrl}" download="${escapeHtml(originalName)}" class="msg-file-link">📎 ${escapeHtml(originalName)}</a>`;
+            }
         }
     } else {
         content = escapeHtml(m.message || '');
