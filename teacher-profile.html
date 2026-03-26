@@ -71,44 +71,41 @@
 
     <main class="pt-5 mt-5 bg-gray">
       <div class="container pt-5">
-        <div class="row row-cols-md-2 g-3">
-          <div class="col-12 col-md-7">
-            <div class="border rounded-4 bg-light">
+        <div class="row row-cols-md-2 g-3 align-items-stretch">
+          <div class="col-12 col-md-7 pb-3">
+            <div class="border rounded-4 bg-light h-100">
 
     <div>
               <p class="ms-5 mt-4 mb-4 tilt-warp display-5 mb-0 border rounded-circle d-inline-block text-primary">
-                About Ms.Emma
+                About <span id="tutor-name">老師</span>
               </p>
-              <p class="fw-light pb-3 mb-0 border-bottom border-1 px-5">你好！我是 Emma 老師<br>
-
-                我相信每個孩子都有獨特的學習節奏。我擅長將複雜的文法邏輯轉化為簡單好懂的積木概念，讓高年級的孩子也能輕鬆掌握語言架構。在溫暖、無壓力的環境下，我會陪著孩子一步步建立紮實的英文實力。</p>
+              <p class="ms-5 mb-1 fw-bold text-primary" id="tutor-headline"></p>
+              <p class="ms-5 mb-2"><span id="tutor-rating">⭐ —</span></p>
+              <p class="fw-light pb-3 mb-0 border-bottom border-1 px-5"><span id="tutor-intro">載入中...</span></p>
              </div>
               <h3 class="sansTeg bg-primary border-bottom text-success ps-5">
                 
-                Emma's background
+                <span id='tutor-name-bg'>老師</span>'s background
               </h3>
 
             <div class="row  row-cols-md-2 pt-4">
                 <div class="col-12 border-end border-1 px-5">
                     <div class=" pt-3">
                        <h5 class="ps-3">學歷</h5>
-                    <ul class="list-unstyled ps-3">
-                        <li><span class="text-secondary"> ✦ </span> 銘傳大學 | 商業設計學系</li>
-                        <li><span class="text-secondary"> ✦ </span> 文華高中 | 普通科</li>
+                    <ul class="list-unstyled ps-3" id="education-list">
+                        <li><span class="text-secondary"> ✦ </span> 載入中...</li>
                     </ul>
                     <h5 class="ps-3">經歷</h5>
-                    <ul class="list-unstyled ps-3">
-                        <li><span class="text-secondary"> ✦ </span> 國際幼兒園 雙語帶班導師（5 年經驗）</li>
-                        <li><span class="text-secondary"> ✦ </span> 3 年海外志工教學、5 年一對一兒童口說家教</li>
+                    <ul class="list-unstyled ps-3" id="experience-list">
+                        <li><span class="text-secondary"> ✦ </span> 載入中...</li>
                     </ul> 
                     </div>
                 </div>
                 <div class="col-12 ps-5 ps-md-1">
                     <div class=" pt-3">
                        <h5 class="ps-3"> 證照</h5>
-                    <ul class="list-unstyled ps-3">
-                        <li><span class="text-secondary"> ✦ </span> 多益 | 沒考過</li>
-                        <li><span class="text-secondary"> ✦ </span> Adobe | ACA photoshop 證照</li>
+                    <ul class="list-unstyled ps-3" id="certificates-container">
+                        <li>載入中...</li>
                     </ul>
                     </div>
                 </div>
@@ -117,43 +114,17 @@
             <h3 class="sansTeg text-primary mt-5 py-1 ps-5 border-top border-1 pt-5">
                <span class="text-secondary"> ✦ </span> Choose Subject
               </h3>
-              <ul class="nav ps-5 pb-3">
-                <li class="nav-item pe-2">
-                  <a
-                    class="nav-link active border rounded-3 px-5 bg-success fw-bold"
-                    aria-current="page"
-                    href="#"
-                    >低年級英文</a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a
-                    class="nav-link border rounded-3 px-5 bg-gray disabled fw-bold"
-                    >高年級英文</a
-                  >
-                </li>
-              </ul>
-              <p class="px-5 pt-2">歡迎來到英文冒險島！✦<br>
-
-這不是一堂坐著聽講的課，而是一場聲音的捉迷藏。我們會跟著 Lianne 老師一起翻開巨大的立體繪本，認識住在單字裡的『拼音小怪獸』。透過手感互動、英語歌謠和角色扮演，孩子會在玩樂中自然學會 Phonics 發音規則，讓開口說英文變得像玩玩具一樣簡單有趣！</p>
+              <div class="ps-5 pb-3 d-flex gap-2 flex-wrap" id="course-buttons">
+                <!-- JS 動態產生 -->
+              </div>
+              <h5 class="px-5 pt-2 fw-bold" id="course-name"></h5>
+              <p class="px-5" id="course-desc">課程描述載入中...</p>
               <div>
                 <h3 class="sansTeg text-primary mt-5 py-1 ps-5 d-inline-block">
                     <span class="text-secondary"> ✦ </span> Student Review</h3>
                       <small class="fw-light ps-2 d-inline-block">學生評價</small>
-                <div class=" px-5">
-                <div class="card border-1 bg-primary border mb-2">
-                    <div class="card-body">
-                        <p class="text-light mb-0">以前我覺得英文課好無聊，但 Sam 老師會帶我們玩闖關遊戲，還會教我們唱超好聽的英文歌。我現在每天都問媽媽什麼時候可以再上課，英文一點都不恐怖了！<br>
-—— 小三學生，Lucas</p>
-                    </div>
-                </div>
-
-                <div class="card border-1 bg-primary border">
-                    <div class="card-body">
-                        <p class="text-light mb-0">以前我覺得英文課好無聊，但 Sam 老師會帶我們玩闖關遊戲，還會教我們唱超好聽的英文歌。我現在每天都問媽媽什麼時候可以再上課，英文一點都不恐怖了！<br>
-—— 小三學生，Lucas</p>
-                    </div>
-                </div>
+                <div class="px-5" id="reviews-container">
+                  <p style="color:#999;">載入中...</p>
                 </div>
               </div>
 
@@ -161,86 +132,51 @@
                <span class="text-secondary"> ✦ </span>Choose Time
               </h3>
   <small class="fw-light ps-2 d-inline-block">近期可立即預約時間</small>
-              <div class="ps-5 pb-5">
-
-                <button type="button" class="btn btn-success border border-1 py-2">
-                <time datetime="2026-03-25T18:00+08:00" class="nunito">3/25 18:00</time>
-              </button>
-            <button type="button" class="btn btn-success border border-1 py-2">
-                <time datetime="2026-03-25T18:00+08:00" class="nunito">3/25 18:00</time>
-              </button>
-              <button type="button" class="btn btn-success border border-1 py-2">
-                <time datetime="2026-03-25T18:00+08:00" class="nunito">3/25 18:00</time>
-              </button>
-              <button type="button" class="btn btn-success border border-1 py-2">
-                <time datetime="2026-03-25T18:00+08:00" class="nunito">3/25 18:00</time>
-              </button>
-               
-            </div>
+              <div class="ps-5 pb-5 d-flex flex-wrap gap-2" id="schedule-container">
+                <p style="color:#999;">載入中...</p>
+              </div>
 
             </div>
           </div>
-          <div class="col-12 col-md-5">
-            <div
-              id="carouselExampleControls"
-              class="carousel slide"
-              data-bs-ride="carousel"
-            >
-            <div class="carousel-inner" style="height: 680px">
-            <div class="carousel-item active h-100 bg-line rounded-4">
-                <img
-                src="./assets/img/tutor-1.png"
-                class="d-block w-100 h-100 object-fit-cover rounded-4 border p-4 "
-                alt="..."
-                />
-            </div>
-            <div class="carousel-item h-100">
-                <img
-                src=""
-                class="d-block w-100 h-100 object-fit-cover rounded-4 border"
-                alt="..."
-                />
-            </div>
-            <div class="carousel-item h-100">
-                <img
-                src=""
-                class="d-block w-100 h-100 object-fit-cover rounded-4 border"
-                alt="..."
-                />
-            </div>
-              <button
-                class="carousel-control-prev"
-                type="button"
-                data-bs-target="#carouselExampleControls"
-                data-bs-slide="prev"
-              >
-                <span
-                  class="carousel-control-prev-icon"
-                  aria-hidden="true"
-                ></span>
-                <span class="visually-hidden">Previous</span>
+          <!-- 右側：大頭貼 → 影片 → 預約按鈕，填滿整欄 -->
+          <div class="col-12 col-md-5 d-flex flex-column" style="min-height:100%;">
+
+            <!-- 大頭貼 -->
+            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-inner" style="height: 600px;">
+                <div class="carousel-item active h-100 bg-line rounded-4" id="carousel-main">
+                  <img
+                    id="tutor-avatar"
+                    src="./assets/img/tutor-1.png"
+                    class="d-block w-100 h-100 object-fit-cover rounded-4 border"
+                    alt="老師頭像"
+                  />
+                </div>
+              </div>
+              <button class="carousel-control-prev" type="button"
+                data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
               </button>
-              <button
-                class="carousel-control-next"
-                type="button"
-                data-bs-target="#carouselExampleControls"
-                data-bs-slide="next"
-              >
-                <span
-                  class="carousel-control-next-icon"
-                  aria-hidden="true"
-                ></span>
-                <span class="visually-hidden">Next</span>
+              <button class="carousel-control-next" type="button"
+                data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
               </button>
             </div>
-            <div>
+
+            <!-- 影片區塊 -->
+            <div id="videos-container" class="mt-2"></div>
+
+            <!-- 預約按鈕 -->
+            <div class="pt-3 pb-4">
               <button
                 type="button"
-                class="btn btn-success border border-2 rounded-2 mt-3 p-3 w-100"
+                id="btn-booking"
+                class="btn btn-success border border-2 rounded-2 p-3 w-100"
               >
                 <p class="mb-0 px-5 nunito">預約上課！</p>
               </button>
             </div>
+
           </div>
         </div>
       </div>
@@ -260,5 +196,8 @@
         wrap: false,
       });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/js/navbar.js"></script>
+    <script src="./assets/js/teacher-profile.js"></script>
   </body>
 </html>

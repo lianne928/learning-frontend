@@ -46,67 +46,119 @@
     </header>
 
     <div class="explore-container">
-      <header class="explore-header">
-        <h1>探索好老師 🔍</h1>
-        <p>
-          在 Merge 找到最適合孩子的啟蒙導師，讓學習變成每天最期待的遊戲時間！
-        </p>
-      </header>
+      <!-- 頁首 + 搜尋區塊（米白奶油色 + Blob 風格）-->
+      <div class="explore-hero">
+        <!-- Blob 裝飾 -->
+        <div class="explore-blob explore-blob-1"></div>
+        <div class="explore-blob explore-blob-2"></div>
+        <div class="explore-blob explore-blob-3"></div>
+        <div class="explore-blob explore-blob-4"></div>
 
-      <section class="explore-search-bar">
-        <div class="search-item">
-          🔍
-          <input
-            type="text"
-            id="searchInput"
-            oninput="handleSearch()"
-            placeholder="搜尋老師或課程名稱..."
-          />
-        </div>
-        <div class="divider"></div>
-
-        <div class="search-item">
-          📖
-          <select id="subjectSelect" onchange="handleSearch()">
-            <option value="">所有課程</option>
-            <option value="11">低年級課程</option>
-            <option value="12">中年級課程</option>
-            <option value="13">高年級課程</option>
-            <option value="21">GEPT 全民英檢</option>
-            <option value="22">YLE 劍橋兒童</option>
-            <option value="23">國中先修</option>
-            <option value="31">其他科目</option>
-          </select>
-        </div>
-        <div class="divider"></div>
-
-        <div class="search-item">
-          📅
-          <select id="daySelect" onchange="handleSearch()">
-            <option value="">所有日期</option>
-            <option value="1">星期一</option>
-            <option value="2">星期二</option>
-            <option value="3">星期三</option>
-            <option value="4">星期四</option>
-            <option value="5">星期五</option>
-            <option value="6">星期六</option>
-            <option value="7">星期日</option>
-          </select>
-        </div>
-        <div class="divider"></div>
-
-        <div class="search-item">
-          🕒
-          <select id="timeSelect" onchange="handleSearch()">
-            <option value="">所有時段</option>
-            <option value="morning">上午 (09:00 - 13:00)</option>
-            <option value="afternoon">下午 (13:00 - 17:00)</option>
-            <option value="evening">晚上 (17:00 - 21:00)</option>
-          </select>
+        <!-- 標題 -->
+        <div class="explore-hero-title">
+          <span class="explore-hero-badge">✦ 兒童英語家教平台</span>
+          <h1>探索<span class="explore-hero-highlight">好老師</span> ✦</h1>
+          <p>
+            在 Merge 找到最適合孩子的啟蒙導師，讓學習變成每天最期待的遊戲時間！
+          </p>
         </div>
 
-        <button class="btn-search" onclick="handleSearch()">🔍 開始尋找</button>
-      </section>
+        <!-- 搜尋列 -->
+        <div class="explore-search-bar">
+          <div class="search-item">
+            <img
+              src="./assets/img/loupe.png"
+              class="search-icon-img"
+              alt="搜尋"
+              style="
+                width: 24px;
+                height: 24px;
+                object-fit: contain;
+                flex-shrink: 0;
+              "
+            />
+            <input
+              type="text"
+              id="searchInput"
+              oninput="handleSearch()"
+              placeholder="搜尋老師或課程名稱..."
+            />
+          </div>
+          <div class="divider"></div>
+
+          <div class="search-item">
+            <img
+              src="./assets/img/curriculum.png"
+              class="search-icon-img"
+              alt="課程"
+              style="
+                width: 24px;
+                height: 24px;
+                object-fit: contain;
+                flex-shrink: 0;
+              "
+            />
+            <select id="subjectSelect" onchange="handleSearch()">
+              <option value="">所有課程</option>
+              <option value="11">低年級課程</option>
+              <option value="12">中年級課程</option>
+              <option value="13">高年級課程</option>
+              <option value="21">GEPT 全民英檢</option>
+              <option value="22">YLE 劍橋兒童</option>
+              <option value="23">國中先修</option>
+              <option value="31">其他科目</option>
+            </select>
+          </div>
+          <div class="divider"></div>
+
+          <div class="search-item">
+            <img
+              src="./assets/img/calendar.png"
+              class="search-icon-img"
+              alt="日期"
+              style="
+                width: 24px;
+                height: 24px;
+                object-fit: contain;
+                flex-shrink: 0;
+              "
+            />
+            <select id="daySelect" onchange="handleSearch()">
+              <option value="">所有日期</option>
+              <option value="1">星期一</option>
+              <option value="2">星期二</option>
+              <option value="3">星期三</option>
+              <option value="4">星期四</option>
+              <option value="5">星期五</option>
+              <option value="6">星期六</option>
+              <option value="7">星期日</option>
+            </select>
+          </div>
+          <div class="divider"></div>
+
+          <div class="search-item">
+            <img
+              src="./assets/img/clock.png"
+              class="search-icon-img"
+              alt="時段"
+              style="
+                width: 24px;
+                height: 24px;
+                object-fit: contain;
+                flex-shrink: 0;
+              "
+            />
+            <select id="timeSelect" onchange="handleSearch()">
+              <option value="">所有時段</option>
+              <option value="morning">上午 (09:00 - 13:00)</option>
+              <option value="afternoon">下午 (13:00 - 17:00)</option>
+              <option value="evening">晚上 (17:00 - 21:00)</option>
+            </select>
+          </div>
+
+          <button class="btn-search" onclick="handleSearch()">開始尋找</button>
+        </div>
+      </div>
 
       <!-- 課程卡片區 -->
       <section class="bg-gray">
@@ -206,62 +258,98 @@
         }
 
         coursesToRender.forEach((course) => {
-          const scheduleHTML = buildSchedulePopup(course.availableSlots || []);
           const subjectLabel = getSubjectLabel(course.subject);
           const rating = course.averageRating > 0 ? course.averageRating : "—";
 
+          // 建立背面課表格子
+          const days = ["一", "二", "三", "四", "五", "六", "日"];
+          const periods = [
+            { key: "morning", label: "上午" },
+            { key: "afternoon", label: "下午" },
+            { key: "evening", label: "晚上" },
+          ];
+          const slots = course.availableSlots || [];
+
+          let backSchedule = '<div class="flip-schedule-grid">';
+          backSchedule += '<div class="flip-sg-corner"></div>';
+          days.forEach((d) => {
+            backSchedule += `<div class="flip-sg-header">週${d}</div>`;
+          });
+          periods.forEach((period) => {
+            backSchedule += `<div class="flip-sg-label">${period.label}</div>`;
+            for (let day = 1; day <= 7; day++) {
+              const has = slots.some((s) => s === day + "-" + period.key);
+              backSchedule += `<div class="flip-sg-cell${has ? " on" : ""}"></div>`;
+            }
+          });
+          backSchedule += "</div>";
+
           const cardHTML = `
             <div class="col">
-              <div class="explore-card">
+              <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                <div class="flip-card-inner">
 
-                <!-- Teacher From TW Badge -->
-                <span class="explore-tw-badge">Teacher From TW.</span>
+                  <!-- 正面 -->
+                  <div class="flip-card-front explore-card">
+                    <span class="explore-tw-badge">Teacher From TW.</span>
+                    <div class="explore-card-img-wrap">
+                      <img src="${convertGoogleDriveUrl(course.avatarUrl)}"
+                        class="explore-card-img" alt="${course.teacherName}">
+                    </div>
+                    <div class="explore-diamond">✦</div>
+                    <div class="explore-card-body">
+                      <div class="d-flex align-items-center gap-2">
+                        <h5 class="mb-0 sansTeg explore-teacher-name">${course.teacherName || "老師"}</h5>
+                        <span class="explore-rating ms-auto">★ ${rating}</span>
+                      </div>
+                      <div class="mt-1">
+                        <p class="nunito mb-0 explore-course-name">${course.courseName || "課程名稱"}</p>
+                        <div class="d-flex gap-1 flex-wrap mt-1">
+                          ${subjectLabel ? `<span class="explore-tag">${subjectLabel}</span>` : ""}
+                          ${course.title ? `<span class="explore-tag">${course.title}</span>` : ""}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="explore-card-footer">
+                      <div class="d-flex justify-content-center gap-4 mb-2">
+                        <div>
+                          <span class="explore-price-label">體驗課 <span class="explore-price-badge explore-badge-grey">首堂優惠</span></span>
+                          <div class="explore-price explore-price-pink text-center">200<span class="explore-price-unit"> / 60 mins</span></div>
+                        </div>
+                        <div>
+                          <span class="explore-price-label">單堂 <span class="explore-price-badge explore-badge-blue">一般方案</span></span>
+                          <div class="explore-price explore-price-blue text-center">${course.price || 0}<span class="explore-price-unit"> / 60 mins</span></div>
+                        </div>
+                      </div>
+                      </div>
+                      <a href="teacher-profile.html?tutorId=${course.tutorId}&courseId=${course.id}"
+                        class="text-decoration-none" onclick="event.stopPropagation()">
+                        <button type="button" class="explore-btn-talk">LET'S TALK +</button>
+                      </a>
+                    </div>
+                  </div>
 
-                <!-- 頭像（格線背景）-->
-                <div class="explore-card-img-wrap">
-                  <img src="${convertGoogleDriveUrl(course.avatarUrl)}"
-                    class="explore-card-img" alt="${course.teacherName}">
+                  <!-- 背面 -->
+                  <div class="flip-card-back">
+                    <div class="flip-back-header">
+                      <div>
+                        <div class="flip-back-name">${course.teacherName || "老師"}</div>
+                        <div class="flip-back-course">${course.courseName || "課程名稱"}</div>
+                      </div>
+                      <span class="explore-rating">★ ${rating}</span>
+                    </div>
+                    <div class="flip-back-schedule-wrap">
+                      <div class="flip-schedule-title">📅 開課時段</div>
+                      ${backSchedule}
+                    </div>
+                    <div class="flip-back-footer">
+                      <button class="flip-btn-back" onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')">
+                        ← 返回
+                      </button>
+                    </div>
+                  </div>
+
                 </div>
-
-                <!-- 粉色菱形裝飾 -->
-                <div class="explore-diamond">✦</div>
-
-                <!-- 老師資訊 -->
-                <div class="explore-card-body">
-                  <div class="d-flex align-items-center gap-2">
-                    <h5 class="mb-0 sansTeg explore-teacher-name">${course.teacherName || "老師"}</h5>
-                    <span class="explore-rating ms-auto">★ ${rating}</span>
-                  </div>
-                  <div class="mt-1">
-                    <p class="nunito mb-0 explore-course-name">${course.courseName || "課程名稱"}</p>
-                    <div class="d-flex gap-1 flex-wrap mt-1">
-                      ${subjectLabel ? `<span class="explore-tag">${subjectLabel}</span>` : ""}
-                      ${course.title ? `<span class="explore-tag">${course.title}</span>` : ""}
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 價格區 -->
-               <div class="explore-card-footer">
-                  <div class="d-flex justify-content-center gap-4">
-                    <div>
-                      <span class="explore-price-label">體驗課 <span class="explore-price-badge explore-badge-grey">首堂優惠</span></span>
-                      <div class="explore-price explore-price-pink">200<span class="explore-price-unit"> / 60 mins</span></div>
-                    </div>
-                    
-                    <div>
-                      <span class="explore-price-label">單堂 <span class="explore-price-badge explore-badge-blue">一般方案</span></span>
-                      <div class="explore-price explore-price-blue">${course.price || 0}<span class="explore-price-unit"> / 60 mins</span></div>
-                    </div>
-                  </div>
-                  
-                  <a href="teacher-profile.html?tutorId=${course.tutorId}&courseId=${course.id}" class="text-decoration-none">
-                    <button type="button" class="explore-btn-talk mt-2">LET'S TALK +</button>
-                  </a>
-              </div>
-
-                <!-- Hover 課表彈出 -->
-                <div class="schedule-popup">${scheduleHTML}</div>
               </div>
             </div>
           `;

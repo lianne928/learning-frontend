@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Merge - 首頁</title>
     <link rel="stylesheet" href="./assets/scss/all.scss" />
+    <script src="./assets/scss/components/_index.scss"></script>
   </head>
 
   <body>
@@ -101,10 +102,10 @@
             class="d-none d-lg-block list-unstyled position-absolute end-0 pt-1"
             style="
               rotate: 8deg;
-              zoom: 4;
+              zoom: 3.5;
               transform-origin: top right;
               z-index: 10;
-              top: 10px;
+              top: 16px;
             "
           >
             <li
@@ -145,7 +146,7 @@
             </li>
           </ul>
           <div
-            class="my-5 border border-dark border-2 rounded-5 p-5 bg-white shadow-sm bg-dark">
+            class="my-5 mb-4 border border-dark border-2 rounded-5 p-5 bg-white shadow-sm bg-dark" style="min-height: 420px;">
             <div class="row position-relative">
               <div class="col-12 col-lg-7 text-dark">
                 <h3 class="display-4 tilt-warp">LEARNING ✦</h3>
@@ -175,439 +176,12 @@
         </div>
 
         <div class="container py-5">
-          <div
-            class="row row-cols-1 row-cols-md-2 row-cols-lg-4 me-0 g-5"
-          >
             <!-- teacher card start -->
-            <div class="col position-relative">
-              <div class="teacherItem">
-                <div
-                  class="card rounded-4 border-dark h-100 position-relative"
-                >
-                <span
-                          class="position-absolute top-0 end-0 translate-middle-y rounded-pill border border-dark text-dark mb-0 bg-light px-3 py-1"
-                        >
-                          平台推薦老師
-                        </span>
-                  <div class="p-3 h-100 ">
-                    <div class="d-flex flex-column h-100">
-                        
-                      <div class="card-body">
-
-                        <br />
-                        <small class="storeName card-title fw-light bg-light"
-                          >GEPT / TOEIC / Speaking</small
-                        >
-
-
-                      </div>
-                      <div
-                        class="card-footer border-0 py-0 mt-auto bg-transparent"
-                      >
-                      
-                        <div class="position-relative">
-                          <div class="mb-2 d-flex flex-wrap gap-2">
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                英檢衝刺
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                口說訓練
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                1 對 1
-              </span>
+            <div id="teacher-card-container">
+              <div class="col-12 text-center py-5 text-muted">⏳ 載入老師資料中...</div>
             </div>
-                          <a
-                            href="#"
-                            class="cardHref btn btn-primary d-inline-block w-100 border border-1 border-dark text-white fw-bold mt-auto card-btn"
-                            ><p class="mb-0">
-                              立即預約
-                            </p></a
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col position-relative">
-              <div class="teacherItem">
-                <div
-                  class="card rounded-4 border-dark h-100 position-relative"
-                >
-                <span
-                          class="position-absolute top-0 end-0 translate-middle-y rounded-pill border border-dark text-dark mb-0 bg-light px-3 py-1"
-                        >
-                          平台推薦老師
-                        </span>
-                  <div class="p-3 h-100 ">
-                    <div class="d-flex flex-column h-100">
-                         
-                      <img src="" alt="">
-                      <div class="card-body">
-
-                        <br />
-                        <small class="storeName card-title fw-light bg-light"
-                          >GEPT / TOEIC / Speaking</small
-                        >
-
-
-                      </div>
-                      <div
-                        class="card-footer border-0 py-0 mt-auto bg-transparent"
-                      >
-                      
-                        <div class="position-relative">
-                          <div class="mb-2 d-flex flex-wrap gap-2">
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                英檢衝刺
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                口說訓練
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                1 對 1
-              </span>
-            </div>
-                          <a
-                            href="#"
-                            class="cardHref btn btn-primary d-inline-block w-100 border border-1 border-dark text-white fw-bold mt-auto card-btn"
-                            ><p class="mb-0">
-                              立即預約
-                            </p></a
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col position-relative">
-              <div class="teacherItem">
-                <div
-                  class="card rounded-4 border-dark h-100 position-relative"
-                >
-                <span
-                          class="position-absolute top-0 end-0 translate-middle-y rounded-pill border border-dark text-dark mb-0 bg-light px-3 py-1"
-                        >
-                          平台推薦老師
-                        </span>
-                  <div class="p-3 h-100 ">
-                    <div class="d-flex flex-column h-100">
-                         
-                      <img src="" alt="">
-                      <div class="card-body">
-
-                        <br />
-                        <small class="storeName card-title fw-light bg-light"
-                          >GEPT / TOEIC / Speaking</small
-                        >
-
-
-                      </div>
-                      <div
-                        class="card-footer border-0 py-0 mt-auto bg-transparent"
-                      >
-                      
-                        <div class="position-relative">
-                          <div class="mb-2 d-flex flex-wrap gap-2">
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                英檢衝刺
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                口說訓練
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                1 對 1
-              </span>
-            </div>
-                          <a
-                            href="#"
-                            class="cardHref btn btn-primary d-inline-block w-100 border border-1 border-dark text-white fw-bold mt-auto card-btn"
-                            ><p class="mb-0">
-                              立即預約
-                            </p></a
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col position-relative">
-              <div class="teacherItem">
-                <div
-                  class="card rounded-4 border-dark h-100 position-relative"
-                >
-                <span
-                          class="position-absolute top-0 end-0 translate-middle-y rounded-pill border border-dark text-dark mb-0 bg-light px-3 py-1"
-                        >
-                          平台推薦老師
-                        </span>
-                  <div class="p-3 h-100 ">
-                    <div class="d-flex flex-column h-100">
-                         
-                      <div class="card-body">
-
-                        <br />
-                        <small class="storeName card-title fw-light bg-light"
-                          >GEPT / TOEIC / Speaking</small
-                        >
-
-
-                      </div>
-                      <div
-                        class="card-footer border-0 py-0 mt-auto bg-transparent"
-                      >
-                      
-                        <div class="position-relative">
-                          <div class="mb-2 d-flex flex-wrap gap-2">
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                英檢衝刺
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                口說訓練
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                1 對 1
-              </span>
-            </div>
-                          <a
-                            href="#"
-                            class="cardHref btn btn-primary d-inline-block w-100 border border-1 border-dark text-white fw-bold mt-auto card-btn"
-                            ><p class="mb-0">
-                              立即預約
-                            </p></a
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col position-relative">
-              <div class="teacherItem">
-                <div
-                  class="card rounded-4 border-dark h-100 position-relative"
-                >
-                <span
-                          class="position-absolute top-0 end-0 translate-middle-y rounded-pill border border-dark text-dark mb-0 bg-light px-3 py-1"
-                        >
-                          平台推薦老師
-                        </span>
-                  <div class="p-3 h-100 ">
-                    <div class="d-flex flex-column h-100">
-                        
-                      <div class="card-body">
-
-                        <br />
-                        <small class="storeName card-title fw-light bg-light"
-                          >GEPT / TOEIC / Speaking</small
-                        >
-
-
-                      </div>
-                      <div
-                        class="card-footer border-0 py-0 mt-auto bg-transparent"
-                      >
-                      
-                        <div class="position-relative">
-                          <div class="mb-2 d-flex flex-wrap gap-2">
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                英檢衝刺
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                口說訓練
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                1 對 1
-              </span>
-            </div>
-                          <a
-                            href="#"
-                            class="cardHref btn btn-primary d-inline-block w-100 border border-1 border-dark text-white fw-bold mt-auto card-btn"
-                            ><p class="mb-0">
-                              立即預約
-                            </p></a
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col position-relative">
-              <div class="teacherItem">
-                <div
-                  class="card rounded-4 border-dark h-100 position-relative"
-                >
-                <span
-                          class="position-absolute top-0 end-0 translate-middle-y rounded-pill border border-dark text-dark mb-0 bg-light px-3 py-1"
-                        >
-                          平台推薦老師
-                        </span>
-                  <div class="p-3 h-100 ">
-                    <div class="d-flex flex-column h-100">
-                         
-                      <img src="" alt="">
-                      <div class="card-body">
-
-                        <br />
-                        <small class="storeName card-title fw-light bg-light"
-                          >GEPT / TOEIC / Speaking</small
-                        >
-
-
-                      </div>
-                      <div
-                        class="card-footer border-0 py-0 mt-auto bg-transparent"
-                      >
-                      
-                        <div class="position-relative">
-                          <div class="mb-2 d-flex flex-wrap gap-2">
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                英檢衝刺
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                口說訓練
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                1 對 1
-              </span>
-            </div>
-                          <a
-                            href="#"
-                            class="cardHref btn btn-primary d-inline-block w-100 border border-1 border-dark text-white fw-bold mt-auto card-btn"
-                            ><p class="mb-0">
-                              立即預約
-                            </p></a
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col position-relative">
-              <div class="teacherItem">
-                <div
-                  class="card rounded-4 border-dark h-100 position-relative"
-                >
-                <span
-                          class="position-absolute top-0 end-0 translate-middle-y rounded-pill border border-dark text-dark mb-0 bg-light px-3 py-1"
-                        >
-                          平台推薦老師
-                        </span>
-                  <div class="p-3 h-100 ">
-                    <div class="d-flex flex-column h-100">
-                         
-                      <img src="" alt="">
-                      <div class="card-body">
-
-                        <br />
-                        <small class="storeName card-title fw-light bg-light"
-                          >GEPT / TOEIC / Speaking</small
-                        >
-
-
-                      </div>
-                      <div
-                        class="card-footer border-0 py-0 mt-auto bg-transparent"
-                      >
-                      
-                        <div class="position-relative">
-                          <div class="mb-2 d-flex flex-wrap gap-2">
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                英檢衝刺
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                口說訓練
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                1 對 1
-              </span>
-            </div>
-                          <a
-                            href="#"
-                            class="cardHref btn btn-primary d-inline-block w-100 border border-1 border-dark text-white fw-bold mt-auto card-btn"
-                            ><p class="mb-0">
-                              立即預約
-                            </p></a
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col position-relative">
-              <div class="teacherItem">
-                <div
-                  class="card rounded-4 border-dark h-100 position-relative"
-                >
-                <span
-                          class="position-absolute top-0 end-0 translate-middle-y rounded-pill border border-dark text-dark mb-0 bg-light px-3 py-1"
-                        >
-                          平台推薦老師
-                        </span>
-                  <div class="p-3 h-100 ">
-                    <div class="d-flex flex-column h-100">
-                         
-                      <div class="card-body">
-
-                        <br />
-                        <small class="storeName card-title fw-light bg-light"
-                          >GEPT / TOEIC / Speaking</small
-                        >
-
-
-                      </div>
-                      <div
-                        class="card-footer border-0 py-0 mt-auto bg-transparent"
-                      >
-                      
-                        <div class="position-relative">
-                          <div class="mb-2 d-flex flex-wrap gap-2">
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                英檢衝刺
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                口說訓練
-              </span>
-              <span class="badge border border-1 border-dark bg-light text-dark fw-light">
-                1 對 1
-              </span>
-            </div>
-                          <a
-                            href="#"
-                            class="cardHref btn btn-primary d-inline-block w-100 border border-1 border-dark text-white fw-bold mt-auto card-btn"
-                            ><p class="mb-0">
-                              立即預約
-                            </p></a
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- productCard items end -->
+            <!-- teacher card end -->
+        </div>
       </section>
 
       <section class="pt-5 mt-5 d-flex flex-column position-relative">
@@ -661,9 +235,10 @@
       <section></section>
     </main>
     <script type="module" src="./assets/js/matter.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./assets/js/index.js"></script>
     <script src="./assets/js/navbar.js"></script>
     <script src="./assets/js/tokenTest.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   
   </body>
 </html>
