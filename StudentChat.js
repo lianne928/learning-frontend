@@ -308,25 +308,24 @@ function connectWebSocket(bookingId) {
         stompErrorSubscription = null;
     }
 
-    if (stompClient && stompClient.connected) {
+    if (stompClient && stompClient.active) {
         subscribeBooking(bookingId);
         return;
     }
 
     if (stompClient) {
-        try { stompClient.disconnect(); } catch { }
+        try { stompClient.deactivate(); } catch { }
     }
 
-    const socket = new SockJS(`${WS_BASE_URL}/ws`);
-    stompClient = Stomp.over(socket);
-    stompClient.debug = null;
-
     const jwt = getJwt();
-    stompClient.connect(
-        { Authorization: 'Bearer ' + jwt },
-        () => subscribeBooking(bookingId),
-        err => console.error('WebSocket 連線失敗', err)
-    );
+    stompClient = new StompJs.Client({
+        webSocketFactory: () => new SockJS(`${WS_BASE_URL}/ws`),
+        connectHeaders: { Authorization: 'Bearer ' + jwt },
+        reconnectDelay: 5000,
+        onConnect: () => subscribeBooking(bookingId),
+        onStompError: err => console.error('WebSocket 連線失敗', err)
+    });
+    stompClient.activate();
 }
 
 function subscribeBooking(bookingId) {
