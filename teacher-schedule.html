@@ -64,7 +64,7 @@
     <main class="teacher-main">
 
         <h1 class="teacher-page-title">行程與排課</h1>
-        <p class="teacher-page-subtitle">管理你的課程行程與每週開放時段</p>
+        <p class="teacher-page-subtitle">管理你的課程行程、每週開放時段與課程設定</p>
 
         <!-- 頁籤 -->
         <div class="schedule-tabs">
@@ -73,6 +73,9 @@
             </button>
             <button class="schedule-tab-btn" data-tab="manage">
                 <span class="material-symbols-outlined">tune</span> 課表管理
+            </button>
+            <button class="schedule-tab-btn" data-tab="courses">
+                <span class="material-symbols-outlined">school</span> 課程管理
             </button>
         </div>
 
@@ -151,7 +154,98 @@
 
         </div>
 
+        <!-- 頁籤三：課程管理 -->
+        <div class="tab-panel" id="tab-courses">
+
+            <div class="teacher-card mb-4">
+                <div class="teacher-card-header">
+                    <h3>我的課程</h3>
+                    <button class="btn-teacher" id="btn-add-course">
+                        <span class="material-symbols-outlined" style="font-size:16px;">add</span>
+                        新增課程
+                    </button>
+                </div>
+                <div class="teacher-card-body">
+                    <div id="courses-list">
+                        <div class="text-center text-muted py-4">⏳ 載入中...</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </main>
+</div>
+
+<!-- 新增/編輯課程 Modal -->
+<div class="modal fade" id="courseModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="courseModalTitle">新增課程</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="courseForm">
+                    <input type="hidden" id="courseId">
+                    
+                    <div class="mb-3">
+                        <label for="courseName" class="form-label">課程名稱 <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="courseName" required maxlength="100"
+                               placeholder="例如：低年級英語啟蒙班">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="courseSubject" class="form-label">課程類別 <span class="text-danger">*</span></label>
+                        <select class="form-select" id="courseSubject" required>
+                            <option value="">請選擇...</option>
+                            <optgroup label="國小英語">
+                                <option value="11">低年級（一~二年級）</option>
+                                <option value="12">中年級（三~四年級）</option>
+                                <option value="13">高年級（五~六年級）</option>
+                            </optgroup>
+                            <optgroup label="英檢證照">
+                                <option value="21">GEPT（全民英檢）</option>
+                                <option value="22">YLE（劍橋兒童英檢）</option>
+                                <option value="23">國中先修</option>
+                            </optgroup>
+                            <optgroup label="其他">
+                                <option value="31">其他</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="coursePrice" class="form-label">單堂價格 (NT$) <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="coursePrice" required min="0" step="10"
+                               placeholder="例如：600">
+                        <small class="text-muted">建議價格範圍：NT$ 400 - 1,200</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="courseDescription" class="form-label">課程描述 <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="courseDescription" rows="4" required maxlength="500"
+                                  placeholder="請簡述課程內容、適合對象、教學特色等..."></textarea>
+                        <small class="text-muted">最多 500 字</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">課程狀態</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="courseIsActive" checked>
+                            <label class="form-check-label" for="courseIsActive">
+                                啟用課程（關閉後學生將無法預約）
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="btn-save-course">儲存</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
