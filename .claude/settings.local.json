@@ -6,7 +6,8 @@
       "Bash(git -C \"d:\\\\learning-frontend01\\\\learning-frontend\" log --pretty=format:\"%h %s\" --all)",
       "Bash(git -C \"d:\\\\learning-frontend01\\\\learning-frontend\" show 63fba9a --name-status)",
       "Bash(git -C \"d:\\\\learning-frontend01\\\\learning-frontend\" show 63fba9a^:StudentChat.html)",
-      "Bash(git -C \"d:\\\\learning-frontend01\\\\learning-frontend\" show 63fba9a^:teacher-messages.html)"
+      "Bash(git -C \"d:\\\\learning-frontend01\\\\learning-frontend\" show 63fba9a^:teacher-messages.html)",
+      "Bash(grep -E \"\\\\.html$|\\\\.css$|assets\")"
     ]
   }
 }
