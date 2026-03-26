@@ -1,0 +1,321 @@
+// ============================================
+// _teacher-chat.scss — 老師訊息中心
+// Design: Playful Brutalism（以 _student-chat.scss 為範本）
+// ============================================
+
+// ── 色票 ──
+$tc-primary: #0055FF;
+$tc-accent:  #CCFF00;
+$tc-bg:      #F5F7FF;
+$tc-border:  #000;
+$tc-white:   #fff;
+$tc-text:    #111;
+
+// ── 斷點 ──
+$bp-tablet: 991px;
+$bp-mobile: 575px;
+
+// ============================================
+// BODY LAYOUT（僅限老師訊息中心頁面）
+// ============================================
+
+body.teacher-chat-page {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: $tc-bg;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    color: $tc-text;
+}
+
+// ============================================
+// SIDEBAR（scoped 在 teacher-chat-page 下，
+//  避免覆蓋其他老師後台頁面的 teacher-sidebar 樣式）
+// ============================================
+
+body.teacher-chat-page .teacher-sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: $tc-primary;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    border-right: 2px solid $tc-border;
+    flex-shrink: 0;
+    // 覆寫 _teacher-layout.scss 的 position / transform RWD 行為
+    position: static;
+    transform: none;
+    transition: left 0.25s ease;
+}
+
+body.teacher-chat-page .teacher-sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 24px 24px 20px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+
+    .logo-icon {
+        width: 38px;
+        height: 38px;
+        background: $tc-accent;
+        border: 2px solid $tc-border;
+        border-radius: 10px;
+        box-shadow: 3px 3px 0 $tc-border;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Nunito', sans-serif;
+        font-weight: 900;
+        font-size: 1.1rem;
+        color: $tc-border;
+        flex-shrink: 0;
+        // 覆寫 _teacher-layout.scss 的 gradient logo
+        background: $tc-accent;
+        border-radius: 10px;
+    }
+
+    .logo-text {
+        font-family: 'Nunito', sans-serif;
+        font-weight: 900;
+        font-size: 1.1rem;
+        color: $tc-white;
+        line-height: 1.2;
+        letter-spacing: -0.3px;
+
+        span {
+            display: block;
+            font-size: 0.68rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.65);
+            letter-spacing: 0.02em;
+        }
+    }
+}
+
+body.teacher-chat-page .teacher-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 24px;
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+    border-left: 4px solid transparent;
+    transition: background 0.15s, color 0.15s;
+    // 覆寫 _teacher-layout.scss 的 border-radius / margin
+    margin-right: 0;
+    margin-bottom: 0;
+    border-radius: 0;
+
+    .material-symbols-outlined {
+        font-size: 20px;
+        font-variation-settings: 'FILL' 0, 'wght' 400;
+        color: rgba(255, 255, 255, 0.75);
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: $tc-white;
+    }
+
+    &.active {
+        background: $tc-accent;
+        color: $tc-border;
+        font-weight: 700;
+        border-left-color: transparent;
+
+        // 覆寫 _teacher-layout.scss 的 ::before 彩色線條
+        &::before { display: none; }
+
+        .material-symbols-outlined {
+            color: $tc-border;
+            font-variation-settings: 'FILL' 0, 'wght' 400;
+        }
+    }
+}
+
+body.teacher-chat-page .teacher-sidebar-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
+    border-top: 2px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    // 覆寫 _teacher-layout.scss 的 justify-content / margin-top
+    justify-content: flex-start;
+    margin-top: 0;
+
+    .teacher-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+        flex-shrink: 0;
+    }
+
+    .teacher-info {
+        flex: 1;
+        margin-left: 0;
+
+        .teacher-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: $tc-white;
+            line-height: 1.2;
+        }
+
+        .teacher-role {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.55);
+            font-weight: 400;
+        }
+    }
+
+    .logout-icon {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 18px !important;
+        &:hover { color: #ef4444; }
+    }
+}
+
+// ============================================
+// RWD — Tablet（576px – 991px）
+// ============================================
+
+@media (max-width: $bp-tablet) {
+    body.teacher-chat-page .teacher-sidebar {
+        width: 64px;
+        min-width: 64px;
+    }
+
+    body.teacher-chat-page .teacher-sidebar-logo {
+        padding: 20px 12px;
+        justify-content: center;
+        gap: 0;
+    }
+
+    body.teacher-chat-page {
+        .logo-text,
+        .teacher-info,
+        .nav-label,
+        .logout-icon {
+            display: none;
+        }
+
+        .teacher-nav-link {
+            justify-content: center;
+            padding: 14px 0;
+            gap: 0;
+        }
+
+        .teacher-sidebar-footer {
+            justify-content: center;
+            padding: 14px 0;
+            gap: 0;
+        }
+
+        .chat-list-panel {
+            max-width: none;
+            min-width: 200px;
+            flex: 0 0 220px;
+        }
+    }
+}
+
+// ============================================
+// RWD — Mobile（< 576px）
+// ============================================
+
+@media (max-width: $bp-mobile) {
+    body.teacher-chat-page {
+        .hamburger-btn {
+            display: flex;
+            background: $tc-primary;
+        }
+
+        .teacher-sidebar {
+            position: fixed;
+            left: -280px;
+            top: 0;
+            bottom: 0;
+            width: 260px;
+            min-width: 260px;
+            z-index: 1000;
+        }
+
+        // 手機展開 sidebar 時恢復完整顯示
+        .logo-text,
+        .teacher-info,
+        .nav-label,
+        .logout-icon {
+            display: revert;
+        }
+
+        .teacher-sidebar-logo {
+            padding: 24px 24px 20px;
+            justify-content: flex-start;
+            gap: 12px;
+        }
+
+        .teacher-nav-link {
+            justify-content: flex-start;
+            padding: 11px 24px;
+            gap: 12px;
+        }
+
+        .teacher-sidebar-footer {
+            justify-content: flex-start;
+            padding: 16px 20px;
+            gap: 10px;
+        }
+
+        &.sidebar-open .teacher-sidebar {
+            left: 0;
+        }
+
+        &.sidebar-open .sidebar-overlay {
+            display: block;
+        }
+
+        .chat-layout {
+            width: 100%;
+        }
+
+        .chat-list-panel {
+            flex: 1;
+            max-width: none;
+            min-width: 0;
+            margin: 8px;
+        }
+
+        .chat-window {
+            display: none;
+            margin: 8px;
+        }
+
+        &.mobile-show-chat .chat-list-panel {
+            display: none;
+        }
+
+        &.mobile-show-chat .chat-window {
+            display: flex;
+            flex: 1;
+        }
+
+        .chat-back-btn {
+            display: flex;
+        }
+
+        .msg-content {
+            max-width: 80%;
+        }
+
+        .chat-messages {
+            padding: 16px 14px;
+        }
+    }
+}

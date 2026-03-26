@@ -9,7 +9,10 @@
       "Bash(git -C \"d:\\\\learning-frontend01\\\\learning-frontend\" show 63fba9a^:teacher-messages.html)",
       "Bash(grep -E \"\\\\.html$|\\\\.css$|assets\")",
       "Bash(find d:learning-frontend01learning-frontend -type f \\\\\\(-name config* -o -name .env* -o -name settings* \\\\\\))",
-      "Bash(grep -rn \"sockjs\\\\|stomp\\\\|SockJS\\\\|Stomp\" /d/learning-frontend01/learning-frontend/*.html)"
+      "Bash(grep -rn \"sockjs\\\\|stomp\\\\|SockJS\\\\|Stomp\" /d/learning-frontend01/learning-frontend/*.html)",
+      "Bash(find assets/js -type f -name *.js)",
+      "Bash(ls -la /d/learning-frontend01/learning-frontend/*.js)",
+      "Bash(grep -E \"\\(assets/js|\\\\.html$\\)\")"
     ]
   }
 }
