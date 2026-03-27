@@ -99,8 +99,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
           }
         }
+      } else if (role === "ADMIN") {
+        // 管理員 - 顯示後台連結
+        authNavItem.innerHTML = `
+          <a href="admin-dashboard.html" class="text-decoration-none px-3 text-warning fw-bold">
+            🛡️ ${name}
+          </a>
+          <a href="#" onclick="navLogout()" class="text-decoration-none px-3 pe-0 text-danger fw-bold">登出</a>
+        `;
       } else {
-        // 其他角色（例如 ADMIN）
+        // 其他未知角色
         authNavItem.innerHTML = `
           <span class="text-primary fw-bold px-3">👋 ${name}</span>
           <a href="#" onclick="navLogout()" class="text-decoration-none px-3 pe-0 text-danger fw-bold">登出</a>

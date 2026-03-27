@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge | 學習紀錄</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/scss/all.scss">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400;
+            font-size: 20px;
+            vertical-align: middle;
+        }
+
+        .student-main {
+            overflow-y: auto;
+        }
+
+        /* ── 篩選列 ── */
+        .s-filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            background: #fff;
+            border: 2px solid #000;
+            border-radius: 14px;
+            box-shadow: 4px 4px 0 #000;
+            padding: 14px 20px;
+            margin-bottom: 24px;
+        }
+
+        .s-filter-input {
+            border: 2px solid #000;
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            font-family: 'Noto Sans TC', sans-serif;
+            background: #F5F7FF;
+            box-shadow: 2px 2px 0 #000;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .s-filter-input:focus {
+            border-color: #0055FF;
+            box-shadow: 2px 2px 0 #0055FF;
+        }
+
+        .s-filter-divider {
+            width: 1px;
+            height: 24px;
+            background: #ddd;
+        }
+
+        .s-filter-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            background: #0055FF;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: 2px solid #000;
+            border-radius: 10px;
+            box-shadow: 3px 3px 0 #000;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+
+        .s-filter-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        /* ── 紀錄卡片 ── */
+        .s-card {
+            background: #fff;
+            border: 2px solid #000;
+            border-radius: 14px;
+            box-shadow: 4px 4px 0 #000;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .s-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 22px;
+            border-bottom: 2px solid #000;
+        }
+
+        .s-card-header h3 {
+            font-size: 0.95rem;
+            font-weight: 900;
+            color: #000;
+            margin: 0;
+        }
+
+        /* ── 單筆紀錄 ── */
+        .record-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 22px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.12s;
+        }
+
+        .record-item:last-child { border-bottom: none; }
+        .record-item:hover { background: #F5F7FF; }
+
+        .record-avatar {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #000;
+            box-shadow: 2px 2px 0 #000;
+            flex-shrink: 0;
+        }
+
+        .record-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .record-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #111;
+            margin-bottom: 4px;
+        }
+
+        .record-meta {
+            font-size: 0.75rem;
+            color: #999;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .record-subject {
+            font-size: 0.7rem;
+            color: #0055FF;
+            font-weight: 700;
+            background: #EBF0FF;
+            border: 1.5px solid #0055FF;
+            border-radius: 6px;
+            padding: 2px 8px;
+        }
+
+        .record-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .record-duration {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .record-status {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: 1.5px solid #000;
+        }
+
+        .status-done     { background: #CCFF00; color: #000; }
+        .status-cancel   { background: #fee2e2; color: #dc2626; border-color: #dc2626; }
+        .status-ongoing  { background: #EBF0FF; color: #0055FF; border-color: #0055FF; }
+
+        .record-stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .record-stars .material-symbols-outlined {
+            font-size: 14px;
+            font-variation-settings: 'FILL' 1, 'wght' 400;
+            color: #FFD500;
+        }
+
+        .record-stars .star-empty {
+            color: #ddd;
+            font-variation-settings: 'FILL' 0, 'wght' 400;
+        }
+
+        /* ── 空狀態 ── */
+        .s-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #bbb;
+        }
+
+        .s-empty .material-symbols-outlined {
+            font-size: 48px;
+            opacity: 0.25;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        /* ── 摘要列 ── */
+        .s-summary-bar {
+            display: flex;
+            gap: 24px;
+            padding: 12px 22px;
+            background: #F5F7FF;
+            border-bottom: 2px solid #000;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #555;
+            flex-wrap: wrap;
+        }
+
+        .s-summary-item span {
+            color: #0055FF;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 手機版頂部 Header -->
+    <header class="student-mobile-header">
+        <button class="btn-menu" id="sidebar-toggle">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <span class="logo-text nunito fst-italic">Merge</span>
+        <div style="width: 40px;"></div>
+    </header>
+
+    <!-- 手機版遮罩 -->
+    <div class="student-overlay" id="sidebar-overlay"></div>
+
+    <div class="student-layout">
+
+        <!-- ===== 左側導覽列 ===== -->
+        <aside class="student-sidebar" id="student-sidebar">
+            <div class="student-sidebar-logo">
+                <div class="logo-icon">M</div>
+                <div class="logo-text">
+                    Merge
+                    <span>學生後台</span>
+                </div>
+            </div>
+            <nav class="flex-grow-1 py-2">
+                <a href="student-dashboard.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">grid_view</span> 控制台
+                </a>
+                <a href="StudentChat.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">chat_bubble</span> 訊息中心
+                </a>
+                <a href="explore.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">search</span> 找老師
+                </a>
+                <a href="booking.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">calendar_month</span> 我的課程
+                </a>
+                <a href="student-learning-records.html" class="student-nav-link active">
+                    <span class="material-symbols-outlined">history</span> 學習紀錄
+                </a>
+                <a href="student-credits.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">account_balance_wallet</span> 儲值明細
+                </a>
+                <a href="student-settings.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">settings</span> 設定
+                </a>
+            </nav>
+            <div class="student-sidebar-footer" id="logout-btn">
+                <img src="https://i.pravatar.cc/38?img=5" alt="頭像" class="student-avatar">
+                <div class="student-info">
+                    <div class="student-name" id="sidebar-name">學生</div>
+                    <div class="student-role">學生</div>
+                </div>
+                <span class="material-symbols-outlined logout-icon">logout</span>
+            </div>
+        </aside>
+
+        <!-- ===== 右側主內容區 ===== -->
+        <main class="student-main">
+
+            <!-- 頁面標題 -->
+            <h1 class="student-page-title">學習紀錄</h1>
+
+            <!-- 篩選列 -->
+            <div class="s-filter-bar">
+                <input type="text" id="filter-keyword" class="s-filter-input" placeholder="搜尋老師或科目…" style="width: 180px;">
+                <div class="s-filter-divider"></div>
+                <select id="filter-subject" class="s-filter-input">
+                    <option value="">全部科目</option>
+                    <option>英語</option>
+                    <option>日語</option>
+                    <option>數學</option>
+                    <option>程式設計</option>
+                    <option>音樂</option>
+                    <option>物理</option>
+                    <option>化學</option>
+                    <option>國語</option>
+                </select>
+                <div class="s-filter-divider"></div>
+                <select id="filter-status" class="s-filter-input">
+                    <option value="">全部狀態</option>
+                    <option>已完成</option>
+                    <option>已取消</option>
+                </select>
+                <div class="s-filter-divider"></div>
+                <input type="date" id="filter-date-from" class="s-filter-input">
+                <span style="font-size:0.78rem; color:#aaa; font-weight:600;">至</span>
+                <input type="date" id="filter-date-to" class="s-filter-input">
+                <button id="btn-filter" class="s-filter-btn">
+                    <span class="material-symbols-outlined" style="font-size:16px;">search</span>
+                    搜尋
+                </button>
+            </div>
+
+            <!-- 紀錄列表 -->
+            <div class="s-card">
+                <div class="s-card-header">
+                    <h3>
+                        <span class="material-symbols-outlined" style="font-size:18px; color:#0055FF; margin-right:6px;">history</span>
+                        上課紀錄
+                    </h3>
+                    <span id="record-count" style="font-size:0.78rem; color:#aaa; font-weight:600;">載入中…</span>
+                </div>
+
+                <!-- 摘要列 -->
+                <div class="s-summary-bar">
+                    <div class="s-summary-item">總堂數：<span id="summary-total">--</span></div>
+                    <div class="s-summary-item">已完成：<span id="summary-done">--</span></div>
+                    <div class="s-summary-item">已取消：<span id="summary-cancel">--</span></div>
+                    <div class="s-summary-item">總學習時數：<span id="summary-hours">--</span></div>
+                </div>
+
+                <!-- 紀錄項目（動態載入） -->
+                <div id="records-list">
+                    <div style="text-align:center; padding:40px; color:#aaa; font-size:0.85rem;">載入中…</div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./assets/js/student-layout.js"></script>
+    <script>
+        const SUBJECT_MAP = { 1:'英語', 2:'日語', 3:'數學', 4:'程式設計', 5:'音樂', 6:'物理', 7:'化學', 8:'國語' };
+        const STATUS_MAP  = { 1:'已排課', 2:'已完成', 3:'已取消' };
+        let allRecords = [];
+
+        function handleApiError(err) {
+            if (!err.response) { alert('無法連線至伺服器，請確認網路'); return; }
+            if (err.response.status === 401) { localStorage.clear(); window.location.href = 'login.html'; return; }
+            if (err.response.status === 403) { alert('權限不足'); return; }
+            alert('伺服器發生錯誤，請稍後再試');
+        }
+
+        function renderRecords(records) {
+            const container = document.getElementById('records-list');
+            document.getElementById('record-count').textContent = '共 ' + records.length + ' 筆';
+            if (!records.length) {
+                container.innerHTML = '<div class="s-empty"><span class="material-symbols-outlined">history</span>查無符合條件的紀錄</div>';
+                return;
+            }
+            const avatarNums = [11, 23, 32, 45, 60, 7, 14, 20, 33, 50];
+            container.innerHTML = records.map((r, i) => {
+                const subjectName = SUBJECT_MAP[r.subject] || ('科目' + r.subject);
+                const statusClass = r.status === 2 ? 'status-done' : r.status === 3 ? 'status-cancel' : 'status-ongoing';
+                const statusText = STATUS_MAP[r.status] || '';
+                const dateStr = r.date ? r.date.replace(/-/g, '/') : '';
+                const timeStr = r.hour != null ? r.hour + ':00' : '';
+                const avatarNum = avatarNums[i % avatarNums.length];
+                const starsHtml = r.status === 2
+                    ? '<div class="record-stars"><span class="material-symbols-outlined">star</span><span class="material-symbols-outlined">star</span><span class="material-symbols-outlined">star</span><span class="material-symbols-outlined">star</span><span class="material-symbols-outlined">star</span></div>'
+                    : '';
+                return `<div class="record-item">
+                    <img src="https://i.pravatar.cc/44?img=${avatarNum}" alt="老師" class="record-avatar">
+                    <div class="record-info">
+                        <div class="record-title">${subjectName}</div>
+                        <div class="record-meta">
+                            <span>${r.tutorName || ''} 老師</span>
+                            <span>${dateStr} ${timeStr}</span>
+                            <span class="record-subject">${subjectName}</span>
+                        </div>
+                    </div>
+                    <div class="record-right">
+                        <div class="record-duration">60 分鐘</div>
+                        <span class="record-status ${statusClass}">${statusText}</span>
+                        ${starsHtml}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function updateSummary(records) {
+            const done   = records.filter(r => r.status === 2).length;
+            const cancel = records.filter(r => r.status === 3).length;
+            document.getElementById('summary-total').textContent  = records.length + ' 堂';
+            document.getElementById('summary-done').textContent   = done + ' 堂';
+            document.getElementById('summary-cancel').textContent = cancel + ' 堂';
+            document.getElementById('summary-hours').textContent  = done + ' hr';
+        }
+
+        function applyFilters() {
+            const keyword   = document.getElementById('filter-keyword').value.toLowerCase().trim();
+            const subject   = document.getElementById('filter-subject').value;
+            const statusVal = document.getElementById('filter-status').value;
+            const dateFrom  = document.getElementById('filter-date-from').value;
+            const dateTo    = document.getElementById('filter-date-to').value;
+            const statusNum = statusVal === '已完成' ? 2 : statusVal === '已取消' ? 3 : 0;
+
+            const filtered = allRecords.filter(r => {
+                const subjectName = SUBJECT_MAP[r.subject] || '';
+                const tutorName = (r.tutorName || '').toLowerCase();
+                if (keyword && !tutorName.includes(keyword) && !subjectName.toLowerCase().includes(keyword)) return false;
+                if (subject && subjectName !== subject) return false;
+                if (statusNum && r.status !== statusNum) return false;
+                if (dateFrom && r.date < dateFrom) return false;
+                if (dateTo && r.date > dateTo) return false;
+                return true;
+            });
+            renderRecords(filtered);
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userId = localStorage.getItem('userId');
+            try {
+                const res = await axios.get(API_BASE_URL + '/courses/me?userId=' + userId);
+                allRecords = res.data || [];
+                // 依日期降序排列
+                allRecords.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+                updateSummary(allRecords);
+                renderRecords(allRecords);
+            } catch (err) {
+                handleApiError(err);
+            }
+            document.getElementById('btn-filter').addEventListener('click', applyFilters);
+        });
+    </script>
+</body>
+
+</html>

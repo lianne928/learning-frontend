@@ -3,51 +3,59 @@
 // ==========================================
 
 // 1. 基礎色票定義
-$pb-ink:          #464646;    // 深炭灰
-$pb-white:        #FFFFFF;    // 純白
-$pb-paper:        #F4F6F8;    // 淺灰藍紙白
-$pb-gray-soft:    #E9ECEF;    // 你的淺灰色 (注入 gray)
+$pb-ink: #464646; // 深炭灰
+$pb-white: #FFFFFF; // 純白
+$pb-paper: #F4F6F8; // 淺灰藍紙白
+$pb-gray-soft: #E9ECEF; // 你的淺灰色 (注入 gray)
 
 // 2. 核心童趣色票
-$pb-blue-hero:    #0055FF;    // 英雄藍 (Primary)
-$pb-pink:         #FF52D9;    // 魔法粉 (Secondary)
-$pb-lime:         #CCFF00;    // 萊姆綠 (Success)
-$pb-cyan:         #00E5FF;    // 電氣青 (Info)
-$pb-yellow:       #FFD500;    // 亮黃色 (Warning)
-$pb-red:          #FF4433;    // 亮橘紅 (Danger)
+$pb-blue-hero: #0055FF; // 英雄藍 (Primary)
+$pb-pink: #FF52D9; // 魔法粉 (Secondary)
+$pb-lime: #CCFF00; // 萊姆綠 (Success)
+$pb-cyan: #00E5FF; // 電氣青 (Info)
+$pb-yellow: #FFD500; // 亮黃色 (Warning)
+$pb-red: #FF4433; // 亮橘紅 (Danger)
 
 // 3. 預定義 Bootstrap 基礎變數 (覆蓋預設值)
-$primary:         $pb-blue-hero;
-$secondary:       $pb-pink;
-$success:         $pb-lime;
-$info:            $pb-cyan;
-$warning:         $pb-yellow;
-$danger:          $pb-red;
-$light:           $pb-paper;
-$dark:            $pb-ink;
-$white:           $pb-white;
+$primary: $pb-blue-hero;
+$secondary: $pb-pink;
+$success: $pb-lime;
+$info: $pb-cyan;
+$warning: $pb-yellow;
+$danger: $pb-red;
+$light: $pb-paper;
+$dark: $pb-ink;
+$white: $pb-white;
 
 $theme-colors: (
-  "primary":    $primary,
-  "secondary":  $secondary,
-  "success":    $success,
-  "info":       $info,
-  "warning":    $warning,
-  "danger":     $danger,
-  "light":      $light,
-  "dark":       $dark,
-  "white":      $white,
-  "gray":       $pb-gray-soft,
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark,
+  "white": $white,
+  "gray": $pb-gray-soft,
 );
 
 // 5. 童趣野獸派 UI 變數
-$pb-radius-lg:     32px;
-$pb-border-width:  2px;
-$pb-shadow-hard:   6px 6px 0px 0px $pb-ink;
+$pb-radius-lg: 32px;
+$pb-border-width: 2px;
+$pb-shadow-hard: 6px 6px 0px 0px $pb-ink;
 
 // 覆蓋 Bootstrap 全域樣式
-$body-bg:       $light; 
-$body-color:    $dark;
-$border-width:  $pb-border-width;
-$border-color:  $dark;
+$body-bg: $light;
+$body-color: $dark;
+$border-width: $pb-border-width;
+$border-color: $dark;
 $border-radius-lg: $pb-radius-lg;
+
+/* 格紋背景*/
+#body {
+  background-image:
+    linear-gradient(rgba(70, 70, 70, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(70, 70, 70, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}

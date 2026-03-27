@@ -7,352 +7,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    <style>
-        /* ── CSS 變數（沿用 teacher-layout）── */
-        :root {
-            --brand-yellow: #FFD000;
-            --brand-navy:   #1A2238;
-            --brand-bg:     #F0F4FA;
-            --text-main:    #334155;
-            --text-light:   #94A3B8;
-            --border-color: #E2E8F0;
-        }
-
-        * { font-family: 'Noto Sans TC', sans-serif; }
-
-        body { background-color: var(--brand-bg); color: var(--text-main); margin: 0; }
-
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400;
-            font-size: 20px;
-            vertical-align: middle;
-        }
-
-        /* ── 版型 ── */
-        .teacher-layout { display: flex; height: 100vh; overflow: hidden; }
-
-        /* ── 側邊欄 ── */
-        .teacher-sidebar {
-            width: 260px;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            z-index: 100;
-        }
-        @media (max-width: 991.98px) {
-            .teacher-sidebar {
-                position: fixed; top: 0; bottom: 0; left: 0;
-                z-index: 1050;
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-            .teacher-sidebar.show { transform: translateX(0); }
-        }
-
-        .teacher-sidebar-logo {
-            padding: 20px 24px;
-            display: flex; align-items: center; gap: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            margin-bottom: 8px;
-        }
-        .logo-icon {
-            width: 36px; height: 36px;
-            background: linear-gradient(135deg, #FFD000, #FF9500);
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            color: #1e293b; font-weight: 900; font-size: 1.1rem; flex-shrink: 0;
-        }
-        .logo-text { font-weight: 900; font-size: 1.1rem; color: #fff; line-height: 1.2; }
-        .logo-text span { display: block; font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.4); }
-
-        .teacher-nav-link {
-            display: flex; align-items: center; gap: 12px;
-            padding: 11px 24px;
-            color: rgba(255,255,255,0.5);
-            font-weight: 600; font-size: 0.88rem;
-            text-decoration: none;
-            transition: all 0.2s;
-            position: relative;
-            border-radius: 0 14px 14px 0;
-            margin-right: 16px; margin-bottom: 2px;
-        }
-        .teacher-nav-link:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
-        .teacher-nav-link.active {
-            background: rgba(255,255,255,0.1); color: #fff; font-weight: 700;
-        }
-        .teacher-nav-link.active::before {
-            content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-            width: 3px; border-radius: 0 3px 3px 0;
-        }
-        .teacher-nav-link.active .material-symbols-outlined {
-            font-variation-settings: 'FILL' 1, 'wght' 400;
-        }
-        /* nav 顏色 */
-        .nav-dashboard .material-symbols-outlined { color: #FFD000; }
-        .nav-dashboard.active::before { background: #FFD000; }
-        .nav-tutors .material-symbols-outlined { color: #34D399; }
-        .nav-tutors.active::before { background: #34D399; }
-        .nav-users .material-symbols-outlined { color: #60A5FA; }
-        .nav-users.active::before { background: #60A5FA; }
-        .nav-orders .material-symbols-outlined { color: #F472B6; }
-        .nav-orders.active::before { background: #F472B6; }
-        .nav-settings .material-symbols-outlined { color: #94A3B8; }
-        .nav-settings.active::before { background: #94A3B8; }
-
-        .teacher-sidebar-footer {
-            padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.08);
-            margin-top: auto; display: flex; align-items: center; justify-content: space-between;
-            cursor: pointer;
-        }
-        .teacher-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.2); }
-        .teacher-info { flex-grow: 1; margin-left: 12px; }
-        .teacher-info .teacher-name { font-weight: 700; font-size: 0.88rem; color: #fff; }
-        .teacher-info .teacher-role { font-size: 0.72rem; color: rgba(255,255,255,0.4); font-weight: 600; }
-        .logout-icon { font-size: 20px; color: rgba(255,255,255,0.3); transition: color 0.2s; }
-        .logout-icon:hover { color: #ef4444; }
-
-        /* ── 主內容 ── */
-        .teacher-main {
-            flex: 1; overflow-y: auto;
-            padding: 32px 40px;
-            background-color: var(--brand-bg);
-        }
-        @media (max-width: 991.98px) { .teacher-main { padding: 20px 16px; } }
-        .teacher-main::-webkit-scrollbar { width: 5px; }
-        .teacher-main::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-
-        /* ── 歡迎卡片 ── */
-        .dashboard-welcome {
-            background: linear-gradient(135deg, #1e293b 0%, #1a2238 50%, #0f172a 100%);
-            border-radius: 20px; padding: 32px 36px; color: #fff;
-            display: flex; justify-content: space-between; align-items: center;
-            gap: 20px; flex-wrap: wrap; position: relative; overflow: hidden;
-        }
-        .dashboard-welcome::before {
-            content: ''; position: absolute; top: -60px; right: -60px;
-            width: 220px; height: 220px; border-radius: 50%;
-            background: rgba(255,208,0,0.10);
-        }
-        .dashboard-welcome::after {
-            content: ''; position: absolute; bottom: -40px; left: 30%;
-            width: 150px; height: 150px; border-radius: 50%;
-            background: rgba(52,211,153,0.10);
-        }
-        .dashboard-greeting {
-            font-size: 0.78rem; font-weight: 700; color: #FFD000;
-            letter-spacing: 0.1em; text-transform: uppercase;
-            margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
-        }
-        .dashboard-welcome-name { font-size: 1.7rem; font-weight: 900; margin-bottom: 8px; color: #fff; }
-        .dashboard-welcome-desc { font-size: 0.9rem; color: rgba(255,255,255,0.55); margin: 0; }
-        .dashboard-welcome-desc strong { color: #FFD000; font-size: 1.1rem; }
-
-        /* ── Tab Switcher ── */
-        .admin-tabs {
-            display: flex; gap: 4px;
-            background: #fff; border-radius: 12px; padding: 4px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin-bottom: 28px;
-        }
-        .admin-tab-btn {
-            flex: 1; padding: 10px 20px; border: none; background: transparent;
-            border-radius: 9px; font-weight: 700; font-size: 0.88rem;
-            color: var(--text-light); cursor: pointer; transition: all 0.2s;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .admin-tab-btn:hover { background: var(--brand-bg); color: var(--text-main); }
-        .admin-tab-btn.active {
-            background: linear-gradient(135deg, #1e293b, #312e81);
-            color: #fff; box-shadow: 0 4px 12px rgba(30,41,59,0.25);
-        }
-        .admin-tab-btn .badge-count {
-            background: rgba(255,255,255,0.2); color: #fff;
-            font-size: 0.72rem; padding: 2px 7px; border-radius: 20px; font-weight: 700;
-        }
-        .admin-tab-btn:not(.active) .badge-count {
-            background: var(--brand-bg); color: var(--text-light);
-        }
-
-        .tab-panel { display: none; }
-        .tab-panel.active { display: block; }
-
-        /* ── 統計卡片 ── */
-        .teacher-stat-card {
-            background: #fff; border-radius: 16px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-            padding: 20px 24px; position: relative; overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .teacher-stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
-        .teacher-stat-card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-        }
-        .stat-green::before  { background: linear-gradient(90deg, #34D399, #10B981); }
-        .stat-blue::before   { background: linear-gradient(90deg, #60A5FA, #3B82F6); }
-        .stat-purple::before { background: linear-gradient(90deg, #A78BFA, #8B5CF6); }
-        .stat-orange::before { background: linear-gradient(90deg, #FB923C, #F97316); }
-        .stat-yellow::before { background: linear-gradient(90deg, #FFD000, #FF9500); }
-        .stat-red::before    { background: linear-gradient(90deg, #F87171, #EF4444); }
-
-        .stat-icon {
-            width: 32px; height: 32px; border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .stat-icon .material-symbols-outlined { font-size: 18px; }
-        .icon-green  { color: #10B981; background: #ECFDF5; }
-        .icon-blue   { color: #3B82F6; background: #EFF6FF; }
-        .icon-purple { color: #8B5CF6; background: #F5F3FF; }
-        .icon-orange { color: #F97316; background: #FFF7ED; }
-        .icon-yellow { color: #D97706; background: #FFFBEB; }
-        .icon-red    { color: #EF4444; background: #FEF2F2; }
-
-        .stat-label {
-            font-size: 0.8rem; font-weight: 700; color: var(--text-light);
-            margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
-        }
-        .stat-value { font-size: 2rem; font-weight: 900; color: var(--brand-navy); line-height: 1.1; margin-bottom: 8px; }
-        .stat-unit  { font-size: 1rem; font-weight: 600; color: var(--text-light); }
-        .stat-trend {
-            display: inline-flex; align-items: center; gap: 4px;
-            font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 6px;
-        }
-        .stat-trend.up   { background: #ECFDF5; color: #10B981; }
-        .stat-trend.info { background: #EFF6FF; color: #3B82F6; }
-        .stat-trend.warn { background: #FFFBEB; color: #D97706; }
-
-        /* ── 通用卡片 ── */
-        .teacher-card {
-            background: #fff; border-radius: 16px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden;
-        }
-        .teacher-card-header {
-            padding: 16px 24px; border-bottom: 1px solid var(--border-color);
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .teacher-card-header h3 {
-            font-size: 0.95rem; font-weight: 700; color: var(--brand-navy);
-            margin: 0; display: flex; align-items: center; gap: 8px;
-        }
-        .teacher-card-header h3::before {
-            content: ''; display: inline-block; width: 4px; height: 16px;
-            background: linear-gradient(180deg, #FFD000, #FF9500); border-radius: 2px;
-        }
-
-        /* ── 審核 Tab：篩選按鈕 ── */
-        .review-filter-bar {
-            display: flex; gap: 8px; flex-wrap: wrap; padding: 16px 24px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .filter-btn {
-            padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border-color);
-            background: #fff; font-size: 0.8rem; font-weight: 700;
-            color: var(--text-light); cursor: pointer; transition: all 0.2s;
-        }
-        .filter-btn:hover { border-color: #94a3b8; color: var(--text-main); }
-        .filter-btn.active { background: #1e293b; color: #fff; border-color: #1e293b; }
-
-        /* ── 審核表格 ── */
-        .review-table { width: 100%; border-collapse: collapse; }
-        .review-table th {
-            font-size: 0.75rem; font-weight: 700; color: var(--text-light);
-            text-transform: uppercase; letter-spacing: 0.05em;
-            padding: 12px 16px; background: #f8fafc;
-            border-bottom: 1px solid var(--border-color); text-align: left;
-        }
-        .review-table td {
-            padding: 14px 16px; border-bottom: 1px solid #f1f5f9;
-            font-size: 0.88rem; vertical-align: middle;
-        }
-        .review-table tr:last-child td { border-bottom: none; }
-        .review-table tr:hover td { background: #fafbff; cursor: pointer; }
-
-        .tutor-name-cell { display: flex; align-items: center; gap: 10px; }
-        .tutor-initial {
-            width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 900; font-size: 0.95rem; color: #fff;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-        }
-        .tutor-name { font-weight: 700; color: var(--brand-navy); font-size: 0.9rem; }
-        .tutor-email { font-size: 0.75rem; color: var(--text-light); }
-
-        .status-badge {
-            display: inline-flex; align-items: center; gap: 4px;
-            padding: 4px 10px; border-radius: 20px;
-            font-size: 0.75rem; font-weight: 700; white-space: nowrap;
-        }
-        .status-pending  { background: #FFFBEB; color: #D97706; }
-        .status-approved { background: #ECFDF5; color: #10B981; }
-        .status-rejected { background: #FEF2F2; color: #EF4444; }
-
-        /* ── 熱門課程列表 ── */
-        .popular-item {
-            display: flex; align-items: center; gap: 14px;
-            padding: 14px 24px; border-bottom: 1px solid #f1f5f9; transition: background 0.15s;
-        }
-        .popular-item:last-child { border-bottom: none; }
-        .popular-item:hover { background: #fafbff; }
-        .popular-rank {
-            width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 900; font-size: 0.85rem;
-        }
-        .rank-1 { background: #FFFBEB; color: #D97706; }
-        .rank-2 { background: #F1F5F9; color: #64748B; }
-        .rank-3 { background: #FFF7ED; color: #C2410C; }
-        .rank-other { background: #F8FAFC; color: #94A3B8; }
-        .popular-info { flex-grow: 1; }
-        .popular-title { font-weight: 700; font-size: 0.9rem; color: var(--brand-navy); }
-        .popular-meta  { font-size: 0.78rem; color: var(--text-light); margin-top: 2px; }
-        .popular-count { font-weight: 900; font-size: 1.1rem; color: var(--brand-navy); text-align: right; }
-        .popular-count small { display: block; font-size: 0.72rem; font-weight: 600; color: var(--text-light); }
-
-        /* ── Modal ── */
-        .modal-content { border-radius: 16px; border: none; overflow: hidden; }
-        .modal-header  { background: linear-gradient(135deg, #1e293b, #312e81); color: #fff; border: none; padding: 20px 24px; }
-        .modal-title   { font-weight: 900; font-size: 1.1rem; }
-        .modal-body    { padding: 24px; }
-        .modal-footer  { border: none; padding: 16px 24px; background: #f8fafc; }
-        .label-custom  { font-size: 0.75rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-        .detail-box    { background: #f8fafc; border-radius: 10px; padding: 14px 16px; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; }
-        .exp-item      { border-left: 3px solid #6366f1; padding-left: 12px; margin-bottom: 8px; font-size: 0.88rem; }
-        .cert-link     { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 8px; text-decoration: none; color: var(--text-main); font-weight: 600; font-size: 0.85rem; transition: all 0.2s; margin-bottom: 8px; }
-        .cert-link:hover { border-color: #6366f1; color: #6366f1; }
-        .video-btn { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #1e293b; color: #fff; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; transition: opacity 0.2s; }
-        .video-btn:hover { opacity: 0.85; color: #fff; }
-
-        /* ── 手機版 ── */
-        .teacher-mobile-header {
-            display: none; align-items: center; justify-content: space-between;
-            padding: 12px 16px; background: #1e293b;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            position: sticky; top: 0; z-index: 50;
-        }
-        @media (max-width: 991.98px) { .teacher-mobile-header { display: flex; } }
-        .teacher-overlay {
-            display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.5); z-index: 1040;
-        }
-        .teacher-overlay.show { display: block; }
-
-        /* ── 黃色按鈕 ── */
-        .btn-teacher {
-            background: linear-gradient(135deg, #FFD000, #FF9500);
-            color: #1e293b; font-weight: 700; border: none; border-radius: 10px;
-            padding: 10px 20px; font-size: 0.88rem; transition: all 0.2s;
-            display: inline-flex; align-items: center; gap: 6px;
-            text-decoration: none; white-space: nowrap; cursor: pointer;
-        }
-        .btn-teacher:hover { opacity: 0.9; color: #1e293b; transform: translateY(-1px); }
-
-        /* 空狀態 */
-        .empty-state { text-align: center; padding: 48px 24px; color: var(--text-light); }
-        .empty-state .material-symbols-outlined { font-size: 48px; opacity: 0.3; display: block; margin-bottom: 12px; }
-    </style>
+    <!-- 編譯後的 CSS（SCSS → CSS）-->
+    <link rel="stylesheet" href="./assets/scss/all.scss">
 </head>
 <body>
 
@@ -379,26 +35,29 @@
                 <span>管理者後台</span>
             </div>
         </div>
+
         <nav class="flex-grow-1 py-2">
-            <a href="admin-dashboard.html" class="teacher-nav-link nav-dashboard active">
-                <span class="material-symbols-outlined">grid_view</span> 總覽儀表板
+            <!-- 點擊直接切換 Tab，不跳頁 -->
+            <a href="#" id="nav-link-dashboard"
+               class="teacher-nav-link nav-dashboard active"
+               onclick="event.preventDefault(); switchTab('dashboard')">
+                <span class="material-symbols-outlined">grid_view</span>
+                總覽儀表板
             </a>
-            <a href="admin-tutors.html" class="teacher-nav-link nav-tutors">
-                <span class="material-symbols-outlined">verified_user</span> 老師審核
-                <span id="nav-pending-badge" class="ms-auto" style="background:#fef9c3; color:#92400e; font-size:0.7rem; font-weight:700; padding:2px 8px; border-radius:10px; display:none;"></span>
+            <a href="#" id="nav-link-tutors"
+               class="teacher-nav-link nav-tutors"
+               onclick="event.preventDefault(); switchTab('tutors')">
+                <span class="material-symbols-outlined">verified_user</span>
+                老師審核
+                <span id="nav-pending-badge" class="nav-pending-badge"></span>
             </a>
-            <a href="admin-users.html" class="teacher-nav-link nav-users">
-                <span class="material-symbols-outlined">people</span> 使用者管理
-            </a>
-            <a href="admin-orders.html" class="teacher-nav-link nav-orders">
-                <span class="material-symbols-outlined">receipt_long</span> 訂單管理
-            </a>
-            <a href="index.html" class="teacher-nav-link nav-settings" style="margin-top: auto;">
-                <span class="material-symbols-outlined">home</span> 返回首頁
+            <a href="index.html" class="teacher-nav-link nav-home">
+                <span class="material-symbols-outlined">home</span>
+                返回首頁
             </a>
         </nav>
+
         <div class="teacher-sidebar-footer" id="logout-btn">
-            <img id="sidebar-avatar" src="https://via.placeholder.com/38" alt="頭像" class="teacher-avatar">
             <div class="teacher-info">
                 <div class="teacher-name" id="sidebar-name">管理員</div>
                 <div class="teacher-role">Admin</div>
@@ -417,7 +76,7 @@
         </div>
 
         <!-- ===== Tab Switcher ===== -->
-        <div class="admin-tabs mb-4">
+        <div class="admin-tabs">
             <button class="admin-tab-btn active" id="tab-dashboard" onclick="switchTab('dashboard')">
                 <span class="material-symbols-outlined" style="font-size:18px;">bar_chart</span>
                 儀表板
@@ -429,9 +88,9 @@
             </button>
         </div>
 
-        <!-- ===================================================== -->
-        <!-- TAB 1：儀表板                                          -->
-        <!-- ===================================================== -->
+        <!-- ================================================ -->
+        <!-- TAB 1：儀表板                                     -->
+        <!-- ================================================ -->
         <div class="tab-panel active" id="panel-dashboard">
 
             <!-- 歡迎卡片 -->
@@ -447,61 +106,97 @@
                     </p>
                 </div>
                 <div style="position:relative; z-index:1; text-align:right;">
-                    <div style="font-size:0.78rem; color:rgba(255,255,255,0.5); margin-bottom:6px;" id="current-time"></div>
+                    <div id="current-time" style="font-size:0.78rem; color:rgba(255,255,255,0.5); margin-bottom:6px;"></div>
                     <div style="font-size:0.88rem; color:rgba(255,255,255,0.7); font-weight:600;">
-                        本月累積 <span id="welcome-month-revenue" style="color:#FFD000; font-weight:900;">—</span> 元
+                        本月累積 <span id="welcome-month-revenue" style="color:#ffd000; font-weight:900;">—</span> 元
                     </div>
                 </div>
             </div>
 
             <!-- 統計數字 6 格 -->
             <div class="row g-3 mb-4">
+                <!-- 學生總人數 -->
                 <div class="col-6 col-md-4">
                     <div class="teacher-stat-card stat-blue">
-                        <div class="stat-label">學生總人數 <div class="stat-icon icon-blue"><span class="material-symbols-outlined">school</span></div></div>
+                        <div class="stat-label">學生總人數
+                            <div class="stat-icon icon-blue"><span class="material-symbols-outlined">school</span></div>
+                        </div>
                         <div class="stat-value"><span id="stat-students">—</span></div>
-                        <div class="stat-trend info mt-2"><span class="material-symbols-outlined" style="font-size:13px;">person_add</span> 本月新增 <span id="stat-new-students">—</span> 人</div>
+                        <div class="stat-trend info mt-2">
+                            <span class="material-symbols-outlined" style="font-size:13px;">person_add</span>
+                            本月新增 <span id="stat-new-students">—</span> 人
+                        </div>
                     </div>
                 </div>
+                <!-- 已核准老師 -->
                 <div class="col-6 col-md-4">
                     <div class="teacher-stat-card stat-green">
-                        <div class="stat-label">已核准老師 <div class="stat-icon icon-green"><span class="material-symbols-outlined">verified</span></div></div>
+                        <div class="stat-label">已核准老師
+                            <div class="stat-icon icon-green"><span class="material-symbols-outlined">verified</span></div>
+                        </div>
                         <div class="stat-value"><span id="stat-tutors">—</span></div>
-                        <div class="stat-trend up mt-2"><span class="material-symbols-outlined" style="font-size:13px;">person_add</span> 本月新增 <span id="stat-new-tutors">—</span> 人</div>
+                        <div class="stat-trend up mt-2">
+                            <span class="material-symbols-outlined" style="font-size:13px;">person_add</span>
+                            本月新增 <span id="stat-new-tutors">—</span> 人
+                        </div>
                     </div>
                 </div>
+                <!-- 課程種類 -->
                 <div class="col-6 col-md-4">
                     <div class="teacher-stat-card stat-purple">
-                        <div class="stat-label">課程種類 <div class="stat-icon icon-purple"><span class="material-symbols-outlined">category</span></div></div>
+                        <div class="stat-label">課程種類
+                            <div class="stat-icon icon-purple"><span class="material-symbols-outlined">category</span></div>
+                        </div>
                         <div class="stat-value"><span id="stat-course-types">—</span></div>
-                        <div class="stat-trend info mt-2"><span class="material-symbols-outlined" style="font-size:13px;">auto_awesome</span> 科目代碼不重複</div>
+                        <div class="stat-trend info mt-2">
+                            <span class="material-symbols-outlined" style="font-size:13px;">auto_awesome</span>
+                            科目代碼不重複
+                        </div>
                     </div>
                 </div>
+                <!-- 今日營收 -->
                 <div class="col-6 col-md-4">
                     <div class="teacher-stat-card stat-yellow">
-                        <div class="stat-label">今日營收 <div class="stat-icon icon-yellow"><span class="material-symbols-outlined">today</span></div></div>
+                        <div class="stat-label">今日營收
+                            <div class="stat-icon icon-yellow"><span class="material-symbols-outlined">today</span></div>
+                        </div>
                         <div class="stat-value">
                             <span style="font-size:1.1rem; color:#94a3b8; font-weight:700;">NT$</span>
                             <span id="stat-today-revenue">—</span>
                         </div>
-                        <div class="stat-trend warn mt-2"><span class="material-symbols-outlined" style="font-size:13px;">trending_up</span> 平台抽成收入</div>
+                        <div class="stat-trend warn mt-2">
+                            <span class="material-symbols-outlined" style="font-size:13px;">trending_up</span>
+                            平台抽成收入
+                        </div>
                     </div>
                 </div>
+                <!-- 本月累積營收 -->
                 <div class="col-6 col-md-4">
                     <div class="teacher-stat-card stat-orange">
-                        <div class="stat-label">本月累積營收 <div class="stat-icon icon-orange"><span class="material-symbols-outlined">account_balance</span></div></div>
+                        <div class="stat-label">本月累積營收
+                            <div class="stat-icon icon-orange"><span class="material-symbols-outlined">account_balance</span></div>
+                        </div>
                         <div class="stat-value">
                             <span style="font-size:1.1rem; color:#94a3b8; font-weight:700;">NT$</span>
                             <span id="stat-month-revenue">—</span>
                         </div>
-                        <div class="stat-trend up mt-2"><span class="material-symbols-outlined" style="font-size:13px;">calendar_month</span> 本月截至目前</div>
+                        <div class="stat-trend up mt-2">
+                            <span class="material-symbols-outlined" style="font-size:13px;">calendar_month</span>
+                            本月截至目前
+                        </div>
                     </div>
                 </div>
+                <!-- 待審核老師（從 TutorReviewCountDTO.pendingCount 填入）-->
                 <div class="col-6 col-md-4">
-                    <div class="teacher-stat-card stat-red">
-                        <div class="stat-label">待審核老師 <div class="stat-icon icon-red"><span class="material-symbols-outlined">pending</span></div></div>
+                    <div class="teacher-stat-card stat-red" style="cursor:pointer;" onclick="switchTab('tutors')">
+                        <div class="stat-label">待審核老師
+                            <div class="stat-icon icon-red"><span class="material-symbols-outlined">pending</span></div>
+                        </div>
                         <div class="stat-value"><span id="stat-pending">—</span></div>
-                        <div class="stat-trend warn mt-2"><span class="material-symbols-outlined" style="font-size:13px;">notification_important</span> 需要處理</div>
+                        <div class="stat-trend warn mt-2">
+                            <span class="material-symbols-outlined" style="font-size:13px;">notification_important</span>
+                            點擊前往審核
+                        </div>
                     </div>
                 </div>
             </div>
@@ -522,30 +217,36 @@
 
         </div><!-- /panel-dashboard -->
 
-        <!-- ===================================================== -->
-        <!-- TAB 2：老師審核                                         -->
-        <!-- ===================================================== -->
+        <!-- ================================================ -->
+        <!-- TAB 2：老師審核                                    -->
+        <!-- ================================================ -->
         <div class="tab-panel" id="panel-tutors">
 
             <!-- 審核統計卡片 -->
             <div class="row g-3 mb-4">
                 <div class="col-4">
                     <div class="teacher-stat-card stat-yellow" style="cursor:pointer;" onclick="filterTutors('pending')">
-                        <div class="stat-label">待審核 <div class="stat-icon icon-yellow"><span class="material-symbols-outlined">pending</span></div></div>
+                        <div class="stat-label">待審核
+                            <div class="stat-icon icon-yellow"><span class="material-symbols-outlined">pending</span></div>
+                        </div>
                         <div class="stat-value"><span id="count-pending">—</span></div>
                         <div class="stat-trend warn mt-2">需要處理</div>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="teacher-stat-card stat-green" style="cursor:pointer;" onclick="filterTutors('qualified')">
-                        <div class="stat-label">已核准 <div class="stat-icon icon-green"><span class="material-symbols-outlined">verified</span></div></div>
+                        <div class="stat-label">已核准
+                            <div class="stat-icon icon-green"><span class="material-symbols-outlined">verified</span></div>
+                        </div>
                         <div class="stat-value"><span id="count-approved">—</span></div>
                         <div class="stat-trend up mt-2">正式老師</div>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="teacher-stat-card stat-red" style="cursor:pointer;" onclick="filterTutors('suspended')">
-                        <div class="stat-label">已停權 <div class="stat-icon icon-red"><span class="material-symbols-outlined">block</span></div></div>
+                        <div class="stat-label">已停權
+                            <div class="stat-icon icon-red"><span class="material-symbols-outlined">block</span></div>
+                        </div>
                         <div class="stat-value"><span id="count-suspended">—</span></div>
                         <div class="stat-trend warn mt-2">已限制</div>
                     </div>
@@ -555,10 +256,10 @@
             <!-- 審核表格 -->
             <div class="teacher-card">
                 <div class="review-filter-bar">
-                    <button class="filter-btn active" onclick="filterTutors('all')" id="filter-all">全部</button>
-                    <button class="filter-btn" onclick="filterTutors('pending')" id="filter-pending">待審核</button>
-                    <button class="filter-btn" onclick="filterTutors('qualified')" id="filter-qualified">已核准</button>
-                    <button class="filter-btn" onclick="filterTutors('suspended')" id="filter-suspended">已停權</button>
+                    <button class="filter-btn active" id="filter-all"       onclick="filterTutors('all')">全部</button>
+                    <button class="filter-btn"         id="filter-pending"   onclick="filterTutors('pending')">待審核</button>
+                    <button class="filter-btn"         id="filter-qualified" onclick="filterTutors('qualified')">已核准</button>
+                    <button class="filter-btn"         id="filter-suspended" onclick="filterTutors('suspended')">已停權</button>
                 </div>
                 <div style="overflow-x:auto;">
                     <table class="review-table">
@@ -589,7 +290,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div>
-                    <div class="modal-title" id="m-name">老師姓名</div>
+                    <div class="modal-title" id="m-name"></div>
                     <div style="font-size:0.8rem; opacity:0.7; margin-top:2px;" id="m-email"></div>
                 </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
@@ -614,18 +315,18 @@
                         </div>
                         <div>
                             <div class="label-custom">申請日期</div>
-                            <div style="font-size:0.88rem; color:var(--text-main);" id="m-apply-date"></div>
+                            <div style="font-size:0.88rem;" id="m-apply-date"></div>
                         </div>
                     </div>
                     <!-- 右欄 -->
                     <div class="col-md-5">
                         <div class="label-custom mb-2">證照佐證</div>
                         <a class="cert-link" id="m-cert1-link" href="#" target="_blank">
-                            <span class="material-symbols-outlined" style="color:#10B981;">workspace_premium</span>
+                            <span class="material-symbols-outlined" style="color:#10b981;">workspace_premium</span>
                             <span id="m-cert1-name">證照一</span>
                         </a>
                         <a class="cert-link" id="m-cert2-link" href="#" target="_blank" style="display:none;">
-                            <span class="material-symbols-outlined" style="color:#10B981;">workspace_premium</span>
+                            <span class="material-symbols-outlined" style="color:#10b981;">workspace_premium</span>
                             <span id="m-cert2-name">證照二</span>
                         </a>
                         <div class="label-custom mt-3 mb-2">影片資料</div>
@@ -635,7 +336,8 @@
                         <a class="video-btn" id="m-video2" href="#" target="_blank" style="display:none;">
                             <span class="material-symbols-outlined">videocam</span> 教學示範影片
                         </a>
-                        <div class="alert alert-info border-0 small mt-3" style="border-radius:10px; background:#EFF6FF; color:#1D4ED8;">
+                        <div class="alert border-0 small mt-3"
+                             style="border-radius:10px; background:#eff6ff; color:#1d4ed8;">
                             <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">info</span>
                             審核通過後，老師將可正式在平台接課。
                         </div>
@@ -658,341 +360,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-// ==========================================
-// admin-dashboard.js（內聯）
-// ==========================================
-const API_BASE_URL = 'http://localhost:8080/api';
-
-// JWT
-const _token = localStorage.getItem('jwt_token');
-if (_token) axios.defaults.headers.common['Authorization'] = `Bearer ${_token}`;
-
-// 全域狀態
-let currentTutorId = null;
-let currentFilter  = 'all';
-let allTutors      = [];
-const reviewModal  = new bootstrap.Modal(document.getElementById('reviewModal'));
-
-// ── 即時時間 ──────────────────────────────────────────────────────────
-function updateTime() {
-    const now = new Date();
-    document.getElementById('current-time').textContent =
-        now.toLocaleDateString('zh-TW', { year:'numeric', month:'long', day:'numeric', weekday:'long' }) +
-        ' ' + now.toLocaleTimeString('zh-TW', { hour:'2-digit', minute:'2-digit' });
-}
-setInterval(updateTime, 1000);
-updateTime();
-
-// ── Tab 切換 ──────────────────────────────────────────────────────────
-function switchTab(tab) {
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`panel-${tab}`).classList.add('active');
-    document.getElementById(`tab-${tab}`).classList.add('active');
-
-    if (tab === 'tutors' && allTutors.length === 0) loadTutors();
-}
-
-// ── 手機版側邊欄 ─────────────────────────────────────────────────────
-const sidebar = document.getElementById('teacher-sidebar');
-const overlay = document.getElementById('sidebar-overlay');
-document.getElementById('sidebar-toggle')?.addEventListener('click', () => {
-    sidebar.classList.toggle('show');
-    overlay.classList.toggle('show');
-});
-overlay?.addEventListener('click', () => {
-    sidebar.classList.remove('show');
-    overlay.classList.remove('show');
-});
-
-// ── 登出 ─────────────────────────────────────────────────────────────
-document.getElementById('logout-btn')?.addEventListener('click', () => {
-    if (confirm('確定要登出嗎？')) {
-        localStorage.clear();
-        window.location.href = 'login.html';
-    }
-});
-
-// ── 載入儀表板數據 ────────────────────────────────────────────────────
-async function loadDashboard() {
-    try {
-        const res = await axios.get(`${API_BASE_URL}/admin/dashboard`);
-        const d   = res.data;
-
-        // 人數統計
-        document.getElementById('stat-students').textContent    = d.totalStudents?.toLocaleString() ?? '—';
-        document.getElementById('stat-tutors').textContent      = d.totalTutors?.toLocaleString()   ?? '—';
-        document.getElementById('stat-course-types').textContent= d.totalCourseTypes ?? '—';
-        document.getElementById('stat-new-students').textContent = d.newStudentsThisMonth ?? '—';
-        document.getElementById('stat-new-tutors').textContent   = d.newTutorsThisMonth   ?? '—';
-
-        // 營收
-        const todayRev  = Number(d.revenueToday  ?? 0).toLocaleString();
-        const monthRev  = Number(d.revenueThisMonth ?? 0).toLocaleString();
-        document.getElementById('stat-today-revenue').textContent = todayRev;
-        document.getElementById('stat-month-revenue').textContent = monthRev;
-        document.getElementById('welcome-revenue').textContent    = todayRev;
-        document.getElementById('welcome-month-revenue').textContent = monthRev;
-
-        // 熱門課程
-        renderPopular(d.popularCourses ?? []);
-
-        // 待審核數（同步更新 Tab badge 和統計卡）
-        loadTutorCounts();
-
-    } catch (err) {
-        console.error('載入儀表板失敗：', err);
-    }
-}
-
-// ── 渲染熱門課程 ──────────────────────────────────────────────────────
-const subjectLabel = {
-    11:'低年級', 12:'中年級', 13:'高年級',
-    21:'GEPT', 22:'YLE', 23:'國中先修', 31:'其他'
-};
-function renderPopular(list) {
-    const el = document.getElementById('popular-list');
-    if (!list.length) {
-        el.innerHTML = `<div class="empty-state"><span class="material-symbols-outlined">bar_chart</span><p>目前無訂單資料</p></div>`;
-        return;
-    }
-    el.innerHTML = list.map((c, i) => {
-        const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-other';
-        return `
-        <div class="popular-item">
-            <div class="popular-rank ${rankClass}">${i + 1}</div>
-            <div class="popular-info">
-                <div class="popular-title">${c.courseName}</div>
-                <div class="popular-meta">
-                    <span class="material-symbols-outlined" style="font-size:14px;">person</span> ${c.tutorName}
-                    &nbsp;·&nbsp;
-                    <span class="material-symbols-outlined" style="font-size:14px;">category</span> ${subjectLabel[c.subject] || c.subject}
-                </div>
-            </div>
-            <div class="popular-count">
-                ${Number(c.totalLessons).toLocaleString()}
-                <small>堂</small>
-            </div>
-        </div>`;
-    }).join('');
-}
-
-// ── 載入老師數量統計 ──────────────────────────────────────────────────
-async function loadTutorCounts() {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/admin/tutors/counts`);
-        const data = response.data; 
-
-        // 1. 取得各項數值
-        const pending  = data.pendingCount   || 0;
-        const approved = data.qualifiedCount || 0; 
-        const banned   = data.bannedCount    || 0;
-        const total    = pending + approved + banned;
-
-        // 2. 更新上方數據卡片
-        const elTotal    = document.getElementById('count-all');
-        const elPending  = document.getElementById('count-pending');
-        const elApproved = document.getElementById('count-approved'); 
-        const elBanned   = document.getElementById('count-suspended');
-
-        if (elTotal)    elTotal.textContent    = total;
-        if (elPending)  elPending.textContent  = pending;
-        if (elApproved) elApproved.textContent = approved;
-        if (elBanned)   elBanned.textContent   = banned;
-
-        // 3. 更新 Tab 上的 Badge (待審核)
-        const badge = document.getElementById('tab-pending-count');
-        if (badge) {
-            badge.textContent = pending;
-            badge.style.backgroundColor = pending > 0 ? '#FEF2F2' : '#F1F5F9';
-            badge.style.color           = pending > 0 ? '#EF4444' : '#64748B';
-        }
-
-        // 4. 更新側邊欄 Sidebar Badge
-        const navBadge = document.getElementById('nav-pending-badge');
-        if (navBadge) {
-            if (pending > 0) {
-                navBadge.textContent = pending;
-                navBadge.style.display = 'inline-block';
-            } else {
-                navBadge.style.display = 'none';
-            }
-        }
-
-    } catch (err) {
-        console.error('載入老師數量失敗：', err);
-    }
-}
-
-// ── 載入老師審核列表 ──────────────────────────────────────────────────
-async function loadTutors() {
-    try {
-        const res = await axios.get(`${API_BASE_URL}/admin/tutors`);
-        allTutors = res.data;
-        renderTutorTable(allTutors);
-    } catch (err) {
-        console.error('載入老師列表失敗：', err);
-        document.getElementById('tutor-table-body').innerHTML =
-            `<tr><td colspan="5" class="text-center py-4 text-danger">載入失敗，請重試</td></tr>`;
-    }
-}
-
-// ── 篩選老師 ──────────────────────────────────────────────────────────
-function filterTutors(filter) {
-    currentFilter = filter;
-    // 切換按鈕樣式
-    ['all','pending','qualified','suspended'].forEach(f => {
-        document.getElementById(`filter-${f}`)?.classList.toggle('active', f === filter);
-    });
-    // 篩選資料
-    const filtered = filter === 'all'       ? allTutors :
-                     filter === 'pending'   ? allTutors.filter(t => t.status === 1) :
-                     filter === 'qualified' ? allTutors.filter(t => t.status === 2) :
-                                             allTutors.filter(t => t.status === 3);
-    renderTutorTable(filtered);
-
-    // 若在儀表板 Tab，切換到審核 Tab
-    if (!document.getElementById('panel-tutors').classList.contains('active')) {
-        switchTab('tutors');
-    }
-}
-
-// ── 渲染老師表格 ──────────────────────────────────────────────────────
-function renderTutorTable(list) {
-    const tbody = document.getElementById('tutor-table-body');
-    if (!list.length) {
-        tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><span class="material-symbols-outlined">person_search</span><p>此分類目前無資料</p></div></td></tr>`;
-        return;
-    }
-    tbody.innerHTML = list.map(t => {
-        const statusBadge = t.status === 1
-            ? `<span class="status-badge status-pending">⏳ 待審核</span>`
-            : t.status === 2
-            ? `<span class="status-badge status-approved">✅ 已核准</span>`
-            : `<span class="status-badge status-rejected">🚫 已停權</span>`;
-        const initial = (t.name || '?')[0];
-        return `
-        <tr onclick="openReviewModal(${t.id})">
-            <td>
-                <div class="tutor-name-cell">
-                    <div class="tutor-initial">${initial}</div>
-                    <div>
-                        <div class="tutor-name">${t.name}</div>
-                        <div class="tutor-email">${t.email}</div>
-                    </div>
-                </div>
-            </td>
-            <td style="color:var(--text-light); font-size:0.85rem;">${t.title || '—'}</td>
-            <td style="font-size:0.85rem; color:var(--text-light);">${t.applyDate || '—'}</td>
-            <td>${statusBadge}</td>
-            <td>
-                <button class="btn btn-sm fw-bold" style="border:1px solid var(--border-color); border-radius:8px; font-size:0.78rem;"
-                    onclick="event.stopPropagation(); openReviewModal(${t.id})">
-                    <span class="material-symbols-outlined" style="font-size:15px;">open_in_new</span> 查看
-                </button>
-            </td>
-        </tr>`;
-    }).join('');
-}
-
-// ── 開啟審核 Modal ────────────────────────────────────────────────────
-async function openReviewModal(tutorId) {
-    currentTutorId = tutorId;
-    try {
-        const res = await axios.get(`${API_BASE_URL}/admin/tutors/${tutorId}`);
-        const t   = res.data;
-
-        document.getElementById('m-name').textContent        = t.name;
-        document.getElementById('m-email').textContent       = t.email;
-        document.getElementById('m-title').textContent       = t.title || '（未填）';
-        document.getElementById('m-education').textContent   = t.education ? '🎓 ' + t.education : '';
-        document.getElementById('m-intro').textContent       = t.intro || '（未填）';
-        document.getElementById('m-apply-date').textContent  = t.applyDate || '—';
-
-        // 經歷
-        document.getElementById('m-exp1').textContent = t.experience1 || '（未填）';
-        const exp2El = document.getElementById('m-exp2');
-        if (t.experience2) { exp2El.textContent = t.experience2; exp2El.style.display = 'block'; }
-        else { exp2El.style.display = 'none'; }
-
-        // 證照
-        const cert1Link = document.getElementById('m-cert1-link');
-        document.getElementById('m-cert1-name').textContent = t.certificateName1 || '證照一';
-        cert1Link.href = t.certificate1 || '#';
-        cert1Link.style.display = t.certificate1 ? 'flex' : 'none';
-
-        const cert2Link = document.getElementById('m-cert2-link');
-        document.getElementById('m-cert2-name').textContent = t.certificateName2 || '證照二';
-        cert2Link.href = t.certificate2 || '#';
-        cert2Link.style.display = t.certificate2 ? 'flex' : 'none';
-
-        // 影片
-        const v1 = document.getElementById('m-video1');
-        v1.href = t.videoUrl1 || '#';
-        v1.style.display = t.videoUrl1 ? 'flex' : 'none';
-        const v2 = document.getElementById('m-video2');
-        v2.href = t.videoUrl2 || '#';
-        v2.style.display = t.videoUrl2 ? 'flex' : 'none';
-
-        // 當前狀態與按鈕
-        const statusText = t.status === 1 ? '⏳ 待審核' : t.status === 2 ? '✅ 已核准' : '🚫 已停權';
-        document.getElementById('m-current-status').textContent = '目前狀態：' + statusText;
-
-        const approveBtn = document.getElementById('btn-approve');
-        const rejectBtn  = document.getElementById('btn-reject');
-        if (t.status === 2) {
-            approveBtn.style.display = 'none';
-            rejectBtn.textContent    = '🚫 停權';
-            rejectBtn.style.display  = 'inline-flex';
-        } else if (t.status === 3) {
-            rejectBtn.style.display   = 'none';
-            approveBtn.textContent    = '✅ 重新核准';
-            approveBtn.style.display  = 'inline-flex';
-        } else {
-            approveBtn.textContent = '✅ 核准';
-            approveBtn.style.display = 'inline-flex';
-            rejectBtn.textContent  = '🚫 停權';
-            rejectBtn.style.display  = 'inline-flex';
-        }
-
-        reviewModal.show();
-    } catch (err) {
-        alert('載入老師資料失敗');
-    }
-}
-
-// ── 執行審核動作 ──────────────────────────────────────────────────────
-async function handleReview(status) {
-    const action = status === 2 ? '核准' : '停權';
-    if (!confirm(`確定要對此老師執行「${action}」操作嗎？`)) return;
-    try {
-        await axios.patch(`${API_BASE_URL}/admin/tutors/${currentTutorId}/status`, { status });
-        reviewModal.hide();
-        // 重新載入列表與計數
-        allTutors = [];
-        await loadTutors();
-        await loadTutorCounts();
-        
-        alert(`已成功${action}該老師。`);
-    } catch (err) {
-        alert('操作失敗：' + (err.response?.data || err.message));
-    }
-}
-
-// ── 頁面初始化 ────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-    // 驗證管理員身份
-    const token    = localStorage.getItem('jwt_token');
-    const userRole = localStorage.getItem('userRole');
-    if (!token) { window.location.href = 'login.html'; return; }
-    if (userRole !== 'ADMIN') { window.location.href = 'index.html'; return; }
-
-    const userName = localStorage.getItem('userName');
-    if (userName) document.getElementById('sidebar-name').textContent = userName;
-
-    loadDashboard();
-});
-</script>
+<script src="./assets/js/navbar.js"></script>
+<script src="./assets/js/admin-dashboard.js"></script>
 </body>
 </html>
