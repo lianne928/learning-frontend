@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>學習紀錄 - Student Wallet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/scss/student-learninglogs.scss">
+</head>
+
+<body>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar-wrapper" id="sidebar">
+        <div class="sidebar-header">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <img alt="User avatar"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjiVVt_WOPjZJbxgDYFIruu6RgJzkoNVLF-jQkkRNS-kfY4XydahESLXkEDiHHgm1zoqWpDHcqEtdYb8B2heI-b064Bt1aoF9d6Dx1k3whMTiTTBkAB9maICmW4Nv7NC54bVL5U96h-MTdojMid4XsQJiaOpDHo2Wg_wZPTryr8gIP33G6qNJtTLSUg69I3sDf3jecq13tAL2NTfQZw-YwBn3UXU0axbTYjW9bq-TI4GaflJgQI2boWbhT2OvKh2_tLUCfGObCCNAI" />
+                </div>
+                <div class="user-info">
+                    <h2>Alex Rivera</h2>
+                    <p>ID: STU-88291</p>
+                </div>
+            </div>
+            <div class="premium-tag">PREMIUM MEMBER</div>
+        </div>
+        <nav class="sidebar-nav">
+            <a class="nav-link" href="student-home.html">
+                <span class="material-symbols-outlined">explore</span>
+                <span>探索首頁</span>
+            </a>
+            <a class="nav-link active" href="student-learninglogs.html">
+                <span class="material-symbols-outlined">school</span>
+                <span>學習紀錄</span>
+                <div class="active-dot"></div>
+            </a>
+            <a class="nav-link" href="student-ratings.html">
+                <span class="material-symbols-outlined">assignment_turned_in</span>
+                <span>報告與評分</span>
+            </a>
+            <a class="nav-link" href="student-message.html">
+                <span class="material-symbols-outlined">chat_bubble</span>
+                <span>訊息中心</span>
+            </a>
+            <div class="sidebar-divider"></div>
+            <a class="nav-link" href="#">
+                <span class="material-symbols-outlined">account_balance_wallet</span>
+                <span>儲值與明細</span>
+            </a>
+            <a class="nav-link" href="#">
+                <span class="material-symbols-outlined">settings</span>
+                <span>帳戶設定</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="logout-btn">
+                <span class="material-symbols-outlined">logout</span>
+                <span>登出系統</span>
+            </button>
+        </div>
+    </aside>
+    <div class="main-wrapper">
+        <header>
+            <div class="header-left">
+                <button class="menu-btn" id="menuToggle">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <h1 class="logo-text">Student<span>Wallet</span></h1>
+            </div>
+            <div class="header-right">
+                <div class="wallet-card">
+                    <span class="material-symbols-outlined"
+                        style="font-size: 18px; color: var(--primary-color);">account_balance_wallet</span>
+                    <span class="amount">$2,450.00</span>
+                </div>
+                <div class="top-profile-img">
+                    <img alt="User profile"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9yIkrpHWaLYCOIK0AlDT2-035mjQH0SnaxT0lg6LzCm9m48oDK7xG7MyBybcwYJpCHAhyRO_mN5Nclbw1Gi_wV5tRLd-LIqvH-ILKVgYFJzD7U_x2ggT5BM0olE-8MmoqlLDKbS8X5X4WhQ68LRhITPkCGOK9ju4A4k0oX8hHjYmQjeFpjymBXZsQy99bvQb8kNrNJPzpEWTK7R1Jyr-yhwodNL9zko1SvrByyczbyPqNZtXqLc7yKRVbrZzNG6D6d2MaKN8EYFSg" />
+                </div>
+            </div>
+        </header>
+        <main class="content-container">
+            <div class="page-header">
+                <div class="title-section">
+                    <h2>學習紀錄</h2>
+                    <p id="status-text">查看所有預約與上課紀錄</p>
+                </div>
+                <div class="tabs-container">
+                    <div class="tab-item" data-tab="purchased">已購課程</div>
+                    <div class="tab-item active" data-tab="upcoming">即將開始</div>
+                    <div class="tab-item" data-tab="completed">已完成</div>
+                    <div class="tab-item" data-tab="cancelled">已取消</div>
+                </div>
+            </div>
+            <!-- Purchased Content -->
+            <div class="tab-content" id="purchased">
+                <div class="course-card">
+                    <div class="date-badge" style="background: #eff6ff;">
+                        <span class="month" style="color: var(--accent-blue);">DEC</span>
+                        <span class="day" style="color: var(--accent-blue);">12</span>
+                    </div>
+                    <div class="course-info">
+                        <div class="info-top">
+                            <span class="status-tag status-purchased">已購買</span>
+                            <h3 class="course-title">進階商用英文對話 - 精修班</h3>
+                        </div>
+                        <div class="info-bottom">
+                            <div class="info-item">
+                                <span class="material-symbols-outlined">history_edu</span>
+                                <span>共 12 堂課</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="material-symbols-outlined">person</span>
+                                <span>Teacher James</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-primary">
+                            <span class="material-symbols-outlined">event</span>
+                            立即預約
+                        </button>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="date-badge" style="background: #eff6ff;">
+                        <span class="month" style="color: var(--accent-blue);">JAN</span>
+                        <span class="day" style="color: var(--accent-blue);">05</span>
+                    </div>
+                    <div class="course-info">
+                        <div class="info-top">
+                            <span class="status-tag status-purchased">已購買</span>
+                            <h3 class="course-title">多益高分衝刺班 (900+)</h3>
+                        </div>
+                        <div class="info-bottom">
+                            <div class="info-item">
+                                <span class="material-symbols-outlined">history_edu</span>
+                                <span>共 24 堂課</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="material-symbols-outlined">person</span>
+                                <span>Teacher Sarah</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-primary">
+                            <span class="material-symbols-outlined">event</span>
+                            立即預約
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Upcoming Content (Default) -->
+            <div class="tab-content active" id="upcoming">
+                <div class="course-card">
+                    <div class="date-badge">
+                        <span class="month">OCT</span>
+                        <span class="day">25</span>
+                    </div>
+                    <div class="course-info">
+                        <div class="info-top">
+                            <span class="status-tag status-upcoming">即將開始</span>
+                            <h3 class="course-title">自然發音大冒險 - Level 1</h3>
+                        </div>
+                        <div class="info-bottom">
+                            <div class="info-item">
+                                <span class="material-symbols-outlined">schedule</span>
+                                <span>19:00 - 19:50</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="material-symbols-outlined">person</span>
+                                <span>Sunny Chen</span>
+                            </div>
+                            <div class="info-item">
+                                <div class="avatar-small">L</div>
+                                <span>Leo</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline">
+                            <span class="material-symbols-outlined">description</span>
+                            請假
+                        </button>
+                        <button class="btn btn-primary">
+                            <span class="material-symbols-outlined">videocam</span>
+                            進入教室
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Completed Content -->
+            <div class="tab-content" id="completed">
+                <div class="course-card">
+                    <div class="date-badge" style="background: #f1f5f9;">
+                        <span class="month" style="color: #64748b;">OCT</span>
+                        <span class="day" style="color: #64748b;">18</span>
+                    </div>
+                    <div class="course-info">
+                        <div class="info-top">
+                            <span class="status-tag status-completed">已完成</span>
+                            <h3 class="course-title">基礎生活會話 - Level 2</h3>
+                        </div>
+                        <div class="info-bottom">
+                            <div class="info-item">
+                                <span class="material-symbols-outlined">person</span>
+                                <span>Teacher Mary</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="material-symbols-outlined">star</span>
+                                <span>評分：5.0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline">
+                            <span class="material-symbols-outlined">article</span>
+                            回顧錄影
+                        </button>
+                        <button class="btn btn-outline">
+                            <span class="material-symbols-outlined">rate_review</span>
+                            查看評價
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Cancelled Content -->
+            <div class="tab-content" id="cancelled">
+                <div class="course-card" style="opacity: 0.7;">
+                    <div class="date-badge" style="background: #fef2f2;">
+                        <span class="month" style="color: var(--accent-red);">OCT</span>
+                        <span class="day" style="color: var(--accent-red);">10</span>
+                    </div>
+                    <div class="course-info">
+                        <div class="info-top">
+                            <span class="status-tag status-cancelled">已取消</span>
+                            <h3 class="course-title" style="text-decoration: line-through;">兒童創意美學 - 線上課</h3>
+                        </div>
+                        <div class="info-bottom">
+                            <div class="info-item">
+                                <span class="material-symbols-outlined">error</span>
+                                <span>學員主動申請請假</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline" disabled="">
+                            已退還課時
+                        </button>
+                    </div>
+                </div>
+                <div class="empty-state">
+                    <span class="material-symbols-outlined">event_busy</span>
+                    <p>沒有更多取消紀錄</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="./assets/js/student-learninglogs.js"></script>
+</body>
+
+</html>

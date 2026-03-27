@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>探索首頁 - Student Wallet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/scss/student-home.scss">
+</head>
+
+<body>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar-wrapper" id="sidebar">
+        <div class="sidebar-header">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <img alt="User avatar"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjiVVt_WOPjZJbxgDYFIruu6RgJzkoNVLF-jQkkRNS-kfY4XydahESLXkEDiHHgm1zoqWpDHcqEtdYb8B2heI-b064Bt1aoF9d6Dx1k3whMTiTTBkAB9maICmW4Nv7NC54bVL5U96h-MTdojMid4XsQJiaOpDHo2Wg_wZPTryr8gIP33G6qNJtTLSUg69I3sDf3jecq13tAL2NTfQZw-YwBn3UXU0axbTYjW9bq-TI4GaflJgQI2boWbhT2OvKh2_tLUCfGObCCNAI" />
+                </div>
+                <div class="user-info">
+                    <h2>Alex Rivera</h2>
+                    <p>ID: STU-88291</p>
+                </div>
+            </div>
+            <div class="premium-tag">PREMIUM MEMBER</div>
+        </div>
+        <nav class="sidebar-nav">
+            <a class="nav-link active" href="student-home.html">
+                <span class="material-symbols-outlined">explore</span>
+                <span>探索首頁</span>
+                <div class="active-dot"></div>
+            </a>
+            <a class="nav-link" href="student-learninglogs.html">
+                <span class="material-symbols-outlined">school</span>
+                <span>學習紀錄</span>
+            </a>
+            <a class="nav-link" href="student-ratings.html">
+                <span class="material-symbols-outlined">assignment_turned_in</span>
+                <span>報告與評分</span>
+            </a>
+            <a class="nav-link" href="student-message.html">
+                <span class="material-symbols-outlined">chat_bubble</span>
+                <span>訊息中心</span>
+            </a>
+            <div class="sidebar-divider"></div>
+            <a class="nav-link" href="#">
+                <span class="material-symbols-outlined">account_balance_wallet</span>
+                <span>儲值與明細</span>
+            </a>
+            <a class="nav-link" href="#">
+                <span class="material-symbols-outlined">settings</span>
+                <span>帳戶設定</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="logout-btn">
+                <span class="material-symbols-outlined">logout</span>
+                <span>登出系統</span>
+            </button>
+        </div>
+    </aside>
+    <div class="main-wrapper">
+        <header>
+            <div class="header-left">
+                <button class="menu-btn" id="menuToggle">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <h1 class="logo-text">Student<span>Wallet</span></h1>
+            </div>
+            <div class="header-right">
+                <div class="wallet-card">
+                    <span class="material-symbols-outlined"
+                        style="font-size: 18px; color: var(--primary-color);">account_balance_wallet</span>
+                    <span class="amount">$2,450.00</span>
+                </div>
+                <div class="top-profile-img">
+                    <img alt="User profile"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9yIkrpHWaLYCOIK0AlDT2-035mjQH0SnaxT0lg6LzCm9m48oDK7xG7MyBybcwYJpCHAhyRO_mN5Nclbw1Gi_wV5tRLd-LIqvH-ILKVgYFJzD7U_x2ggT5BM0olE-8MmoqlLDKbS8X5X4WhQ68LRhITPkCGOK9ju4A4k0oX8hHjYmQjeFpjymBXZsQy99bvQb8kNrNJPzpEWTK7R1Jyr-yhwodNL9zko1SvrByyczbyPqNZtXqLc7yKRVbrZzNG6D6d2MaKN8EYFSg" />
+                </div>
+            </div>
+        </header>
+        <main class="content-container">
+            <!-- Personalized Greeting -->
+            <section class="greeting-section">
+                <div class="greeting-avatar">
+                    <img alt="Leo Avatar"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjiVVt_WOPjZJbxgDYFIruu6RgJzkoNVLF-jQkkRNS-kfY4XydahESLXkEDiHHgm1zoqWpDHcqEtdYb8B2heI-b064Bt1aoF9d6Dx1k3whMTiTTBkAB9maICmW4Nv7NC54bVL5U96h-MTdojMid4XsQJiaOpDHo2Wg_wZPTryr8gIP33G6qNJtTLSUg69I3sDf3jecq13tAL2NTfQZw-YwBn3UXU0axbTYjW9bq-TI4GaflJgQI2boWbhT2OvKh2_tLUCfGObCCNAI" />
+                </div>
+                <div class="greeting-content">
+                    <h2>Leo，歡迎回來！</h2>
+                    <p>看看你接下來的學習任務：</p>
+                </div>
+            </section>
+            <!-- Weekly Schedule -->
+            <section class="section-card">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="icon-bg">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                        </div>
+                        週課程表
+                    </div>
+                    <div class="date-range-picker">
+                        <button class="nav-icon-btn" id="prevWeek"><span
+                                class="material-symbols-outlined">chevron_left</span></button>
+                        <div class="date-text" id="currentDateRange">2026年3月23日 - 3月29日</div>
+                        <button class="nav-icon-btn" id="nextWeek"><span
+                                class="material-symbols-outlined">chevron_right</span></button>
+                    </div>
+                </div>
+                <div class="schedule-grid" id="scheduleGrid">
+                    <!-- Day cards rendered by JS -->
+                </div>
+            </section>
+            <!-- Today's Classes -->
+            <section>
+                <h3 class="today-classes-title">今日上課的課程</h3>
+                <div class="course-card">
+                    <div class="course-time-box">
+                        <span class="label">今天</span>
+                        <span class="time">19:00</span>
+                    </div>
+                    <div class="course-info">
+                        <div class="status-badge">即將開始</div>
+                        <h4 class="course-name">Leo 的趣味發音課</h4>
+                        <div class="course-meta">
+                            <span><span class="material-symbols-outlined" style="font-size: 18px;">person</span> Sunny
+                                老師</span>
+                            <span><span class="material-symbols-outlined" style="font-size: 18px;">schedule</span> 今天
+                                19:00 - 19:50</span>
+                        </div>
+                    </div>
+                    <div class="course-actions">
+                        <button class="btn btn-outline">
+                            <span class="material-symbols-outlined">event_busy</span> 請假
+                        </button>
+                        <button class="btn btn-primary">
+                            進入教室 <span class="material-symbols-outlined">chevron_right</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="./assets/js/student-home.js"></script>
+</body>
+
+</html>

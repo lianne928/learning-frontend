@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>學生個人頁 - Merge</title>
+    <link rel="stylesheet" href="./assets/scss/all.scss" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body style="padding-top: 70px">
+    <!-- Navbar -->
+    <header class="border-bottom py-2 fixed-top navbar-light bg-light">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex">
+            <a href="index.html" class="text-decoration-none">
+              <h1 class="nunito fst-italic display-5 pt-2">Merge</h1>
+            </a>
+          </div>
+          <nav class="ms-auto pt-2">
+            <ul class="list-unstyled d-flex align-items-center mb-0">
+              <li>
+                <a href="#" class="text-decoration-none px-3 ms-auto">我要找學生</a>
+              </li>
+              <li>
+                <a href="explore.html" class="text-decoration-none px-3">我要找學生</a>
+              </li>
+              <li>
+                <a href="#" class="text-decoration-none px-3">註冊送代幣</a>
+              </li>
+              <li id="auth-nav-item">
+                <a href="login.html" class="text-decoration-none px-3 pe-0 text-primary fw-bold">LOGIN</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- 主內容 -->
+    <div class="student-profile-wrapper">
+      
+      <!-- ===== 左側主要內容 ===== -->
+      <div class="profile-main">
+
+        <!-- 學生基本資料 -->
+        <div class="profile-card">
+          <div class="tutor-header">
+            <div class="tutor-avatar-wrap">
+              <img id="tutor-avatar" src="https://via.placeholder.com/120" alt="學生頭像">
+            </div>
+            <div class="tutor-meta">
+              <h2 id="tutor-name">載入中...</h2>
+              <p class="tutor-headline" id="tutor-headline"></p>
+              <span class="tutor-rating" id="tutor-rating">⭐ --</span>
+              <p class="tutor-intro" id="tutor-intro"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 課程選擇 -->
+        <div class="profile-card">
+          <h3 class="profile-section-title">📚 課程列表</h3>
+          <div class="course-btn-group" id="course-buttons"></div>
+          <div class="course-desc-box">
+            <h4 id="course-name">課程名稱</h4>
+            <p id="course-desc">課程描述載入中...</p>
+          </div>
+        </div>
+
+        <!-- 影片區 -->
+        <div class="profile-card">
+          <h3 class="profile-section-title">🎬 教學影片</h3>
+          <div class="videos-grid" id="videos-container">
+            <p style="color:#999;">載入中...</p>
+          </div>
+        </div>
+
+        <!-- 證照區 -->
+        <div class="profile-card">
+          <h3 class="profile-section-title">🏅 專業證照</h3>
+          <ul class="certificates-list" id="certificates-container">
+            <li style="list-style:none; color:#999;">載入中...</li>
+          </ul>
+        </div>
+
+        <!-- 課表區 -->
+        <div class="profile-card">
+          <h3 class="profile-section-title">📅 可預約時段</h3>
+          <div class="schedule-grid" id="schedule-container">
+            <p style="color:#999;">載入中...</p>
+          </div>
+        </div>
+
+        <!-- 評價區 -->
+        <div class="profile-card">
+          <h3 class="profile-section-title">💬 學生評價</h3>
+          <div id="reviews-container">
+            <p style="color:#999;">載入中...</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ===== 右側價格欄 ===== -->
+      <aside class="student-aside">
+        <div class="price-card">
+          <h3>💰 課程方案</h3>
+
+          <div class="price-row">
+            <div>
+              <strong id="price-single">NT$ --</strong>
+              <small>單堂 / 60 分鐘</small>
+            </div>
+          </div>
+
+          <div class="price-row">
+            <div>
+              <strong id="price-5">NT$ --</strong>
+              <small>5 堂方案</small>
+            </div>
+            <span class="discount-badge">95 折</span>
+          </div>
+
+          <div class="price-row">
+            <div>
+              <strong id="price-10">NT$ --</strong>
+              <small>10 堂方案</small>
+            </div>
+            <span class="discount-badge">9 折</span>
+          </div>
+
+          <button class="btn-booking-main" id="btn-booking">
+            🚀 立即預約
+          </button>
+
+          <div class="secure-badge">
+            🔒 安全結帳<br>
+            購課後可隨時於個人頁面查看紀錄
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <script src="./assets/js/student-profile.js"></script>
+    <script src="./assets/js/navbar.js"></script>
+  </body>
+</html>

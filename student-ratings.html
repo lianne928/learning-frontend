@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>報告與評分 - Student Wallet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/scss/student-ratings.scss">
+</head>
+
+<body>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar-wrapper" id="sidebar">
+        <div class="sidebar-header">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <img alt="User avatar"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjiVVt_WOPjZJbxgDYFIruu6RgJzkoNVLF-jQkkRNS-kfY4XydahESLXkEDiHHgm1zoqWpDHcqEtdYb8B2heI-b064Bt1aoF9d6Dx1k3whMTiTTBkAB9maICmW4Nv7NC54bVL5U96h-MTdojMid4XsQJiaOpDHo2Wg_wZPTryr8gIP33G6qNJtTLSUg69I3sDf3jecq13tAL2NTfQZw-YwBn3UXU0axbTYjW9bq-TI4GaflJgQI2boWbhT2OvKh2_tLUCfGObCCNAI" />
+                </div>
+                <div class="user-info">
+                    <h2>Alex Rivera</h2>
+                    <p>ID: STU-88291</p>
+                </div>
+            </div>
+            <div class="premium-tag">PREMIUM MEMBER</div>
+        </div>
+        <nav class="sidebar-nav">
+            <a class="nav-link" href="student-home.html"><span
+                    class="material-symbols-outlined">explore</span><span>探索首頁</span></a>
+            <a class="nav-link" href="student-learninglogs.html"><span
+                    class="material-symbols-outlined">school</span><span>學習紀錄</span></a>
+            <a class="nav-link active" href="student-ratings.html"><span
+                    class="material-symbols-outlined">assignment_turned_in</span><span>報告與評分</span>
+                <div class="active-dot"></div>
+            </a>
+            <a class="nav-link" href="student-message.html"><span
+                    class="material-symbols-outlined">chat_bubble</span><span>訊息中心</span></a>
+            <div class="sidebar-divider"></div>
+            <a class="nav-link" href="#"><span
+                    class="material-symbols-outlined">account_balance_wallet</span><span>儲值與明細</span></a>
+            <a class="nav-link" href="#"><span class="material-symbols-outlined">settings</span><span>帳戶設定</span></a>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="logout-btn"><span class="material-symbols-outlined">logout</span><span>登出系統</span></button>
+        </div>
+    </aside>
+    <div class="main-wrapper">
+        <header>
+            <div class="header-left">
+                <button class="menu-btn" id="menuToggle"><span class="material-symbols-outlined">menu</span></button>
+                <h1 class="logo-text">Student<span>Wallet</span></h1>
+            </div>
+            <div class="header-right">
+                <div class="wallet-card">
+                    <span class="material-symbols-outlined"
+                        style="font-size: 18px; color: var(--primary-color);">account_balance_wallet</span>
+                    <span class="amount">$2,450.00</span>
+                </div>
+                <div class="top-profile-img">
+                    <img alt="User profile"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9yIkrpHWaLYCOIK0AlDT2-035mjQH0SnaxT0lg6LzCm9m48oDK7xG7MyBybcwYJpCHAhyRO_mN5Nclbw1Gi_wV5tRLd-LIqvH-ILKVgYFJzD7U_x2ggT5BM0olE-8MmoqlLDKbS8X5X4WhQ68LRhITPkCGOK9ju4A4k0oX8hHjYmQjeFpjymBXZsQy99bvQb8kNrNJPzpEWTK7R1Jyr-yhwodNL9zko1SvrByyczbyPqNZtXqLc7yKRVbrZzNG6D6d2MaKN8EYFSg" />
+                </div>
+            </div>
+        </header>
+        <main class="content-container">
+            <div class="tabs-container">
+                <div class="tab-item active" data-tab="report">
+                    <span class="material-symbols-outlined">description</span>學習報告
+                </div>
+                <div class="tab-item" data-tab="evaluation">
+                    <span class="material-symbols-outlined">star</span>給老師的評價
+                    <span class="tab-badge">1</span>
+                </div>
+            </div>
+            <div id="tabContentWrapper">
+                <!-- Learning Report Section -->
+                <div class="content-section active" id="reportSection">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon orange"><span class="material-symbols-outlined">schedule</span></div>
+                            <div class="stat-info">
+                                <p class="label">本月已上課</p>
+                                <p class="value">8 堂</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green"><span class="material-symbols-outlined">check_circle</span>
+                            </div>
+                            <div class="stat-info">
+                                <p class="label">累積學習時數</p>
+                                <p class="value">400 分鐘</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon yellow"><span class="material-symbols-outlined">stars</span></div>
+                            <div class="stat-info">
+                                <p class="label">平均表現星級</p>
+                                <p class="value">4.8 顆星</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-grid">
+                        <div class="report-sidebar">
+                            <h3
+                                style="margin-bottom: 20px; font-size: 18px; display: flex; align-items: center; gap: 8px;">
+                                <span class="material-symbols-outlined"
+                                    style="color: var(--primary-color)">history</span>歷次課程紀錄
+                            </h3>
+                            <div class="history-list">
+                                <div class="course-card active" data-course-id="1">
+                                    <span style="font-size: 12px; color: #999;">今天 14:00 - 14:50</span>
+                                    <h4>Space Exploration</h4>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div class="eval-avatar" style="width: 24px; height: 24px; font-size: 11px;">S
+                                        </div>
+                                        <span style="font-size: 13px; color: #666;">Sunny 老師</span>
+                                    </div>
+                                </div>
+                                <div class="course-card" data-course-id="2">
+                                    <span style="font-size: 12px; color: #999;">2026/05/08 10:00 - 10:50</span>
+                                    <h4>Animal Kingdom</h4>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div class="eval-avatar" style="width: 24px; height: 24px; font-size: 11px;">S
+                                        </div>
+                                        <span style="font-size: 13px; color: #666;">Sunny 老師</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="report-content" id="reportContentArea">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 32px;">
+                                <div>
+                                    <h2 id="reportTitle">Space Exploration 的專屬報告</h2>
+                                    <p id="reportMeta" style="color: #888; font-size: 14px;">Sunny 老師 • 今天 14:00</p>
+                                </div>
+                                <div class="star-rating" id="reportRating">
+                                    <span class="material-symbols-outlined"
+                                        style="font-variation-settings: 'FILL' 1;">star</span>
+                                    <span class="material-symbols-outlined"
+                                        style="font-variation-settings: 'FILL' 1;">star</span>
+                                    <span class="material-symbols-outlined"
+                                        style="font-variation-settings: 'FILL' 1;">star</span>
+                                    <span class="material-symbols-outlined"
+                                        style="font-variation-settings: 'FILL' 1;">star</span>
+                                    <span class="material-symbols-outlined"
+                                        style="font-variation-settings: 'FILL' 1;">star</span>
+                                </div>
+                            </div>
+                            <p class="section-title">今日學習重點</p>
+                            <div class="tags-container" id="reportTags">
+                                <span class="report-tag">自然發音</span>
+                                <span class="report-tag">認識動物</span>
+                                <span class="report-tag">句型問答</span>
+                            </div>
+                            <div class="section-divider"></div>
+                            <p class="section-title">老師溫暖評語</p>
+                            <div class="teacher-comment" id="reportComment">
+                                "Leo 今天上課非常專心！對於太空的單字掌握度很高，尤其是發音進步很多，下次可以試著用完整的句子回答問題喔！繼續保持！"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Evaluation Section -->
+                <div class="content-section" id="evaluationSection">
+                    <h3 class="evaluation-header">待評價課程</h3>
+                    <div class="evaluation-card">
+                        <div class="eval-avatar">S</div>
+                        <div class="eval-info">
+                            <h4>Sunny 老師 <span class="eval-tag">待評價</span></h4>
+                            <p>Space Exploration (10/26 14:00 - 14:50)</p>
+                        </div>
+                        <button class="give-rating-btn">
+                            <span class="material-symbols-outlined">edit_square</span>給予評價
+                        </button>
+                    </div>
+                    <h3 class="evaluation-header">我的評價紀錄</h3>
+                    <div class="history-eval-card">
+                        <div class="history-eval-header">
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <div class="eval-avatar" style="background: #f5f5f5; color: #999;">S</div>
+                                <div class="eval-info">
+                                    <h4 style="font-size: 15px;">Sunny 老師</h4>
+                                    <p style="font-size: 12px;">2023-10-20 • Animal Kingdom</p>
+                                </div>
+                            </div>
+                            <div class="star-rating" style="font-size: 18px;">
+                                <span class="material-symbols-outlined"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                            </div>
+                        </div>
+                        <div class="history-comment">
+                            "老師非常有耐心，懂得引導害羞的孩子開口。教材很生動有趣，Leo 現在每週都很期待上課！"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="./assets/js/student-ratings.js"></script>
+</body>
+
+</html>

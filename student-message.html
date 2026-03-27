@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>訊息中心 - Student Wallet</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./assets/scss/student-message.scss">
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<!-- Left App Sidebar (NavigationDrawer) -->
+<aside class="sidebar-wrapper" id="sidebar">
+<div class="sidebar-header">
+<div class="user-profile">
+<div class="user-avatar">
+<img alt="User avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjiVVt_WOPjZJbxgDYFIruu6RgJzkoNVLF-jQkkRNS-kfY4XydahESLXkEDiHHgm1zoqWpDHcqEtdYb8B2heI-b064Bt1aoF9d6Dx1k3whMTiTTBkAB9maICmW4Nv7NC54bVL5U96h-MTdojMid4XsQJiaOpDHo2Wg_wZPTryr8gIP33G6qNJtTLSUg69I3sDf3jecq13tAL2NTfQZw-YwBn3UXU0axbTYjW9bq-TI4GaflJgQI2boWbhT2OvKh2_tLUCfGObCCNAI"/>
+</div>
+<div class="user-info">
+<h2>Alex Rivera</h2>
+<p>ID: STU-88291</p>
+</div>
+</div>
+<div class="premium-tag">PREMIUM MEMBER</div>
+</div>
+<nav class="sidebar-nav">
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span>探索首頁</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">school</span>
+<span>學習紀錄</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+<span>報告與評分</span>
+</a>
+<a class="nav-link active" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span>訊息中心</span>
+<div class="active-dot"></div>
+</a>
+<div class="sidebar-divider"></div>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span>儲值與明細</span>
+</a>
+<a class="nav-link" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>帳戶設定</span>
+</a>
+</nav>
+<div class="sidebar-footer">
+<button class="logout-btn">
+<span class="material-symbols-outlined">logout</span>
+<span>登出系統</span>
+</button>
+</div>
+</aside>
+<div class="main-wrapper">
+<!-- TopAppBar (Matched with SCREEN_26) -->
+<header>
+<div class="header-left">
+<button class="menu-btn" id="menuToggle">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="logo-text">Student<span>Wallet</span></h1>
+</div>
+<div class="header-right">
+<div class="wallet-card">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="label">Balance</span>
+<span class="amount">$2,450.00</span>
+</div>
+<div class="top-profile-img">
+<img alt="User profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9yIkrpHWaLYCOIK0AlDT2-035mjQH0SnaxT0lg6LzCm9m48oDK7xG7MyBybcwYJpCHAhyRO_mN5Nclbw1Gi_wV5tRLd-LIqvH-ILKVgYFJzD7U_x2ggT5BM0olE-8MmoqlLDKbS8X5X4WhQ68LRhITPkCGOK9ju4A4k0oX8hHjYmQjeFpjymBXZsQy99bvQb8kNrNJPzpEWTK7R1Jyr-yhwodNL9zko1SvrByyczbyPqNZtXqLc7yKRVbrZzNG6D6d2MaKN8EYFSg"/>
+</div>
+</div>
+</header>
+<main class="message-center">
+<!-- Chat Sidebar -->
+<div class="chat-sidebar" id="chatSidebar">
+<div class="sidebar-search">
+<div class="search-container">
+<span class="material-symbols-outlined">search</span>
+<input id="chatSearch" placeholder="搜尋對話..." type="text"/>
+</div>
+</div>
+<div class="chat-list" id="chatList">
+<div class="chat-item active" data-chat-id="sarah">
+<div class="item-avatar">
+<img alt="Sarah" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7-0ktyy4gZ7JY_5Ng4DtfkO-GcyMl0AfRDdBPdN62-VV1l4EC65oMmqawhjn5Rq8fleX-AhVCclzLgvcxp_r81Q2FkSnTSpQZaXfWqe62Q8uVcHHV4DADhndw7FJKzPAN3P3XpCuuNkp3xUqCl_uI0nbw3MMN15dkWXI0FHP3-oVCJw5rpxMd_mwfvqjcSNeLFTRvJr2Vi0CACLKSvW7fUH9xiCuVJSZC5_xWoR26XI34oXHgYiAGLE4JGEcyLuZZAP9oA6c1yLsD"/>
+</div>
+<div class="item-content">
+<div class="item-header">
+<h4>Teacher Sarah</h4>
+<span class="time">10:30 AM</span>
+</div>
+<div class="item-preview">
+<p>Leo 今天的表現很棒喔！</p>
+<span class="unread-badge">2</span>
+</div>
+</div>
+</div>
+<div class="chat-item" data-chat-id="mike">
+<div class="item-avatar">
+<img alt="Mike" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhjRi6kj4DgSmvufmBI5Y1gFygEnyEf9k-SL0f9d1htgDYB84HWfK9QdrRAEuy5ZNTzYHYVJqvzYQEdzUXmwgn56NtawacXHKwuX9QlyEaNxH35HMiP1KQfIGpYWZbPriiYfyxw6xPuEbVjZmGNJLESt5ZgdV_NnFLMiIiM0WYNcXQbr1ynDR2rfo5SicowRUYfOeYocEZf84_w3HallO4afcstHA8E1tJhFfT5COFlTt1o-QKeHi5AzpaZEPpXGtQ_oLlHU0chf1t"/>
+</div>
+<div class="item-content">
+<div class="item-header">
+<h4>Teacher Mike</h4>
+<span class="time">昨天</span>
+</div>
+<div class="item-preview">
+<p>下週的課程時間確認了嗎？</p>
+</div>
+</div>
+</div>
+<div class="chat-item" data-chat-id="emily">
+<div class="item-avatar">
+<img alt="Emily" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4vSNT2iIEjUsHY7MTN_o2vtbwhnZtiTitqJ0WNth8OqjtQwNMjuixKOA4Gdn-oOxX2YRN0CEkDZC5kRhLvvb-5W5PPGxECJEidZrDR7MDKCNpvb6fFQIpeKqYvBCyhWxnJy3SrBXqJJT1IigWOXzto-un_nSV7P7cd-DO-6Xqfv36XzBd3jHayDX1qucVB7UfxVX8AX16KSajlvhGFzWpgIgdqarYo7WtnNLZHPAvYAViDkSrXWx5KnLLkANbVeXKoY7Nd6YzmaIa"/>
+</div>
+<div class="item-content">
+<div class="item-header">
+<h4>Teacher Emily</h4>
+<span class="time">星期一</span>
+</div>
+<div class="item-preview">
+<p>好的，我會準備相關教材。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Chat Window -->
+<div class="chat-window" id="chatWindow">
+<div class="window-header">
+<div class="header-user">
+<button class="back-btn" id="closeChat">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<img alt="Current Chat Avatar" id="headerAvatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7-0ktyy4gZ7JY_5Ng4DtfkO-GcyMl0AfRDdBPdN62-VV1l4EC65oMmqawhjn5Rq8fleX-AhVCclzLgvcxp_r81Q2FkSnTSpQZaXfWqe62Q8uVcHHV4DADhndw7FJKzPAN3P3XpCuuNkp3xUqCl_uI0nbw3MMN15dkWXI0FHP3-oVCJw5rpxMd_mwfvqjcSNeLFTRvJr2Vi0CACLKSvW7fUH9xiCuVJSZC5_xWoR26XI34oXHgYiAGLE4JGEcyLuZZAP9oA6c1yLsD"/>
+<div class="user-details">
+<h3 id="headerName">Teacher Sarah</h3>
+</div>
+</div>
+<div class="header-actions">
+<button class="btn-book">
+<span class="material-symbols-outlined">calendar_month</span>
+                        預約課程
+                    </button>
+<button class="btn-icon">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<div class="messages-container" id="messagesContainer">
+<!-- Messages injected via JS -->
+</div>
+<div class="input-area">
+<div class="input-tools">
+<button class="btn-icon">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<button class="btn-icon">
+<span class="material-symbols-outlined">image</span>
+</button>
+</div>
+<div class="input-wrapper">
+<input id="messageInput" placeholder="輸入訊息..." type="text"/>
+<button class="btn-icon">
+<span class="material-symbols-outlined">mood</span>
+</button>
+</div>
+<button class="btn-send" id="sendBtn">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

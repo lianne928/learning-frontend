@@ -1,0 +1,426 @@
+// ==========================================
+// 學生後台共用樣式 (_student-layout.scss)
+// ==========================================
+
+// CSS 變數
+:root {
+    --brand-yellow: #FFD000;
+    --brand-navy:   #1A2238;
+    --brand-bg:     #F0F4FA;
+    --text-main:    #334155;
+    --text-light:   #94A3B8;
+    --border-color: #E2E8F0;
+
+    // 彩色 icon 色票（導覽列用）
+    --nav-color-dashboard: #FFD000;
+    --nav-color-schedule:  #34D399;
+    --nav-color-courses:   #60A5FA;
+    --nav-color-reviews:   #F472B6;
+    --nav-color-wallet:#A78BFA;
+    --nav-color-messages:  #FB923C;
+    --nav-color-settings:  #94A3B8;
+}
+
+// 整體版型
+.student-layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--brand-bg);
+    color: var(--text-main);
+    font-family: 'Noto Sans TC', sans-serif;
+}
+
+// ==========================================
+// 左側導覽列
+// ==========================================
+.student-sidebar {
+    width: 260px;
+    background: linear-gradient(180deg, #333333 0%, rgb(145, 148, 156) 100%);
+    border-right: none;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    z-index: 100;
+
+    @media (max-width: 991.98px) {
+        position: fixed;
+        top: 0; bottom: 0; left: 0;
+        z-index: 1050;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        &.show { transform: translateX(0); }
+    }
+}
+
+// Logo 區塊
+.student-sidebar-logo {
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 8px;
+
+    .logo-icon {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, #FFD000, #FF9500);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1e293b;
+        font-weight: 900;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+    }
+
+    .logo-text {
+        font-weight: 900;
+        font-size: 1.1rem;
+        color: #fff;
+        line-height: 1.2;
+
+        span {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.4);
+        }
+    }
+}
+
+// 導覽選單項目
+.student-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 24px;
+    color: rgba(255,255,255,0.5);
+    font-weight: 600;
+    font-size: 0.88rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    position: relative;
+    border-radius: 0 14px 14px 0;
+    margin-right: 16px;
+    margin-bottom: 2px;
+
+    .material-symbols-outlined {
+        font-size: 20px;
+        font-variation-settings: 'FILL' 0, 'wght' 400;
+        transition: all 0.2s;
+    }
+
+    &:hover {
+        background-color: rgba(255,255,255,0.06);
+        color: rgba(255,255,255,0.85);
+    }
+
+    &.active {
+        background-color: rgba(255,255,255,0.1);
+        color: #fff;
+        font-weight: 700;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400;
+        }
+    }
+}
+
+// 各選單項目的彩色 icon
+.student-nav-link[href="student-dashboard.html"] {
+    .material-symbols-outlined { color: var(--nav-color-dashboard); }
+    &.active::before { background-color: var(--nav-color-dashboard); }
+}
+.student-nav-link[href="student-schedule.html"] {
+    .material-symbols-outlined { color: var(--nav-color-schedule); }
+    &.active::before { background-color: var(--nav-color-schedule); }
+}
+.student-nav-link[href="student-courses.html"] {
+    .material-symbols-outlined { color: var(--nav-color-courses); }
+    &.active::before { background-color: var(--nav-color-courses); }
+}
+.student-nav-link[href="student-reviews.html"] {
+    .material-symbols-outlined { color: var(--nav-color-reviews); }
+    &.active::before { background-color: var(--nav-color-reviews); }
+}
+.student-nav-link[href="student-wallet.html"] {
+    .material-symbols-outlined { color: var(--nav-color-wallet); }
+    &.active::before { background-color: var(--nav-color-wallet); }
+}
+.student-nav-link[href="student-messages.html"] {
+    .material-symbols-outlined { color: var(--nav-color-messages); }
+    &.active::before { background-color: var(--nav-color-messages); }
+}
+.student-nav-link[href="student-settings.html"] {
+    .material-symbols-outlined { color: var(--nav-color-settings); }
+    &.active::before { background-color: var(--nav-color-settings); }
+}
+
+// 側邊欄底部個人資訊
+.student-sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+    .student-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 2px solid rgba(255,255,255,0.2);
+    }
+
+    .student-info {
+        flex-grow: 1;
+        margin-left: 12px;
+
+        .student-name {
+            font-weight: 700;
+            font-size: 0.88rem;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .student-role {
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.4);
+            font-weight: 600;
+        }
+    }
+
+    .logout-icon {
+        font-size: 20px;
+        color: rgba(255,255,255,0.3);
+        transition: color 0.2s;
+        &:hover { color: #ef4444; }
+    }
+}
+
+// ==========================================
+// 右側主內容區
+// ==========================================
+.student-main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px 40px;
+    background-color: var(--brand-bg);
+
+    @media (max-width: 991.98px) {
+        padding: 20px 16px;
+    }
+}
+
+// 頁面標題
+.student-page-title {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--brand-navy);
+    margin-bottom: 4px;
+}
+
+.student-page-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 28px;
+}
+
+// 通用卡片
+.student-card {
+    background-color: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    overflow: hidden;
+}
+
+.student-card-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h3 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--brand-navy);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        &::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 16px;
+            background: linear-gradient(180deg, #FFD000, #FF9500);
+            border-radius: 2px;
+        }
+    }
+}
+
+.student-card-body {
+    padding: 24px;
+}
+
+// 統計數字卡片（每張不同顏色）
+.student-stat-card {
+    background-color: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    padding: 20px 24px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    // 頂部彩色條
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 4px;
+    }
+
+    // 第一張：綠色（本月收入）
+    &:nth-child(1)::before { background: linear-gradient(90deg, #34D399, #10B981); }
+    &:nth-child(1) .stat-icon { color: #10B981; background: #ECFDF5; }
+
+    // 第二張：藍色（本週堂數）
+    &:nth-child(2)::before { background: linear-gradient(90deg, #60A5FA, #3B82F6); }
+    &:nth-child(2) .stat-icon { color: #3B82F6; background: #EFF6FF; }
+
+    // 第三張：紫色（平均評分）
+    &:nth-child(3)::before { background: linear-gradient(90deg, #A78BFA, #8B5CF6); }
+    &:nth-child(3) .stat-icon { color: #8B5CF6; background: #F5F3FF; }
+
+    .stat-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-light);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .stat-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .material-symbols-outlined { font-size: 18px; }
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 900;
+        color: var(--brand-navy);
+        line-height: 1.1;
+        margin-bottom: 8px;
+    }
+
+    .stat-unit {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-light);
+    }
+
+    .stat-trend {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 6px;
+
+        &.up   { background-color: #ECFDF5; color: #10B981; }
+        &.down { background-color: #FEF2F2; color: #EF4444; }
+    }
+}
+
+// 黃色主按鈕
+.btn-student {
+    background: linear-gradient(135deg, #FFD000, #FF9500);
+    color: #1e293b;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 0.88rem;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover {
+        opacity: 0.9;
+        color: #1e293b;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(255,208,0,0.4);
+    }
+
+    &:active { transform: scale(0.98); }
+}
+
+// 手機版頂部 header
+.student-mobile-header {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: linear-gradient(180deg, #333333 0%, gray 100%);;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+
+    @media (max-width: 991.98px) { display: flex; }
+
+    .logo-text {
+        font-weight: 900;
+        font-size: 1.1rem;
+        color: #fff;
+    }
+}
+
+// 遮罩
+.student-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1040;
+    &.show { display: block; }
+}
+
+// 捲軸美化
+.student-main::-webkit-scrollbar { width: 5px; }
+.student-main::-webkit-scrollbar-track { background: transparent; }
+.student-main::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }

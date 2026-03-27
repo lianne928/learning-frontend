@@ -1,10 +1,10 @@
 // ==========================================
-// 教師後台共用邏輯 (teacher-layout.js)
+// 教師後台共用邏輯 (student-layout.js)
 // ==========================================
 
 const API_BASE_URL = 'http://localhost:8080/api';
 
-// ── 自動帶入 JWT Token（所有老師後台 API 都需要）──
+// ── 自動帶入 JWT Token（所有學生後台 API 都需要）──
 const _token = localStorage.getItem('jwt_token');
 if (_token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${_token}`;
@@ -12,7 +12,7 @@ if (_token) {
 
 // ── 手機版側邊欄開關 ──
 const sidebarToggle = document.getElementById('sidebar-toggle');
-const sidebar = document.getElementById('teacher-sidebar');
+const sidebar = document.getElementById('student-sidebar');
 const overlay = document.getElementById('sidebar-overlay');
 
 if (sidebarToggle) {
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //     return;
     // }
 
-    // 不是老師 → 跳回首頁
+    // 不是學生 → 跳回首頁
     // if (userRole !== 'TUTOR') {
     //     window.location.href = 'index.html';
     //     return;
@@ -88,11 +88,11 @@ async function loadSidebarAvatar(tutorId) {
     }
 
     // ── 動態插入返回首頁按鈕 ──
-    const nav = document.querySelector('.teacher-sidebar nav');
+    const nav = document.querySelector('.student-sidebar nav');
     if (nav) {
         const homeLink = document.createElement('a');
         homeLink.href = 'index.html';
-        homeLink.className = 'teacher-nav-link';
+        homeLink.className = 'student-nav-link';
         homeLink.innerHTML = '<span class="material-symbols-outlined">home</span> 返回首頁';
         homeLink.style.marginTop = 'auto';
         nav.appendChild(homeLink);
