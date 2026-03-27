@@ -3,15 +3,24 @@
 // 串接後端 REST API + WebSocket (STOMP)
 // ==========================================
 
-const BASE_URL = '';                         // 相對路徑，走 Vite proxy
-const API_BASE_URL = '/api';
-const WS_BASE_URL = 'http://localhost:8080'; // WebSocket 需要絕對路徑
+// ✅ 修正：移除重複定義，使用 navbar.js 的 API_BASE_URL
+// 注意：navbar.js 必須在此檔案之前載入！
+
 const DEFAULT_AVATAR = '/assets/img/teacher.png';
+
+// WebSocket 基礎 URL（從 API_BASE_URL 自動推導）
+const WS_BASE_URL = (() => {
+    if (API_BASE_URL.startsWith('http')) {
+        const url = new URL(API_BASE_URL);
+        return `${url.protocol}//${url.host}`;
+    }
+    return window.location.origin;
+})();
 
 let tutorId = null;
 
 let conversations = [];      // { bookingId (=orderId), bookingRecordId, bookingIds[], bookingRecordIds[], participantId, participantName, avatar, subject, lastMessage, time, unread }
-let currentBookingId = null;
+let currentStudentId = null; // 🆕 改用 studentId（原本是 currentBookingId）
 let stompClient = null;
 let stompSubscription = null;
 let stompErrorSubscription = null;
@@ -106,117 +115,71 @@ function scrollToBottom() {
 
 // ── 載入對話列表 ──────────────────────────
 
+
 async function loadConversations() {
     if (!tutorId) {
         console.warn('無法取得 userId，取消載入對話列表');
         return;
     }
     try {
-        const res = await axios.get(`${API_BASE_URL}/bookings/tutor/${tutorId}`, {
-            headers: authHeaders()
-        });
-        const bookings = res.data;
-
-        // 只顯示非已取消狀態的預約，優先使用 booking 回傳的學生資料
-        const active = bookings.filter(b => b.status !== 3);
-
-        const convList = (await Promise.all(active.map(async b => {
-            if (!b.orderId) {
-                console.warn('預約缺少 orderId，無法建立聊天對話', b);
-                return null;
-            }
-
-            const studentId = b.studentId;
-            const studentData = {
-                name: b.studentName || b.student?.name || b.student?.studentName || '',
-                avatar: b.studentAvatar || b.student?.avatar || ''
-            };
-            const dateVal = Array.isArray(b.date)
-                ? `${b.date[0]}-${String(b.date[1]).padStart(2, '0')}-${String(b.date[2]).padStart(2, '0')}`
-                : (b.date || '');
-            return {
-                bookingId: b.orderId,
-                bookingRecordId: b.id,
-                participantId: studentId,
-                participantName: studentData.name || studentData.studentName || '學生 #' + studentId,
-                subject: b.courseName || '',
-                avatar: resolveMediaUrl(convertGoogleDriveUrl(studentData.avatar)),
-                lastMessage: '',
-                time: dateVal,
-                unread: 0
-            };
-        }))).filter(Boolean);
-
-        // 依 participantId + courseName 分組，同一課程只顯示一個聯絡人
-        const groupMap = new Map();
-        for (const c of convList) {
-            const key = `${c.participantId}::${c.subject}`;
-            if (!groupMap.has(key)) {
-                groupMap.set(key, {
-                    ...c,
-                    bookingIds: [c.bookingId],
-                    bookingRecordIds: [c.bookingRecordId]
-                });
-            } else {
-                const g = groupMap.get(key);
-                g.bookingIds.push(c.bookingId);
-                g.bookingRecordIds.push(c.bookingRecordId);
-                if (c.time > g.time) {
-                    g.bookingId = c.bookingId;
-                    g.bookingRecordId = c.bookingRecordId;
-                    g.time = c.time;
-                }
-            }
-        }
-        conversations = [...groupMap.values()].sort((a, b) => (b.time > a.time ? 1 : -1));
+        const res = await axios.get(
+            `${API_BASE_URL}/chatMessage/conversations/tutor/${tutorId}`,
+            { headers: authHeaders() }
+        );
+        
+        conversations = res.data.map(conv => ({
+            studentId: conv.studentId,
+            studentName: conv.studentName,
+            studentAvatar: conv.studentAvatar || '/assets/img/student.png',
+            orderIds: conv.orderIds,
+            courses: conv.courses,
+            lastMessage: conv.lastMessage || '',
+            lastMessageTime: conv.lastMessageTime,
+            unreadCount: conv.unreadCount || 0
+        }));
+        
         renderChatList();
-
-        const bid = getBookingIdFromQuery();
-        if (bid) {
-            const conv = conversations.find(c =>
-                c.bookingIds.includes(bid) || c.bookingRecordIds.includes(bid)
-            );
-            if (conv) selectConversation(conv.bookingId);
-            else if (conversations.length > 0) selectConversation(conversations[0].bookingId);
-        } else if (conversations.length > 0) {
-            selectConversation(conversations[0].bookingId);
+        
+        if (conversations.length > 0) {
+            selectConversation(conversations[0].studentId);
         }
     } catch (err) {
         console.error('載入對話列表失敗', err);
     }
 }
 
+
 // ── 渲染對話列表 ──────────────────────────
 
 function renderChatList(filter = '') {
     const list = document.getElementById('chatList');
     const filtered = conversations.filter(c =>
-        c.participantName.toLowerCase().includes(filter.toLowerCase()) ||
-        c.subject.includes(filter)
+        c.studentName.toLowerCase().includes(filter.toLowerCase()) ||
+        c.courses.join(", ").includes(filter)
     );
 
     list.innerHTML = filtered.map(c => `
-        <li class="chat-item ${c.bookingId === currentBookingId ? 'active' : ''}" data-id="${c.bookingId}">
+        <li class="chat-item ${c.studentId === currentStudentId ? 'active' : ''}" data-student-id="${c.studentId}">
             <div class="contact-avatar-wrap">
-                <img src="${c.avatar || DEFAULT_AVATAR}" alt="${escapeHtml(c.participantName)}" class="contact-avatar" onerror="this.onerror=null;this.src='${DEFAULT_AVATAR}';">
+                <img src="${c.studentAvatar || DEFAULT_AVATAR}" alt="${escapeHtml(c.studentName)}" class="contact-avatar" onerror="this.onerror=null;this.src='${DEFAULT_AVATAR}';">
             </div>
             <div class="chat-item-body">
                 <div class="chat-item-top">
-                    <span class="contact-name">${escapeHtml(c.participantName)}</span>
-                    <span class="contact-time">${escapeHtml(c.time)}</span>
+                    <span class="contact-name">${escapeHtml(c.studentName)}</span>
+                    <span class="contact-time">${formatTime(c.lastMessageTime)}</span>
                 </div>
                 <div class="chat-item-bottom">
                     <span class="contact-preview">${escapeHtml(c.lastMessage)}</span>
-                    ${c.unread > 0 ? `<span class="unread-badge">${c.unread}</span>` : ''}
+                    ${c.unreadCount > 0 ? `<span class="unread-badge">${c.unreadCount}</span>` : ''}
                 </div>
-                <span class="subject-tag">${escapeHtml(c.subject)}</span>
+                <span class="subject-tag">${escapeHtml(c.courses.join(", "))}</span>
             </div>
         </li>
     `).join('');
 
     list.querySelectorAll('.chat-item').forEach(item => {
         item.addEventListener('click', () => {
-            selectConversation(parseInt(item.dataset.id));
+            selectConversation(parseInt(item.dataset.studentId, 10));
         });
     });
 }
@@ -224,7 +187,7 @@ function renderChatList(filter = '') {
 // ── 渲染訊息 ──────────────────────────────
 
 function buildMsgHtml(m, conv) {
-    const isMe = m.role === 'tutor';
+    const isMe = m.role === 2 || m.role === '2';  // role = 2 是老師
     const timeStr = formatTime(m.createdAt);
     let content = '';
 
@@ -247,24 +210,29 @@ function buildMsgHtml(m, conv) {
     }
 
     if (isMe) {
+        // 老師訊息（右邊藍色）
         return `
-            <div class="msg-row student">
-                <div class="msg-content">
-                    <div class="msg-bubble">${content}</div>
+            <div class="msg-row tutor" style="align-self: flex-end; margin-left: auto; width: fit-content; max-width: 70%;">
+                <div class="msg-content" style="max-width: 100%;">
+                    <div class="msg-bubble" style="word-break: break-word; overflow-wrap: break-word;">${content}</div>
                     <span class="msg-time">${timeStr}</span>
                 </div>
             </div>`;
     } else {
+        // 學生訊息（左邊白色）
+        const avatarUrl = conv.studentAvatar || '/assets/img/student.png';
         return `
-            <div class="msg-row teacher">
-                <img src="${conv.avatar}" alt="${escapeHtml(conv.participantName)}" class="msg-row-avatar">
-                <div class="msg-content">
-                    <div class="msg-bubble">${content}</div>
+            <div class="msg-row student" style="align-self: flex-start; margin-right: auto; width: fit-content; max-width: 70%;">
+                <img src="${avatarUrl}" alt="${escapeHtml(conv.studentName)}" class="msg-row-avatar">
+                <div class="msg-content" style="max-width: 100%;">
+                    <div class="msg-bubble" style="word-break: break-word; overflow-wrap: break-word;">${content}</div>
                     <span class="msg-time">${timeStr}</span>
                 </div>
             </div>`;
     }
 }
+
+
 
 function renderMessages(messages, conv) {
     const container = document.getElementById('chatMessages');
@@ -273,7 +241,7 @@ function renderMessages(messages, conv) {
 }
 
 function appendMessage(m) {
-    const conv = conversations.find(c => c.bookingId === currentBookingId);
+    const conv = conversations.find(c => c.studentId === currentStudentId);
     if (!conv) return;
     const container = document.getElementById('chatMessages');
     container.insertAdjacentHTML('beforeend', buildMsgHtml(m, conv));
@@ -286,42 +254,41 @@ function appendMessage(m) {
 
 // ── 選取對話 ──────────────────────────────
 
-async function selectConversation(bookingId) {
-    currentBookingId = bookingId;
-    const conv = conversations.find(c => c.bookingId === bookingId);
-    if (!conv) return;
-
-    // 更新 header
-    const headerAvatar = document.getElementById('headerAvatar');
-    const headerName = document.getElementById('headerName');
-    const headerTag = document.getElementById('headerTag');
-    if (headerAvatar) { headerAvatar.src = conv.avatar; headerAvatar.alt = conv.participantName; }
-    if (headerName) headerName.textContent = conv.participantName;
-    if (headerTag) headerTag.textContent = conv.subject;
-
-    renderChatList(document.getElementById('searchInput').value);
-
+async function selectConversation(studentId) {
+    const conv = conversations.find(c => c.studentId === studentId);
+    if (!conv) {
+        console.warn('找不到對話', studentId);
+        return;
+    }
+    
+    currentStudentId = studentId;
+    
+    document.getElementById('headerName').textContent = conv.studentName;
+    document.getElementById('headerAvatar').src = conv.studentAvatar;
+    document.getElementById('headerTag').textContent = conv.courses.join(', ');
+    
+    document.querySelectorAll('.chat-list-item').forEach(item => {
+        if (parseInt(item.dataset.studentId) === studentId) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+    
     try {
-        const res = await axios.get(`${API_BASE_URL}/chatMessage/booking/${bookingId}`, {
-            headers: authHeaders()
-        });
+        const res = await axios.get(
+            `${API_BASE_URL}/chatMessage/orders?ids=${conv.orderIds.join(',')}`,
+            { headers: authHeaders() }
+        );
+        
         const messages = res.data;
         renderMessages(messages, conv);
-
-        if (messages.length > 0) {
-            const last = messages[messages.length - 1];
-            conv.lastMessage = last.message || '';
-            conv.time = formatTime(last.createdAt);
-            renderChatList(document.getElementById('searchInput').value);
-        }
+        scrollToBottom();
+        connectWebSocket(conv.orderIds[0]);
     } catch (err) {
         console.error('載入訊息失敗', err);
     }
-
-    connectWebSocket(bookingId);
 }
-
-// ── WebSocket / STOMP ─────────────────────
 
 function connectWebSocket(bookingId) {
     if (stompSubscription) {
@@ -390,7 +357,7 @@ function subscribeBooking(bookingId) {
         frame => {
             const msg = JSON.parse(frame.body);
             // 避免重複顯示自己送出的訊息
-            if (msg.role !== 'tutor') {
+            if (msg.role !== 2) {  // 老師 = 2
                 appendMessage(msg);
             }
         }
@@ -414,29 +381,37 @@ function subscribeBooking(bookingId) {
 async function sendMessage() {
     const input = document.getElementById('msgInput');
     const text = input.value.trim();
-    if (!text || !currentBookingId) return;
-
+    if (!text) return;
+    
+    const conv = conversations.find(c => c.studentId === currentStudentId);
+    if (!conv) {
+        alert('請先選擇對話');
+        return;
+    }
+    
+    const targetOrderId = conv.orderIds[0];
+    
     const payload = {
-        bookingId: currentBookingId,
-        role: 'tutor',
+        bookingId: targetOrderId,
+        role: 2,  // 老師 = 2
         messageType: 1,
         message: text,
         mediaUrl: null
     };
 
     const now = new Date().toISOString();
-    appendMessage({ ...payload, createdAt: now });
+    appendMessage({ ...payload, role: 2, createdAt: now });  // 顯示時用數字
     input.value = '';
 
     try {
         if (stompClient && stompClient.connected) {
             if (typeof stompClient.publish === 'function') {
                 stompClient.publish({
-                    destination: `/app/chat/${currentBookingId}`,
+                    destination: `/app/chat/${targetOrderId}`,
                     body: JSON.stringify(payload)
                 });
             } else {
-                stompClient.send(`/app/chat/${currentBookingId}`, {}, JSON.stringify(payload));
+                stompClient.send(`/app/chat/${targetOrderId}`, {}, JSON.stringify(payload));
             }
         } else {
             await axios.post(`${API_BASE_URL}/chatMessage`, payload, { headers: authHeaders() });
@@ -446,6 +421,7 @@ async function sendMessage() {
         console.error('傳送訊息失敗', err);
     }
 }
+
 
 // ── 上傳檔案 ──────────────────────────────
 
@@ -466,11 +442,11 @@ async function uploadFile(file) {
     const localType = detectLocalType(file);
     const blobUrl = URL.createObjectURL(file);
     const tempId = 'upload-preview-' + Date.now();
-    const conv = conversations.find(c => c.bookingId === currentBookingId);
+    const conv = conversations.find(c => c.studentId === currentStudentId);
     const msgArea = document.getElementById('chatMessages');
 
     const previewMsg = {
-        role: 'tutor',
+        role: 2,  // 老師 = 2
         messageType: localType,
         mediaUrl: blobUrl,
         message: file.name,
@@ -485,7 +461,7 @@ async function uploadFile(file) {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('bookingId', currentBookingId);
-    formData.append('role', 'tutor');
+    formData.append('role', 2);  // 老師 = 2
     formData.append('message', '');
 
     try {
@@ -520,6 +496,23 @@ function populateSidebarUser() {
     }
 }
 
+// ── 載入側邊欄頭貼 ──
+async function loadSidebarAvatar() {
+    if (!tutorId) return;
+    try {
+        const res = await axios.get(`${API_BASE_URL}/tutor/${tutorId}`, {
+            headers: authHeaders()
+        });
+        const avatarUrl = res.data.avatar;
+        const avatarEl = document.getElementById('sidebarAvatar');
+        if (avatarEl && avatarUrl) {
+            avatarEl.src = convertGoogleDriveUrl(avatarUrl);
+        }
+    } catch (err) {
+        console.error('載入頭貼失敗：', err);
+    }
+}
+
 // ── 初始化 ────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -551,6 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     populateSidebarUser();
+    loadSidebarAvatar();
     loadConversations();
 
     document.getElementById('searchInput').addEventListener('input', e => {

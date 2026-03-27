@@ -2,8 +2,6 @@
 // 教師後台共用邏輯 (teacher-layout.js)
 // ==========================================
 
-const API_BASE_URL = 'http://localhost:8080/api';
-
 // ── 自動帶入 JWT Token（所有老師後台 API 都需要）──
 const _token = localStorage.getItem('jwt_token');
 if (_token) {

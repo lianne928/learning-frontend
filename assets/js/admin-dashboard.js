@@ -2,8 +2,6 @@
 // admin-dashboard.js
 // ==========================================
 
-const API_BASE_URL = 'http://localhost:8080/api';
-
 // ── JWT ───────────────────────────────────────────────────────────────
 const _token = localStorage.getItem('jwt_token');
 if (_token) axios.defaults.headers.common['Authorization'] = `Bearer ${_token}`;

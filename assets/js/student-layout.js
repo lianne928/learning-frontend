@@ -2,8 +2,6 @@
 // 學生後台共用邏輯 (student-layout.js)
 // ==========================================
 
-const API_BASE_URL = 'http://localhost:8080/api';
-
 // ── 自動帶入 JWT Token ──
 const _token = localStorage.getItem('jwt_token');
 if (_token) {
