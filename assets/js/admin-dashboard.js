@@ -2,8 +2,6 @@
 // admin-dashboard.js
 // ==========================================
 
-const API_BASE_URL = 'http://localhost:8080/api';
-
 // ── JWT ───────────────────────────────────────────────────────────────
 const _token = localStorage.getItem('jwt_token');
 if (_token) axios.defaults.headers.common['Authorization'] = `Bearer ${_token}`;
@@ -192,7 +190,7 @@ function renderTutorTable(list) {
                              `<span class="status-badge status-rejected">🚫 已停權</span>`;
         const initial = (t.name || '?')[0];
         return `
-        <tr onclick="openReviewModal(${t.id})">
+        <tr onclick="openReviewModal(${t.tutorId})">
             <td>
                 <div class="tutor-name-cell">
                     <div class="tutor-initial">${initial}</div>
@@ -208,7 +206,7 @@ function renderTutorTable(list) {
             <td>
                 <button class="btn btn-sm fw-bold"
                     style="border:1px solid var(--border-color); border-radius:8px; font-size:0.78rem;"
-                    onclick="event.stopPropagation(); openReviewModal(${t.id})">
+                    onclick="event.stopPropagation(); openReviewModal(${t.tutorId})">
                     <span class="material-symbols-outlined" style="font-size:15px;">open_in_new</span> 查看
                 </button>
             </td>

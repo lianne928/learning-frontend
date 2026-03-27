@@ -21,13 +21,13 @@
 
     <!-- ===== 左側導覽列 ===== -->
     <aside class="teacher-sidebar" id="teacher-sidebar">
-        <div class="teacher-sidebar-logo">
+        <a href="teacher-dashboard.html" class="teacher-sidebar-logo" style="text-decoration: none; color: inherit;">
             <div class="logo-icon">M</div>
             <div class="logo-text">
                 Merge
                 <span>老師專用後台</span>
             </div>
-        </div>
+        </a>
         <nav class="flex-grow-1 py-2">
             <a href="teacher-dashboard.html" class="teacher-nav-link">
                 <span class="material-symbols-outlined">grid_view</span>
@@ -56,6 +56,10 @@
             <a href="teacher-settings.html" class="teacher-nav-link">
                 <span class="material-symbols-outlined">settings</span>
                 <span class="nav-label">設定</span>
+            </a>
+            <a href="index.html" class="teacher-nav-link">
+                <span class="material-symbols-outlined">home</span>
+                <span class="nav-label">返回首頁</span>
             </a>
         </nav>
         <div class="teacher-sidebar-footer" id="logout-btn">
@@ -130,6 +134,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./assets/js/navbar.js"></script>
     <script src="./assets/js/TeacherChat.js"></script>
     <script>
         // RWD interactions
