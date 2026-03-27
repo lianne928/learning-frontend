@@ -1,5 +1,6 @@
 // fonts
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Tilt+Warp&family=Zen+Maru+Gothic:wght@300;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Tilt+Warp&family=Zen+Maru+Gothic:wght@300;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 
 @import "../../node_modules/bootstrap/scss/functions";
 
@@ -57,10 +58,17 @@ $utilities: map-merge(
 @import "./components/booking";
 @import "./components/teacher-layout";
 @import "./components/teacher-schedule";
+@import "./components/student-layout";
 @import "./components/teacher-reviews.scss";
 @import "./components/teacher-courses.scss";
 @import "./components/teacher-settings";
+@import "./components/video-room";
 @import "./components/index";
+@import "./components/student-chat";
+@import "./components/teacher-chat";
 @import "./components/loginbtn";
 @import "./components/explore";
+<<<<<<< HEAD
 @import "./components/admin-dashboard";
+=======
+>>>>>>> f7375a1098999e1d059cc090c7f5a57cfeb759ab

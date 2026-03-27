@@ -4,15 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Merge | 訊息中心（老師）</title>
+    <title>Merge | 訊息中心</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/scss/all.scss">
 </head>
 
-<body class="teacher-chat-page">
+<body class="student-chat-page">
 
     <!-- ===== Hamburger (mobile only) ===== -->
     <button class="hamburger-btn" id="hamburgerBtn" aria-label="開啟選單">
@@ -20,49 +17,42 @@
     </button>
 
     <!-- ===== 左側導覽列 ===== -->
-    <aside class="teacher-sidebar" id="teacher-sidebar">
-        <div class="teacher-sidebar-logo">
+    <aside class="student-sidebar" id="student-sidebar">
+        <div class="student-sidebar-logo">
             <div class="logo-icon">M</div>
             <div class="logo-text">
                 Merge
-                <span>老師專用後台</span>
+                <span>學生總台</span>
             </div>
         </div>
-        <nav class="flex-grow-1 py-2">
-            <a href="teacher-dashboard.html" class="teacher-nav-link">
-                <span class="material-symbols-outlined">grid_view</span>
-                <span class="nav-label">控制台</span>
-            </a>
-            <a href="teacher-schedule.html" class="teacher-nav-link">
-                <span class="material-symbols-outlined">calendar_month</span>
-                <span class="nav-label">行程與排課</span>
-            </a>
-            <a href="teacher-courses.html" class="teacher-nav-link">
-                <span class="material-symbols-outlined">menu_book</span>
-                <span class="nav-label">課程管理</span>
-            </a>
-            <a href="teacher-reviews.html" class="teacher-nav-link">
-                <span class="material-symbols-outlined">assignment</span>
-                <span class="nav-label">報告與評價</span>
-            </a>
-            <a href="teacher-income.html" class="teacher-nav-link">
-                <span class="material-symbols-outlined">account_balance_wallet</span>
-                <span class="nav-label">收益與績效</span>
-            </a>
-            <a href="teacher-messages.html" class="teacher-nav-link active">
-                <span class="material-symbols-outlined">chat_bubble</span>
-                <span class="nav-label">訊息中心</span>
-            </a>
-            <a href="teacher-settings.html" class="teacher-nav-link">
-                <span class="material-symbols-outlined">settings</span>
-                <span class="nav-label">設定</span>
-            </a>
-        </nav>
-        <div class="teacher-sidebar-footer" id="logout-btn">
-            <img src="https://i.pravatar.cc/38?img=12" alt="頭像" class="teacher-avatar" id="sidebarAvatar">
-            <div class="teacher-info">
-                <div class="teacher-name" id="sidebarName">老師</div>
-                <div class="teacher-role">老師</div>
+         <nav class="flex-grow-1 py-2">
+                <a href="student-dashboard.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">grid_view</span> 控制台
+                </a>
+                <a href="StudentChat.html" class="student-nav-link active">
+                    <span class="material-symbols-outlined">chat_bubble</span> 訊息中心
+                </a>
+                <a href="explore.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">search</span> 找老師
+                </a>
+                <a href="booking.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">calendar_month</span> 我的課程
+                </a>
+                <a href="student-learning-records.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">history</span> 學習紀錄
+                </a>
+                <a href="student-credits.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">account_balance_wallet</span> 儲值明細
+                </a>
+                <a href="student-settings.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">settings</span> 設定
+                </a>
+            </nav>
+        <div class="student-sidebar-footer" id="logout-btn">
+            <img src="https://i.pravatar.cc/38?img=5" alt="頭像" class="student-avatar" id="sidebarAvatar">
+            <div class="student-info">
+                <div class="student-name" id="sidebarName">林小明</div>
+                <div class="student-role">學生</div>
             </div>
             <span class="material-symbols-outlined logout-icon">logout</span>
         </div>
@@ -83,7 +73,7 @@
             <!-- 搜尋框 -->
             <div class="chat-search-wrap">
                 <span class="material-symbols-outlined chat-search-icon">search</span>
-                <input type="text" class="chat-search-input" placeholder="搜尋學生或科目…" id="searchInput">
+                <input type="text" class="chat-search-input" placeholder="搜尋老師或科目…" id="searchInput">
             </div>
 
             <!-- 對話列表 -->
@@ -98,11 +88,11 @@
                     <span class="material-symbols-outlined">arrow_back</span>
                 </button>
                 <div class="contact-avatar-wrap">
-                    <img src="https://i.pravatar.cc/44?img=20" alt="學生" class="contact-avatar" id="headerAvatar">
+                    <img src="https://i.pravatar.cc/44?img=47" alt="Sarah Chen" class="contact-avatar" id="headerAvatar">
                 </div>
                 <div class="chat-header-info">
-                    <div class="chat-header-name" id="headerName">學生</div>
-                    <span class="subject-tag" id="headerTag"></span>
+                    <div class="chat-header-name" id="headerName">Sarah Chen</div>
+                    <span class="subject-tag" id="headerTag">英文會話</span>
                 </div>
             </div>
 
@@ -130,7 +120,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="./assets/js/TeacherChat.js"></script>
+    <script src="./assets/js/StudentChat.js"></script>
     <script>
         // RWD interactions
         const hamburgerBtn = document.getElementById('hamburgerBtn');
