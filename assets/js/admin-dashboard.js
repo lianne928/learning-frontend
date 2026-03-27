@@ -190,9 +190,9 @@ function renderTutorTable(list) {
             t.status === 1 ? `<span class="status-badge status-pending">⏳ 待審核</span>` :
             t.status === 2 ? `<span class="status-badge status-approved">✅ 已核准</span>` :
                              `<span class="status-badge status-rejected">🚫 已停權</span>`;
-        const initial = (t.name || '?')[0];
+        const initial = (t.name || '?')[0];console.log(t);
         return `
-        <tr onclick="openReviewModal(${t.id})">
+        <tr onclick="openReviewModal(${t.tutorId})">
             <td>
                 <div class="tutor-name-cell">
                     <div class="tutor-initial">${initial}</div>
@@ -208,7 +208,7 @@ function renderTutorTable(list) {
             <td>
                 <button class="btn btn-sm fw-bold"
                     style="border:1px solid var(--border-color); border-radius:8px; font-size:0.78rem;"
-                    onclick="event.stopPropagation(); openReviewModal(${t.id})">
+                    onclick="event.stopPropagation(); openReviewModal(${t.tutorId})">
                     <span class="material-symbols-outlined" style="font-size:15px;">open_in_new</span> 查看
                 </button>
             </td>
@@ -261,7 +261,7 @@ async function openReviewModal(tutorId) {
         } else {
             approveBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">check_circle</span> 核准';
             approveBtn.style.display = 'inline-flex';
-            rejectBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">block</span> 停權';
+            rejectBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">block</span> 不通過';
             rejectBtn.style.display = 'inline-flex';
         }
 
