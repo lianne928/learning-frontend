@@ -6,7 +6,7 @@
 // ✅ 修正：移除重複定義，使用 navbar.js 的 API_BASE_URL
 // 注意：navbar.js 必須在此檔案之前載入！
 
-const DEFAULT_AVATAR = '/assets/img/teacher.png';
+const DEFAULT_AVATAR = '/assets/img/default-student-avatar.png';
 
 // WebSocket 基礎 URL（從 API_BASE_URL 自動推導）
 const WS_BASE_URL = (() => {
@@ -130,7 +130,8 @@ async function loadConversations() {
         conversations = res.data.map(conv => ({
             studentId: conv.studentId,
             studentName: conv.studentName,
-            studentAvatar: conv.studentAvatar || '/assets/img/student.png',
+            // ✅ 正確寫法 (統一使用最上面定義好的 DEFAULT_AVATAR)
+studentAvatar: conv.studentAvatar || DEFAULT_AVATAR,
             orderIds: conv.orderIds,
             courses: conv.courses,
             lastMessage: conv.lastMessage || '',
@@ -220,7 +221,7 @@ function buildMsgHtml(m, conv) {
             </div>`;
     } else {
         // 學生訊息（左邊白色）
-        const avatarUrl = conv.studentAvatar || '/assets/img/student.png';
+        const avatarUrl = '/assets/img/default-student-avatar.png';
         return `
             <div class="msg-row student" style="align-self: flex-start; margin-right: auto; width: fit-content; max-width: 70%;">
                 <img src="${avatarUrl}" alt="${escapeHtml(conv.studentName)}" class="msg-row-avatar">
@@ -264,7 +265,7 @@ async function selectConversation(studentId) {
     currentStudentId = studentId;
     
     document.getElementById('headerName').textContent = conv.studentName;
-    document.getElementById('headerAvatar').src = conv.studentAvatar;
+    document.getElementById('headerAvatar').src = conv.studentAvatar || DEFAULT_AVATAR;
     document.getElementById('headerTag').textContent = conv.courses.join(', ');
     
     document.querySelectorAll('.chat-list-item').forEach(item => {
