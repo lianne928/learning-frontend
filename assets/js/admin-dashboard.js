@@ -188,7 +188,7 @@ function renderTutorTable(list) {
             t.status === 1 ? `<span class="status-badge status-pending">⏳ 待審核</span>` :
             t.status === 2 ? `<span class="status-badge status-approved">✅ 已核准</span>` :
                              `<span class="status-badge status-rejected">🚫 已停權</span>`;
-        const initial = (t.name || '?')[0];
+        const initial = (t.name || '?')[0];console.log(t);
         return `
         <tr onclick="openReviewModal(${t.tutorId})">
             <td>
@@ -259,7 +259,7 @@ async function openReviewModal(tutorId) {
         } else {
             approveBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">check_circle</span> 核准';
             approveBtn.style.display = 'inline-flex';
-            rejectBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">block</span> 停權';
+            rejectBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">block</span> 不通過';
             rejectBtn.style.display = 'inline-flex';
         }
 
