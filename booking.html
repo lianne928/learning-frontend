@@ -25,7 +25,9 @@
                 >
               </li>
               <li>
-                <a href="#" class="text-decoration-none px-3">註冊送代幣</a>
+                <a href="register.html" class="text-decoration-none px-3"
+                  >註冊送代幣</a
+                >
               </li>
             </ul>
           </nav>
@@ -44,21 +46,28 @@
 
         <div class="row pt-5">
           <div class="col-12 col-md-8">
-            <div class="border-top border-bottom py-4">
+            <div class="border-top py-4">
               <div class="border-bottom">
                 <div class="d-flex align-items-center mt-3">
                   <p
+                    id="tutorName"
                     class="ms-1 mb-4 tilt-warp display-3 border rounded-circle d-inline-block text-primary"
                   >
                     Ms.Emma
                   </p>
-                  <span class="ms-2 fw-light">低年級英文</span>
+                  <span id="courseName" class="ms-2 fw-light">低年級英文</span>
                   <div class="ms-auto row">
                     <div class="col">
                       <p class="mb-0">正式課程單價</p>
-                      <p class="sansTeg fs-3 text-end">
-                        500<span style="font-size: 12px"> / 點</span>
-                      </p>
+                      <div class="text-end">
+                        <p
+                          id="coursePrice"
+                          class="sansTeg fs-3 text-end d-inline-block"
+                        >
+                          500
+                        </p>
+                        <span style="font-size: 12px"> / 點</span>
+                      </div>
                     </div>
                     <div class="col">
                       <p class="mb-0">體驗課程單價</p>
@@ -69,133 +78,15 @@
                   </div>
                 </div>
               </div>
-              <p class="ms-1 mt-4">✦ 已選擇的預約時間</p>
-              <div class="row row-cols-md-3 g-3">
-                <div class="col">
-                  <div class="border">
-                    <div
-                      class="border-bottom bg-gray d-flex align-items-center"
-                    >
-                      <p class="ps-3 pt-3 sansTeg d-inline-block">26 Mar.</p>
-                      <button
-                        type="button"
-                        class="btn-close ms-auto me-3"
-                        style="font-size: 12px"
-                        aria-label="Close"
-                      ></button>
-                    </div>
 
-                    <div class="d-flex align-items-center">
-                      <div>
-                        <p
-                          class="display-5 sansTeg ps-3 pt-3 mb-0 pb-3 text-gary border-end pe-4"
-                        >
-                          18:00
-                        </p>
-                      </div>
+              <div class="pb-4">
+                <p class="ms-1 mt-4">✦ 已選擇的預約時間</p>
+                <div id="selectedList" class="row row-cols-md-3 g-3"></div>
+              </div>
 
-                      <div class="mx-auto">
-                        <small class="border px-3 rounded-3 bg-light"
-                          >60mins</small
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="border">
-                    <div
-                      class="border-bottom bg-gray d-flex align-items-center"
-                    >
-                      <p class="ps-3 pt-3 sansTeg d-inline-block">26 Mar.</p>
-                      <button
-                        type="button"
-                        class="btn-close ms-auto me-3"
-                        style="font-size: 12px"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-
-                    <div class="d-flex align-items-center">
-                      <div>
-                        <p
-                          class="display-5 sansTeg ps-3 pt-3 mb-0 pb-3 text-gary border-end pe-4"
-                        >
-                          19:00
-                        </p>
-                      </div>
-
-                      <div class="mx-auto">
-                        <small class="border px-3 rounded-3 bg-light"
-                          >60mins</small
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="border">
-                    <div
-                      class="border-bottom bg-gray d-flex align-items-center"
-                    >
-                      <p class="ps-3 pt-3 sansTeg d-inline-block">27 Mar.</p>
-                      <button
-                        type="button"
-                        class="btn-close ms-auto me-3"
-                        style="font-size: 12px"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-
-                    <div class="d-flex align-items-center">
-                      <div>
-                        <p
-                          class="display-5 sansTeg ps-3 pt-3 mb-0 pb-3 text-gary border-end pe-4"
-                        >
-                          18:00
-                        </p>
-                      </div>
-
-                      <div class="mx-auto">
-                        <small class="border px-3 rounded-3 bg-light"
-                          >60mins</small
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col">
-                  <div class="border">
-                    <div
-                      class="border-bottom bg-gray d-flex align-items-center"
-                    >
-                      <p class="ps-3 pt-3 sansTeg d-inline-block">28 Mar.</p>
-                      <button
-                        type="button"
-                        class="btn-close ms-auto me-3"
-                        style="font-size: 12px"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-
-                    <div class="d-flex align-items-center">
-                      <div>
-                        <p
-                          class="display-5 sansTeg ps-3 pt-3 mb-0 pb-3 text-gary border-end pe-4"
-                        >
-                          18:00
-                        </p>
-                      </div>
-
-                      <div class="mx-auto">
-                        <small class="border px-3 rounded-3 bg-light"
-                          >60mins</small
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div class="border-top">
+                <p class="ms-1 pt-4">✦ 請選擇預約時間</p>
+                <div id="canSelect" class="row row-cols-md-3 g-3"></div>
               </div>
             </div>
           </div>
@@ -211,23 +102,25 @@
                   </p>
                 </div>
                 <div>
-                  <p class="sansTeg d-inline-block fs-4">240</p>
+                  <p id="totalMinutes" class="sansTeg d-inline-block fs-4">0</p>
                   <span class="fw-light"> / mins</span>
                 </div>
               </div>
+
               <div class="d-flex justify-content-between border-bottom py-3">
                 <div class="pt-3">
                   <p
                     class="border d-inline-block px-3 bg-light py-1 rounded-pill"
                   >
-                    予約總堂數
+                    預約總堂數
                   </p>
                 </div>
                 <div class="pt-3">
-                  <p class="sansTeg d-inline-block fs-4">4</p>
+                  <p id="totalLessons" class="sansTeg d-inline-block fs-4">0</p>
                   <span class="fw-light"> / 堂</span>
                 </div>
               </div>
+
               <div class="d-flex">
                 <div class="mt-auto ms-auto">
                   <div class="d-flex flex-column align-items-center">
@@ -235,9 +128,10 @@
                     <div class="d-flex align-items-center">
                       <div class="ms-auto">
                         <p
+                          id="totalPoints"
                           class="sansTeg display-2 text-primary d-inline-block mb-0 pe-2"
                         >
-                          2000
+                          0
                         </p>
                         <span>/ 點</span>
                       </div>
@@ -247,6 +141,7 @@
               </div>
 
               <button
+                id="bookingBtn"
                 type="button"
                 class="btn btn-success border border-1 p-3 w-100"
               >
@@ -255,12 +150,52 @@
             </div>
           </div>
         </div>
-
-        <div>
-          <p class="ms-1 pt-4">✦ 請選擇預約時間</p>
-        </div>
       </div>
     </main>
+
+    <footer class="bg-white border-top py-5 mt-auto">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
+            <a
+              href="index.html"
+              class="text-decoration-none d-flex align-items-center justify-content-center justify-content-md-start"
+            >
+              <h3 class="nunito fst-italic mb-0 me-2 text-primary">Merge</h3>
+              <span class="text-muted small">&copy; 2026</span>
+            </a>
+          </div>
+          <div class="col-md-4 mb-3 mb-md-0">
+            <ul class="list-unstyled d-flex justify-content-center mb-0 small">
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >服務條款</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >隱私政策</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >聯絡我們</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4 text-center text-md-end">
+            <a href="#" class="text-muted me-3"
+              ><i class="bi bi-facebook"></i
+            ></a>
+            <a href="#" class="text-muted me-3"
+              ><i class="bi bi-instagram"></i
+            ></a>
+            <a href="#" class="text-muted"><i class="bi bi-github"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <script src="./assets/js/navbar.js"></script>
     <script src="./assets/js/booking.js"></script>

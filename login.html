@@ -8,7 +8,7 @@
   </head>
 
   <body>
-    <header class="border-bottom py-2">
+    <header class="border-bottom py-2 fixed-top navbar-light bg-light">
       <div class="container">
         <div class="d-flex justify-content-between align-items-center">
           <div class="d-flex">
@@ -17,18 +17,25 @@
             </a>
           </div>
           <nav class="ms-auto pt-2">
-            <ul class="list-unstyled d-flex">
+            <ul class="list-unstyled d-flex align-items-center mb-0">
               <li>
                 <a href="explore.html" class="text-decoration-none px-3"
                   >我要找老師</a
                 >
               </li>
               <li>
-                <a
-                  href="register.html"
-                  class="text-decoration-none px-3 text-primary fw-bold"
+                <a href="register.html" class="text-decoration-none px-3"
                   >註冊送代幣</a
                 >
+              </li>
+
+              <li id="auth-nav-item">
+                <a class="fancy" href="login.html">
+                  <span class="top-key"></span>
+                  <span class="text">登入</span>
+                  <span class="bottom-key-1"></span>
+                  <span class="bottom-key-2"></span>
+                </a>
               </li>
             </ul>
           </nav>
@@ -36,8 +43,8 @@
       </div>
     </header>
 
-    <main class="pb-5">
-      <div class="bg-line border-bottom">
+    <main class="pb-5 mt-5">
+      <div class="bg-line border-bottom pt-5">
         <h2 class="sansTitle text-center pt-5 text-drak">LOGIN</h2>
       </div>
 
