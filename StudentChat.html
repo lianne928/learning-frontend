@@ -1,150 +1,182 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Merge | 訊息中心</title>
+    <title>訊息中心 - Merge 學生後台</title>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./assets/scss/all.scss">
 </head>
+<body class="student-layout student-chat-page">
 
-<body class="student-chat-page">
-
-    <!-- ===== Hamburger (mobile only) ===== -->
-    <button class="hamburger-btn" id="hamburgerBtn" aria-label="開啟選單">
-        <span class="material-symbols-outlined">menu</span>
-    </button>
-
-    <!-- ===== 左側導覽列 ===== -->
-    <aside class="student-sidebar" id="student-sidebar">
-        <div class="student-sidebar-logo">
-            <div class="logo-icon">M</div>
-            <div class="logo-text">
-                Merge
-                <span>學生總台</span>
+    <div class="student-container">
+        
+        <!-- 左側導覽列 -->
+        <aside class="student-sidebar" id="student-sidebar">
+            <div class="student-sidebar-logo">
+                <a href="student-dashboard.html" class="d-flex align-items-center gap-3 text-decoration-none">
+                    <div>
+                        <div class="logo-text">Merge</div>
+                        <div class="logo-sub">STUDENT</div>
+                    </div>
+                </a>
             </div>
-        </div>
-         <nav class="flex-grow-1 py-2">
+
+            <nav class="student-nav">
                 <a href="student-dashboard.html" class="student-nav-link">
-                    <span class="material-symbols-outlined">grid_view</span> 控制台
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span>控制台</span>
+                </a>
+                <a href="student-courses.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">school</span>
+                    <span>學習與課程</span>
                 </a>
                 <a href="StudentChat.html" class="student-nav-link active">
-                    <span class="material-symbols-outlined">chat_bubble</span> 訊息中心
-                </a>
-                <a href="explore.html" class="student-nav-link">
-                    <span class="material-symbols-outlined">search</span> 找老師
-                </a>
-                <a href="booking.html" class="student-nav-link">
-                    <span class="material-symbols-outlined">calendar_month</span> 我的課程
-                </a>
-                <a href="student-learning-records.html" class="student-nav-link">
-                    <span class="material-symbols-outlined">history</span> 學習紀錄
+                    <span class="material-symbols-outlined">chat_bubble</span>
+                    <span>訊息中心</span>
                 </a>
                 <a href="student-credits.html" class="student-nav-link">
-                    <span class="material-symbols-outlined">account_balance_wallet</span> 儲值明細
+                    <span class="material-symbols-outlined">account_balance_wallet</span>
+                    <span>儲值與明細</span>
                 </a>
                 <a href="student-settings.html" class="student-nav-link">
-                    <span class="material-symbols-outlined">settings</span> 設定
+                    <span class="material-symbols-outlined">settings</span>
+                    <span>設定</span>
                 </a>
             </nav>
-        <div class="student-sidebar-footer" id="logout-btn">
-            <img src="https://i.pravatar.cc/38?img=5" alt="頭像" class="student-avatar" id="sidebarAvatar">
-            <div class="student-info">
-                <div class="student-name" id="sidebarName">林小明</div>
-                <div class="student-role">學生</div>
-            </div>
-            <span class="material-symbols-outlined logout-icon">logout</span>
-        </div>
-    </aside>
 
-    <!-- ===== Sidebar overlay (mobile) ===== -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-    <!-- ===== 主內容區（對話列表 + 聊天視窗）===== -->
-    <main class="chat-layout">
-
-        <!-- 中欄：對話列表 -->
-        <section class="chat-list-panel">
-            <div class="chat-list-header">
-                <h2 class="chat-list-title"><span>訊息中心</span></h2>
-            </div>
-
-            <!-- 搜尋框 -->
-            <div class="chat-search-wrap">
-                <span class="material-symbols-outlined chat-search-icon">search</span>
-                <input type="text" class="chat-search-input" placeholder="搜尋老師或科目…" id="searchInput">
-            </div>
-
-            <!-- 對話列表 -->
-            <ul class="chat-list" id="chatList"></ul>
-        </section>
-
-        <!-- 右欄：聊天視窗 -->
-        <section class="chat-window">
-            <!-- 頂部 header -->
-            <div class="chat-header" id="chatHeader">
-                <button class="chat-back-btn" id="chatBackBtn" aria-label="返回">
-                    <span class="material-symbols-outlined">arrow_back</span>
-                </button>
-                <div class="contact-avatar-wrap">
-                    <img src="https://i.pravatar.cc/44?img=47" alt="Sarah Chen" class="contact-avatar" id="headerAvatar">
+            <div class="student-sidebar-footer">
+                <div class="student-user-info">
+                    <div class="student-avatar">
+                        <span class="material-symbols-outlined">account_circle</span>
+                    </div>
+                    <div class="student-info">
+                        <div class="student-name" id="sidebar-name">學生</div>
+                        <div class="student-role">Student</div>
+                    </div>
                 </div>
-                <div class="chat-header-info">
-                    <div class="chat-header-name" id="headerName">Sarah Chen</div>
-                    <span class="subject-tag" id="headerTag">英文會話</span>
+                <button class="student-logout-btn" id="logout-btn" title="登出">
+                    <span class="material-symbols-outlined">logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <!-- 主內容區：聊天介面 -->
+        <main class="student-main chat-layout">
+
+            <!-- Hamburger 按鈕（手機版） -->
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="開啟選單">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+
+            <!-- 中欄：對話列表 -->
+            <section class="chat-list-panel">
+                <div class="chat-list-header">
+                    <h2 class="chat-list-title">訊息中心</h2>
                 </div>
-            </div>
 
-            <!-- 訊息區 -->
-            <div class="chat-messages" id="chatMessages">
-                <!-- 訊息由 JS 動態渲染 -->
-            </div>
+                <!-- 搜尋框 -->
+                <div class="chat-search-wrap">
+                    <span class="material-symbols-outlined chat-search-icon">search</span>
+                    <input type="text" class="chat-search-input" placeholder="搜尋老師或科目…" id="searchInput">
+                </div>
 
-            <!-- 輸入列 -->
-            <div class="chat-input-bar">
-                <button class="attach-btn" title="附件">
-                    <span class="material-symbols-outlined">attach_file</span>
-                </button>
-                <input type="file" id="fileInput" style="display:none" accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.zip">
-                <input type="text" class="chat-input" id="msgInput"
-                    placeholder="輸入訊息… (Enter 送出、Shift+Enter 換行)">
-                <button class="send-btn" id="sendBtn">
-                    <span class="material-symbols-outlined">send</span>
-                </button>
-            </div>
-        </section>
+                <!-- 對話列表 -->
+                <ul class="chat-list" id="chatList">
+                    <!-- JS 動態渲染 -->
+                </ul>
+            </section>
 
-    </main>
+            <!-- 右欄：聊天視窗 -->
+            <section class="chat-window">
+                <!-- 頂部 header -->
+                <div class="chat-header" id="chatHeader">
+                    <button class="chat-back-btn" id="chatBackBtn" aria-label="返回">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <div class="contact-avatar-wrap">
+                        <img src="https://i.pravatar.cc/44?img=47" alt="老師" class="contact-avatar" id="headerAvatar">
+                    </div>
+                    <div class="chat-header-info">
+                        <div class="chat-header-name" id="headerName">選擇對話</div>
+                        <span class="subject-tag" id="headerTag"></span>
+                    </div>
+                </div>
+
+                <!-- 訊息區 -->
+                <div class="chat-messages" id="chatMessages">
+                    <!-- JS 動態渲染 -->
+                    <div class="empty-state">
+                        <span class="material-symbols-outlined">chat</span>
+                        <p>選擇一個對話開始聊天</p>
+                    </div>
+                </div>
+
+                <!-- 輸入列 -->
+                <div class="chat-input-bar">
+                    <button class="attach-btn" id="attachBtn" title="附件">
+                        <span class="material-symbols-outlined">attach_file</span>
+                    </button>
+                    <input type="file" id="fileInput" style="display:none" accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.zip">
+                    <input type="text" class="chat-input" id="msgInput" placeholder="輸入訊息… (Enter 送出、Shift+Enter 換行)">
+                    <button class="send-btn" id="sendBtn">
+                        <span class="material-symbols-outlined">send</span>
+                    </button>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./assets/js/navbar.js"></script>
+    <script src="./assets/js/student-layout.js"></script>
     <script src="./assets/js/StudentChat.js"></script>
+
     <script>
-        // RWD interactions
+        // RWD 互動
         const hamburgerBtn = document.getElementById('hamburgerBtn');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
         const chatBackBtn = document.getElementById('chatBackBtn');
+        const attachBtn = document.getElementById('attachBtn');
+        const fileInput = document.getElementById('fileInput');
 
-        hamburgerBtn.addEventListener('click', () => {
-            document.body.classList.toggle('sidebar-open');
-        });
+        // Hamburger 開啟 sidebar
+        if (hamburgerBtn) {
+            hamburgerBtn.addEventListener('click', () => {
+                document.getElementById('student-sidebar').classList.add('show');
+                document.getElementById('sidebar-overlay').classList.add('show');
+            });
+        }
 
-        sidebarOverlay.addEventListener('click', () => {
-            document.body.classList.remove('sidebar-open');
-        });
+        // 返回對話列表（手機版）
+        if (chatBackBtn) {
+            chatBackBtn.addEventListener('click', () => {
+                document.body.classList.remove('mobile-show-chat');
+            });
+        }
 
-        chatBackBtn.addEventListener('click', () => {
-            document.body.classList.remove('mobile-show-chat');
-        });
+        // 附件按鈕
+        if (attachBtn) {
+            attachBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+        }
 
-        document.getElementById('chatList').addEventListener('click', (e) => {
-            if (window.innerWidth < 576) {
+        // 點擊對話項目時，手機版顯示聊天視窗
+        document.getElementById('chatList')?.addEventListener('click', (e) => {
+            if (window.innerWidth < 768) {
                 document.body.classList.add('mobile-show-chat');
             }
         });
     </script>
-</body>
 
+</body>
 </html>

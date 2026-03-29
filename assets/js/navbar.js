@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           </a>
           <a href="#" onclick="navLogout()" class="text-decoration-none px-3 pe-0 text-danger fw-bold">登出</a>
         `;
+        // navbar.js 第 33-60 行修改部分
+
       } else if (role === "STUDENT") {
         // 學生 - 檢查是否有申請老師（審核中）
         try {
@@ -57,7 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           if (tutorStatus === 1) {
             // 審核中 (status = 1)
             authNavItem.innerHTML = `
-              <span class="text-primary fw-bold px-3">👋 ${name}</span>
+              <a href="student-dashboard.html" class="text-decoration-none px-3 text-primary fw-bold">👋 ${name}</a>
               <span class="badge bg-warning text-dark px-3 py-2 fw-bold" style="font-size: 0.9em;">
                 ⏳ 審核中
               </span>
@@ -66,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           } else if (tutorStatus === 2) {
             // 已核准但 role 還沒更新 - 提示重新登入
             authNavItem.innerHTML = `
-              <span class="text-primary fw-bold px-3">👋 ${name}</span>
+              <a href="student-dashboard.html" class="text-decoration-none px-3 text-primary fw-bold">👋 ${name}</a>
               <a href="#" onclick="navReloadAuth()" class="badge bg-success text-white px-3 py-2 fw-bold text-decoration-none" style="font-size: 0.9em;">
                 ✅ 已核准，點此更新
               </a>
@@ -75,7 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           } else if (tutorStatus === 3) {
             // 停權 (status = 3)
             authNavItem.innerHTML = `
-              <span class="text-primary fw-bold px-3">👋 ${name}</span>
+              <a href="student-dashboard.html" class="text-decoration-none px-3 text-primary fw-bold">👋 ${name}</a>
               <span class="badge bg-danger text-white px-3 py-2 fw-bold" style="font-size: 0.9em;">
                 ❌ 已停權
               </span>
@@ -87,14 +89,14 @@ document.addEventListener("DOMContentLoaded", async () => {
           // 顯示「成為老師」
           if (error.response && error.response.status === 404) {
             authNavItem.innerHTML = `
-              <span class="text-primary fw-bold px-3">👋 ${name}</span>
+              <a href="student-dashboard.html" class="text-decoration-none px-3 text-primary fw-bold">👋 ${name}</a>
               <a href="become-tutor.html" class="text-decoration-none px-3 text-info fw-bold">成為老師</a>
               <a href="#" onclick="navLogout()" class="text-decoration-none px-3 pe-0 text-danger fw-bold">登出</a>
             `;
           } else {
             // 其他錯誤（網路問題等）- 顯示基本資訊
             authNavItem.innerHTML = `
-              <span class="text-primary fw-bold px-3">👋 ${name}</span>
+              <a href="student-dashboard.html" class="text-decoration-none px-3 text-primary fw-bold">👋 ${name}</a>
               <a href="#" onclick="navLogout()" class="text-decoration-none px-3 pe-0 text-danger fw-bold">登出</a>
             `;
           }

@@ -58,14 +58,14 @@ $utilities: map-merge(
 @import "./components/booking";
 @import "./components/teacher-layout";
 @import "./components/teacher-schedule";
-@import "./components/student-layout";
 @import "./components/teacher-reviews.scss";
 @import "./components/teacher-courses.scss";
 @import "./components/teacher-settings";
 @import "./components/video-room";
 @import "./components/index";
-@import "./components/student-chat";
 @import "./components/teacher-chat";
 @import "./components/loginbtn";
 @import "./components/explore";
 @import "./components/admin-dashboard";
+@import "./components/student-layout";
+@import "./components/student-chat";

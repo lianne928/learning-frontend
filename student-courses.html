@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>設定 - Merge 學生後台</title>
+    <title>學習與課程 - Merge 學生後台</title>
     
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
                     <span class="material-symbols-outlined">dashboard</span>
                     <span>控制台</span>
                 </a>
-                <a href="student-courses.html" class="student-nav-link">
+                <a href="student-courses.html" class="student-nav-link active">
                     <span class="material-symbols-outlined">school</span>
                     <span>學習與課程</span>
                 </a>
@@ -41,7 +41,7 @@
                     <span class="material-symbols-outlined">account_balance_wallet</span>
                     <span>儲值與明細</span>
                 </a>
-                <a href="student-settings.html" class="student-nav-link active">
+                <a href="student-settings.html" class="student-nav-link">
                     <span class="material-symbols-outlined">settings</span>
                     <span>設定</span>
                 </a>
@@ -71,73 +71,42 @@
             <!-- 頁面標題 -->
             <div class="page-header">
                 <div>
-                    <h1 class="page-title">設定</h1>
-                    <p class="page-desc">管理您的個人資料</p>
+                    <h1 class="page-title">學習與課程</h1>
+                    <p class="page-desc">管理您的所有課程</p>
                 </div>
                 <button class="btn-mobile-menu" id="sidebar-toggle">
                     <span class="material-symbols-outlined">menu</span>
                 </button>
             </div>
 
-            <!-- 個人資料卡片 -->
-            <div class="content-card mb-4">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <span class="material-symbols-outlined">person</span>
-                        個人資料
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <form id="profile-form">
-                        <div class="mb-3">
-                            <label class="form-label">姓名</label>
-                            <input type="text" class="form-control" id="input-name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" id="input-email" disabled>
-                            <small class="text-muted">Email 無法修改</small>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">生日（選填）</label>
-                            <input type="date" class="form-control" id="input-birthday">
-                        </div>
-                        <button type="submit" class="btn-primary-custom">
-                            <span class="material-symbols-outlined">save</span>
-                            儲存變更
-                        </button>
-                    </form>
-                </div>
+            <!-- 篩選標籤 -->
+            <div class="filter-tabs mb-4">
+                <button class="filter-tab active" data-filter="all">
+                    <span class="material-symbols-outlined">grid_view</span>
+                    全部課程
+                </button>
+                <button class="filter-tab" data-filter="ongoing">
+                    <span class="material-symbols-outlined">play_circle</span>
+                    進行中
+                </button>
+                <button class="filter-tab" data-filter="completed">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    已完成
+                </button>
+                <button class="filter-tab" data-filter="upcoming">
+                    <span class="material-symbols-outlined">schedule</span>
+                    即將開始
+                </button>
             </div>
 
-            <!-- 修改密碼卡片 -->
-            <div class="content-card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <span class="material-symbols-outlined">lock</span>
-                        修改密碼
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <form id="password-form">
-                        <div class="mb-3">
-                            <label class="form-label">目前密碼</label>
-                            <input type="password" class="form-control" id="input-current-password" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">新密碼</label>
-                            <input type="password" class="form-control" id="input-new-password" required minlength="8">
-                            <small class="text-muted">至少 8 個字元</small>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">確認新密碼</label>
-                            <input type="password" class="form-control" id="input-confirm-password" required>
-                        </div>
-                        <button type="submit" class="btn-primary-custom">
-                            <span class="material-symbols-outlined">key</span>
-                            更新密碼
-                        </button>
-                    </form>
+            <!-- 課程列表 -->
+            <div id="courses-list" class="courses-grid">
+                <!-- JS 動態渲染 -->
+                <div class="loading-state">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">載入中...</span>
+                    </div>
+                    <p>載入課程中...</p>
                 </div>
             </div>
 
@@ -149,7 +118,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./assets/js/navbar.js"></script>
     <script src="./assets/js/student-layout.js"></script>
-    <script src="./assets/js/student-settings.js"></script>
+    <script src="./assets/js/student-courses.js"></script>
 
 </body>
 </html>

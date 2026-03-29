@@ -1,16 +1,12 @@
 // ==========================================
-// 學生訊息中心邏輯 (StudentChat.js)
-// 串接後端 REST API + WebSocket (STOMP)
+// 學生訊息中心 - 純 HTTP 版本（最終版）
+// 移除所有 WebSocket 相關代碼
 // ==========================================
 
-const BASE_URL = '';                        // 相對路徑，走 Vite proxy
-const WS_BASE_URL = 'http://localhost:8080'; // WebSocket 需要絕對路徑
+const BASE_URL = '';
 
-let conversations = [];      // { bookingId (=orderId), bookingRecordId, bookingIds[], bookingRecordIds[], participantId, participantName, avatar, subject, lastMessage, time, unread }
+let conversations = [];
 let currentBookingId = null;
-let stompClient = null;
-let stompSubscription = null;
-let stompErrorSubscription = null;
 
 // ── Helpers ──────────────────────────────
 
@@ -101,101 +97,69 @@ async function loadConversations() {
         window.location.href = 'login.html';
         return;
     }
+
     try {
-        const res = await axios.get(`${BASE_URL}/api/student/bookings`, {
+        const res = await axios.get(`${BASE_URL}/api/chatMessage/conversations`, {
             headers: authHeaders()
         });
-        const bookings = res.data;
 
-        // 只顯示非已取消狀態的預約，並行取老師資訊
-        const active = bookings.filter(b => b.status !== 3);
-        const tutorCache = {};
+        const raw = res.data || [];
 
-        const convList = (await Promise.all(active.map(async b => {
-            if (!b.orderId) {
-                console.warn('預約缺少 orderId，無法建立聊天對話', b);
-                return null;
-            }
+        conversations = raw.map(item => ({
+            bookingId: item.orderId,
+            bookingRecordId: item.bookingRecordId,
+            bookingIds: item.bookingIds || [],
+            bookingRecordIds: item.bookingRecordIds || [],
+            participantId: item.participantId,
+            participantName: item.participantName || '未命名',
+            avatar: convertGoogleDriveUrl(item.avatar),
+            subject: item.subject || '',
+            lastMessage: item.lastMessage || '',
+            time: formatTime(item.lastMessageTime),
+            unread: item.unread || 0
+        }));
 
-            const tutorId = b.tutorId;
-            if (tutorId && !tutorCache[tutorId]) {
-                try {
-                    const tr = await axios.get(`${BASE_URL}/api/tutor/${tutorId}`, {
-                        headers: authHeaders()
-                    });
-                    tutorCache[tutorId] = tr.data;
-                } catch {
-                    tutorCache[tutorId] = { name: '老師', avatar: '' };
-                }
-            }
-            const tutor = tutorId ? (tutorCache[tutorId] || { name: '老師', avatar: '' }) : { name: '老師', avatar: '' };
-            return {
-                bookingId: b.orderId,
-                bookingRecordId: b.id,
-                participantId: tutorId,
-                participantName: tutor.name || tutor.tutorName || '老師',
-                subject: b.courseName || '',
-                avatar: resolveMediaUrl(convertGoogleDriveUrl(tutor.avatar)),
-                lastMessage: '',
-                time: b.date || '',
-                unread: 0
-            };
-        }))).filter(Boolean);
+        renderChatList('');
 
-        // 依 participantId + courseName 分組，同一課程只顯示一個聯絡人
-        const groupMap = new Map();
-        for (const c of convList) {
-            const key = `${c.participantId}::${c.subject}`;
-            if (!groupMap.has(key)) {
-                groupMap.set(key, {
-                    ...c,
-                    bookingIds: [c.bookingId],
-                    bookingRecordIds: [c.bookingRecordId]
-                });
-            } else {
-                const g = groupMap.get(key);
-                g.bookingIds.push(c.bookingId);
-                g.bookingRecordIds.push(c.bookingRecordId);
-                if (c.time > g.time) {
-                    g.bookingId = c.bookingId;
-                    g.bookingRecordId = c.bookingRecordId;
-                    g.time = c.time;
-                }
-            }
-        }
-        conversations = [...groupMap.values()].sort((a, b) => (b.time > a.time ? 1 : -1));
-        renderChatList();
-
-        const bid = getBookingIdFromQuery();
-        if (bid) {
-            const conv = conversations.find(c =>
-                c.bookingIds.includes(bid) || c.bookingRecordIds.includes(bid)
-            );
-            if (conv) selectConversation(conv.bookingId);
-            else if (conversations.length > 0) selectConversation(conversations[0].bookingId);
+        const targetId = getBookingIdFromQuery();
+        if (targetId) {
+            selectConversation(targetId);
         } else if (conversations.length > 0) {
             selectConversation(conversations[0].bookingId);
         }
     } catch (err) {
         console.error('載入對話列表失敗', err);
+        if (err.response?.status === 401) {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
     }
 }
 
 // ── 渲染對話列表 ──────────────────────────
 
-function renderChatList(filter = '') {
+function renderChatList(keyword) {
     const list = document.getElementById('chatList');
-    const filtered = conversations.filter(c =>
-        c.participantName.toLowerCase().includes(filter.toLowerCase()) ||
-        c.subject.includes(filter)
-    );
+    if (!list) return;
+
+    const filtered = keyword.trim()
+        ? conversations.filter(c =>
+            (c.participantName || '').toLowerCase().includes(keyword.toLowerCase()) ||
+            (c.subject || '').toLowerCase().includes(keyword.toLowerCase())
+        )
+        : conversations;
+
+    if (filtered.length === 0) {
+        list.innerHTML = '<li class="empty-state">沒有對話</li>';
+        return;
+    }
 
     list.innerHTML = filtered.map(c => `
         <li class="chat-item ${c.bookingId === currentBookingId ? 'active' : ''}" data-id="${c.bookingId}">
-            <div class="contact-avatar-wrap">
-                <img src="${c.avatar}" alt="${escapeHtml(c.participantName)}" class="contact-avatar">
+            <div class="chat-item-avatar">
+                <img src="${c.avatar}" alt="${escapeHtml(c.participantName)}">
             </div>
-            <div class="chat-item-body">
+            <div class="chat-item-content">
                 <div class="chat-item-top">
                     <span class="contact-name">${escapeHtml(c.participantName)}</span>
                     <span class="contact-time">${escapeHtml(c.time)}</span>
@@ -219,7 +183,7 @@ function renderChatList(filter = '') {
 // ── 渲染訊息 ──────────────────────────────
 
 function buildMsgHtml(m, conv) {
-    const isMe = m.role === 'student';
+    const isMe = m.role === 1;
     const timeStr = formatTime(m.createdAt);
     let content = '';
 
@@ -286,7 +250,6 @@ async function selectConversation(bookingId) {
     const conv = conversations.find(c => c.bookingId === bookingId);
     if (!conv) return;
 
-    // 更新 header
     const headerAvatar = document.getElementById('headerAvatar');
     const headerName = document.getElementById('headerName');
     const headerTag = document.getElementById('headerTag');
@@ -297,93 +260,46 @@ async function selectConversation(bookingId) {
     renderChatList(document.getElementById('searchInput').value);
 
     try {
-        const res = await axios.get(`${BASE_URL}/api/chatMessage/booking/${bookingId}`, {
-            headers: authHeaders()
-        });
-        const messages = res.data;
-        renderMessages(messages, conv);
-
-        if (messages.length > 0) {
-            const last = messages[messages.length - 1];
-            conv.lastMessage = last.message || '';
-            conv.time = formatTime(last.createdAt);
-            renderChatList(document.getElementById('searchInput').value);
+        let messages = [];
+        
+        if (conv.bookingIds && conv.bookingIds.length > 0) {
+            const orderIdsParam = conv.bookingIds.join(',');
+            const res = await axios.get(`${BASE_URL}/api/chatMessage/orders?ids=${orderIdsParam}`, {
+                headers: authHeaders()
+            });
+            messages = res.data || [];
+        } else {
+            const res = await axios.get(`${BASE_URL}/api/chatMessage/booking/${bookingId}`, {
+                headers: authHeaders()
+            });
+            messages = res.data || [];
         }
+        
+        renderMessages(messages, conv);
+        conv.unread = 0;
+        renderChatList(document.getElementById('searchInput').value);
     } catch (err) {
         console.error('載入訊息失敗', err);
     }
-
-    connectWebSocket(bookingId);
 }
 
-// ── WebSocket / STOMP ─────────────────────
-
-function connectWebSocket(bookingId) {
-    if (stompSubscription) {
-        stompSubscription.unsubscribe();
-        stompSubscription = null;
-    }
-
-    if (stompErrorSubscription) {
-        stompErrorSubscription.unsubscribe();
-        stompErrorSubscription = null;
-    }
-
-    if (stompClient && stompClient.active) {
-        subscribeBooking(bookingId);
-        return;
-    }
-
-    if (stompClient) {
-        try { stompClient.deactivate(); } catch { }
-    }
-
-    const jwt = getJwt();
-    stompClient = new StompJs.Client({
-        webSocketFactory: () => new SockJS(`${WS_BASE_URL}/ws`),
-        connectHeaders: { Authorization: 'Bearer ' + jwt },
-        reconnectDelay: 5000,
-        onConnect: () => subscribeBooking(bookingId),
-        onStompError: err => console.error('WebSocket 連線失敗', err)
-    });
-    stompClient.activate();
-}
-
-function subscribeBooking(bookingId) {
-    stompSubscription = stompClient.subscribe(
-        `/topic/room/${bookingId}/chat`,
-        frame => {
-            const msg = JSON.parse(frame.body);
-            // 避免重複顯示自己送出的訊息
-            if (msg.role !== 'student') {
-                appendMessage(msg);
-            }
-        }
-    );
-
-    stompErrorSubscription = stompClient.subscribe(
-        `/topic/room/${bookingId}/errors`,
-        frame => {
-            try {
-                const error = JSON.parse(frame.body);
-                console.error('聊天室訊息儲存失敗', error);
-            } catch {
-                console.error('聊天室訊息儲存失敗', frame.body);
-            }
-        }
-    );
-}
-
-// ── 傳送訊息 ──────────────────────────────
+// ── 傳送訊息（純 HTTP）──────────────────────────────
 
 async function sendMessage() {
     const input = document.getElementById('msgInput');
     const text = input.value.trim();
     if (!text || !currentBookingId) return;
 
+    const conv = conversations.find(c => c.bookingId === currentBookingId);
+    if (!conv) return;
+
+    const actualBookingId = (conv.bookingIds && conv.bookingIds.length > 0) 
+        ? conv.bookingIds[conv.bookingIds.length - 1]
+        : currentBookingId;
+
     const payload = {
-        bookingId: currentBookingId,
-        role: 'student',
+        bookingId: actualBookingId,
+        role: 1,
         messageType: 1,
         message: text,
         mediaUrl: null
@@ -393,14 +309,13 @@ async function sendMessage() {
     appendMessage({ ...payload, createdAt: now });
     input.value = '';
 
-    if (stompClient && stompClient.connected) {
-        stompClient.send(`/app/chat/${currentBookingId}`, {}, JSON.stringify(payload));
-    } else {
-        try {
-            await axios.post(`${BASE_URL}/api/chatMessage`, payload, { headers: authHeaders() });
-        } catch (err) {
-            console.error('傳送訊息失敗', err);
-        }
+    try {
+        await axios.post(`${BASE_URL}/api/chatMessage`, payload, { 
+            headers: authHeaders() 
+        });
+    } catch (err) {
+        console.error('傳送訊息失敗', err);
+        alert('傳送失敗：' + (err.response?.data?.message || err.message));
     }
 }
 
@@ -417,17 +332,23 @@ function detectLocalType(file) {
 async function uploadFile(file) {
     if (!file || !currentBookingId) return;
 
+    const conv = conversations.find(c => c.bookingId === currentBookingId);
+    if (!conv) return;
+
+    const actualBookingId = (conv.bookingIds && conv.bookingIds.length > 0) 
+        ? conv.bookingIds[conv.bookingIds.length - 1]
+        : currentBookingId;
+
     const fileInput = document.getElementById('fileInput');
     fileInput.disabled = true;
 
     const localType = detectLocalType(file);
     const blobUrl = URL.createObjectURL(file);
     const tempId = 'upload-preview-' + Date.now();
-    const conv = conversations.find(c => c.bookingId === currentBookingId);
     const msgArea = document.getElementById('chatMessages');
 
     const previewMsg = {
-        role: 'student',
+        role: 1,
         messageType: localType,
         mediaUrl: blobUrl,
         message: file.name,
@@ -441,94 +362,63 @@ async function uploadFile(file) {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('bookingId', currentBookingId);
-    formData.append('role', 'student');
+    formData.append('bookingId', actualBookingId);
+    formData.append('role', 1);
     formData.append('message', '');
 
     try {
         const res = await axios.post(`${BASE_URL}/api/chatMessage/upload`, formData, {
             headers: { 'Authorization': 'Bearer ' + getJwt() }
         });
-        const el = document.getElementById(tempId);
-        if (el) el.remove();
-        appendMessage(res.data);
+
+        const msg = res.data;
+        const tempDiv = document.getElementById(tempId);
+        if (tempDiv) tempDiv.remove();
+
+        appendMessage(msg);
+        fileInput.value = '';
+        fileInput.disabled = false;
     } catch (err) {
-        const status = err.response?.status;
-        const msg = err.response?.data?.message ?? err.message;
-        console.error(`上傳失敗 [${status ?? 'no response'}]`, msg, err);
-        const el = document.getElementById(tempId);
-        if (el) el.remove();
-        msgArea.insertAdjacentHTML('beforeend',
-            '<div class="msg-upload-error">⚠️ 檔案上傳失敗，請重試。</div>');
-        scrollToBottom();
-    } finally {
-        URL.revokeObjectURL(blobUrl);
+        console.error('上傳失敗', err);
+        alert('上傳失敗，請重試。');
+        const tempDiv = document.getElementById(tempId);
+        if (tempDiv) tempDiv.remove();
         fileInput.disabled = false;
     }
 }
 
-// ── Sidebar 使用者資訊 ────────────────────
-
-function populateSidebarUser() {
-    const name = localStorage.getItem('userName');
-    if (name) {
-        const el = document.getElementById('sidebarName');
-        if (el) el.textContent = name;
-    }
-}
-
-// ── 初始化 ────────────────────────────────
+// ── 初始化 ──────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 401/403 自動跳轉登入頁
-    axios.interceptors.response.use(
-        res => res,
-        err => {
-            if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-                ['jwt_token', 'userId', 'userRole', 'userName'].forEach(k => localStorage.removeItem(k));
-                window.location.href = 'login.html';
-            }
-            return Promise.reject(err);
-        }
-    );
-
-    if (!getJwt()) {
-        window.location.href = 'login.html';
-        return;
-    }
-
-    populateSidebarUser();
     loadConversations();
 
-    document.getElementById('searchInput').addEventListener('input', e => {
-        renderChatList(e.target.value);
-    });
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            renderChatList(e.target.value);
+        });
+    }
 
-    document.getElementById('sendBtn').addEventListener('click', sendMessage);
+    const sendBtn = document.getElementById('sendBtn');
+    if (sendBtn) {
+        sendBtn.addEventListener('click', sendMessage);
+    }
 
-    document.getElementById('msgInput').addEventListener('keydown', e => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
+    const msgInput = document.getElementById('msgInput');
+    if (msgInput) {
+        msgInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    }
 
-    document.querySelector('.attach-btn').addEventListener('click', () => {
-        document.getElementById('fileInput').click();
-    });
-
-    document.getElementById('fileInput').addEventListener('change', e => {
-        const file = e.target.files[0];
-        if (file) {
-            uploadFile(file);
-            e.target.value = '';
-        }
-    });
-
-    document.getElementById('logout-btn').addEventListener('click', () => {
-        if (confirm('確定要登出嗎？')) {
-            ['jwt_token', 'userId', 'userRole', 'userName'].forEach(k => localStorage.removeItem(k));
-            window.location.href = 'login.html';
-        }
-    });
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) {
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) uploadFile(file);
+        });
+    }
 });

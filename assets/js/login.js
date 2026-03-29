@@ -51,14 +51,6 @@ document
         }
 
         // 依角色跳轉
-        if (payload.role === 'TUTOR') {
-          window.location.href = "teacher-dashboard.html";
-        } else if (payload.role === 'ADMIN') {
-          window.location.href = "index.html";
-        } else {
-          window.location.href = "index.html";
-        }
-        // 依角色跳轉
         if (payload.role === 'ADMIN') {
           window.location.href = "admin-dashboard.html";
         } else {
