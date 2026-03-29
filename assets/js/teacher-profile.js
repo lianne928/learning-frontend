@@ -35,6 +35,17 @@ function convertGoogleDriveUrl(url) {
   return url;
 }
 
+// ── 判斷是否為 Google Drive 影片連結 ──
+function isGoogleDriveUrl(url) {
+  return url && (url.includes("drive.google.com") || url.includes("docs.google.com"));
+}
+
+// ── 將任意影片 URL 轉為可嵌入的 embed URL（僅限 Google Drive）──
+function toGoogleDriveEmbedUrl(url) {
+  const match = url.match(/[/]d[/]([a-zA-Z0-9_-]+)/);
+  return match ? `https://drive.google.com/file/d/${match[1]}/preview` : url;
+}
+
 // ==========================================
 // API 1：取得老師個人資料
 // ==========================================
@@ -226,33 +237,56 @@ function renderCarousel(avatar) {
 }
 
 // ── 影片獨立區塊 ──
+// 支援兩種來源：
+//   1. Google Drive 連結  → 用 <iframe> 嵌入 preview
+//   2. 本地伺服器 URL     → 用 <video> 標籤直接播放
 function renderVideos(url1, url2) {
-    const container = document.getElementById("videos-container");
-    if (!container) return;
+  const container = document.getElementById("videos-container");
+  if (!container) return;
 
-    const videos = [url1, url2].filter(Boolean);
-    if (videos.length === 0) {
-        container.innerHTML = "";
-        return;
+  const videos = [url1, url2].filter(Boolean);
+  if (videos.length === 0) {
+    container.innerHTML = "";
+    return;
+  }
+
+  const labels = ["自我介紹影片", "教學示範影片"];
+
+  container.innerHTML = videos.map((url, i) => {
+    const label = labels[i];
+
+    if (isGoogleDriveUrl(url)) {
+      // ── Google Drive：轉成 embed URL，用 <iframe> 播放 ──
+      const embedUrl = toGoogleDriveEmbedUrl(url);
+      return `
+        <div class="mb-2">
+          <p class="fw-bold mb-1 nunito" style="font-size:0.9rem;">▶ ${label}</p>
+          <div style="border:2px solid #464646; border-radius:12px; overflow:hidden; height:300px;">
+            <iframe src="${embedUrl}" width="100%" height="300"
+              frameborder="0" allowfullscreen allow="autoplay">
+            </iframe>
+          </div>
+        </div>
+      `;
+    } else {
+      // ── 本地伺服器 / 一般 URL：用 <video> 標籤直接播放 ──
+      return `
+        <div class="mb-2">
+          <p class="fw-bold mb-1 nunito" style="font-size:0.9rem;">▶ ${label}</p>
+          <div style="border:2px solid #464646; border-radius:12px; overflow:hidden;">
+            <video
+              src="${url}"
+              controls
+              preload="metadata"
+              style="width:100%; height:300px; object-fit:contain; background:#000; display:block;"
+            >
+              您的瀏覽器不支援影片播放，請更新瀏覽器。
+            </video>
+          </div>
+        </div>
+      `;
     }
-
-    container.innerHTML = videos.map((url, i) => {
-        const match = url.match(/[/]d[/]([a-zA-Z0-9_-]+)/);
-        const embedUrl = match
-            ? `https://drive.google.com/file/d/${match[1]}/preview`
-            : url;
-        const label = i === 0 ? "自我介紹影片" : "教學示範影片";
-        return `
-            <div class="mb-2">
-                <p class="fw-bold mb-1 nunito" style="font-size:0.9rem;">▶ ${label}</p>
-                <div style="border:2px solid #464646; border-radius:12px; overflow:hidden; height:300px;">
-                    <iframe src="${embedUrl}" width="100%" height="300"
-                        frameborder="0" allowfullscreen allow="autoplay">
-                    </iframe>
-                </div>
-            </div>
-        `;
-    }).join("");
+  }).join("");
 }
 
 // ── 課表 ──
