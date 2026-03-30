@@ -81,7 +81,7 @@ async function booking() {
         axios.get(`/api/tutor/schedules/${tutorId}`),
         axios.get(`/api/shop/course/${courseId}/futurebookings`),
         axios.get(`/api/shop/me/futurebookings`),
-        axios.get(`/api/me/wallet`),   // 可選：若無此 API 忽略
+        axios.get(`/api/users/me`),   // 可選：若無此 API 忽略
       ]);
 
     // ── 課程資訊 ──
