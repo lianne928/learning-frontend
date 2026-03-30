@@ -10,9 +10,7 @@
 
   <body>
     <!-- Toast 容器 -->
-    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999" id="toastContainer"></div>
-
-    <header class="border-bottom py-2">
+    <header class="border-bottom py-2 fixed-top navbar-light bg-light">
       <div class="container">
         <div class="d-flex justify-content-between align-items-center">
           <div class="d-flex">
@@ -23,11 +21,24 @@
           <nav class="ms-auto pt-2">
             <ul class="list-unstyled d-flex align-items-center mb-0">
               <li>
+<<<<<<< HEAD
                 <a href="explore.html" class="text-decoration-none px-3">我要找老師</a>
               </li>
               <li>
                 <a href="#" class="text-decoration-none px-3">註冊送代幣</a>
               </li>
+=======
+                <a href="explore.html" class="text-decoration-none px-3"
+                  >我要找老師</a
+                >
+              </li>
+              <li>
+                <a href="register.html" class="text-decoration-none px-3"
+                  >註冊送代幣</a
+                >
+              </li>
+
+>>>>>>> dd179b1 (feat: update hero section content for booking system)
               <li id="auth-nav-item">
                 <a class="fancy" href="login.html">
                   <span class="top-key"></span>
@@ -42,8 +53,8 @@
       </div>
     </header>
 
-    <main class="pb-5">
-      <div class="bg-line border-bottom">
+    <main class="pb-5 mt-5">
+      <div class="bg-line border-bottom pt-5">
         <h2 class="sansTitle text-center pt-5 text-drak">REGISTER</h2>
       </div>
 
@@ -122,7 +133,9 @@
 
                 <!-- 生日 -->
                 <div class="mb-4">
-                  <label for="birthdayInput" class="form-label">生日（選填）</label>
+                  <label for="birthdayInput" class="form-label"
+                    >生日（選填）</label
+                  >
                   <input type="date" class="form-control" id="birthdayInput" />
                   <div class="form-text">💡 註冊後可以申請成為老師開課教學</div>
                 </div>

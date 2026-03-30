@@ -24,7 +24,9 @@
                 >
               </li>
               <li>
-                <a href="#" class="text-decoration-none px-3">註冊送代幣</a>
+                <a href="register.html" class="text-decoration-none px-3"
+                  >註冊送代幣</a
+                >
               </li>
 
               <li id="auth-nav-item">
@@ -104,7 +106,7 @@
             <li>
               <a
                 href="./explore.html"
-                class="d-flex align-items-center justify-content-center rounded-pill px-5 py-2 bg-success text-decoration-none text-dark"
+                class="cta-glow-shadow d-flex align-items-center justify-content-center rounded-pill px-5 py-2 bg-success text-decoration-none text-dark"
               >
                 <p
                   class="mb-0 fw-bold fst-italic text-center"
@@ -133,11 +135,11 @@
             </li>
           </ul>
           <div
-            class="my-5 mb-4 border border-dark border-2 rounded-5 p-5 bg-white shadow-sm bg-dark"
+            class="my-5 border border-dark border-2 rounded-5 p-5 bg-dark d-flex flex-column"
             style="min-height: 420px"
           >
             <div class="row position-relative">
-              <div class="col-12 col-lg-7 text-dark">
+              <div class="col-12 col-lg-7 text-light">
                 <h3 class="display-4 tilt-warp">LEARNING ✦</h3>
                 <h5>英文 | 從選對課開始</h5>
                 <p class="mt-4">
@@ -146,11 +148,14 @@
                   不論是英檢準備、能力培養，還是實際應用提升，<br />
                   都能更有效率地開始。
                 </p>
-
-                <div class="row"></div>
               </div>
-              <div class="col"></div>
             </div>
+            <a
+              href="explore.html"
+              class="btn btn-success cta-glow-shadow d-block d-md-none text-start border-0 px-5 py-3 text-decoration-none mt-auto"
+            >
+              立即預約試聽課程
+            </a>
           </div>
         </div>
       </section>
@@ -164,7 +169,7 @@
           </div>
         </div>
 
-        <div class="container py-5">
+        <div class="container pt-3">
           <!-- teacher card start -->
           <div id="teacher-card-container">
             <div class="col-12 text-center py-5 text-muted">
@@ -184,7 +189,10 @@
           <div class="w-25 bg-primary rounded-pill" style="height: 900px"></div>
         </div>
         <div class="container">
-          <div class="text-light z-1 position-absolute top-50">
+          <div
+            class="text-light z-1 position-absolute mt-5 pt-5"
+            style="top: 250px"
+          >
             <h2 class="display-1 sansTitle d-inline-block pb-4">
               What to learn more
               <br />
@@ -193,38 +201,100 @@
               <div class="d-inline-block">✦</div>
             </h2>
             <p>
-              提供基礎程以及證照等專業課程。不管你在找的是針對檢定考試的課程，還是透過紮實課程提升實力的基礎課程
-              、進階課程
-              、高階課程等，我們都可以滿足你的需求，並提供最即時的學生評價回饋數據，供您參考選擇。
+              提供全方位基礎與證照專業課程。無論您在尋找檢定衝刺、實力培植基礎課，或是高階進修計畫，我們都能滿足您的學習需求，並輔以即時學員評價，助您精準選擇最適合的課程。
             </p>
 
             <div class="z-1">
-              <button type="button" class="btn btn-success border border-1 p-3">
-                <p class="mb-0 px-5 nunito">GEPT</p>
-              </button>
-              <button type="button" class="btn btn-success border border-1 p-3">
-                <p class="mb-0 px-5 nunito">TOEIC</p>
-              </button>
-              <button type="button" class="btn btn-success border border-1 p-3">
-                <p class="mb-0 px-5 nunito">TOEFL</p>
-              </button>
-              <button type="button" class="btn btn-success border border-1 p-3">
-                <p class="mb-0 px-5 nunito">TOEFL</p>
-              </button>
-              <button type="button" class="btn btn-success border border-1 p-3">
-                <p class="mb-0 px-5 nunito">TOEFL</p>
-              </button>
-              <button type="button" class="btn btn-success border border-1 p-3">
-                <p class="mb-0 px-5 nunito">TOEFL</p>
-              </button>
+              <div class="row">
+                <button
+                  type="button"
+                  class="col btn btn-success border border-1 p-3"
+                >
+                  <p class="mb-0 px-5 nunito">全民英檢 (GEPT)</p>
+                </button>
+                <button
+                  type="button"
+                  class="col btn btn-success border border-1 p-3"
+                >
+                  <p class="mb-0 px-5 nunito">多益 (TOEIC)</p>
+                </button>
+                <button
+                  type="button"
+                  class="col btn btn-success border border-1 p-3"
+                >
+                  <p class="mb-0 px-5 nunito">托福 (TOEFL)</p>
+                </button>
+                <button
+                  type="button"
+                  class="col btn btn-success border border-1 p-3"
+                >
+                  <p class="mb-0 px-5 nunito">雅思 (IELTS)</p>
+                </button>
+                <button
+                  type="button"
+                  class="col btn btn-success border border-1 p-3"
+                >
+                  <p class="mb-0 px-5 nunito">日檢 (JLPT)</p>
+                </button>
+                <button
+                  type="button"
+                  class="col btn btn-success border border-1 p-3"
+                >
+                  <p class="mb-0 px-5 nunito">商務英文</p>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <!-- card -->
-      <section></section>
+      <section class="mb-5 pb-5"></section>
     </main>
+
+    <footer class="bg-white border-top py-5 mt-auto">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
+            <a
+              href="index.html"
+              class="text-decoration-none d-flex align-items-center justify-content-center justify-content-md-start"
+            >
+              <h3 class="nunito fst-italic mb-0 me-2 text-primary">Merge</h3>
+              <span class="text-muted small">&copy; 2026</span>
+            </a>
+          </div>
+          <div class="col-md-4 mb-3 mb-md-0">
+            <ul class="list-unstyled d-flex justify-content-center mb-0 small">
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >服務條款</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >隱私政策</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >聯絡我們</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4 text-center text-md-end">
+            <a href="#" class="text-muted me-3"
+              ><i class="bi bi-facebook"></i
+            ></a>
+            <a href="#" class="text-muted me-3"
+              ><i class="bi bi-instagram"></i
+            ></a>
+            <a href="#" class="text-muted"><i class="bi bi-github"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
     <script type="module" src="./assets/js/matter.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./assets/js/index.js"></script>

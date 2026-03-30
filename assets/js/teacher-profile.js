@@ -17,7 +17,9 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   // 先取得預約資料
   try {
-    const bookRes = await axios.get(`${API_BASE_URL}/bookings/tutor/${tutorId}`);
+    const bookRes = await axios.get(
+      `${API_BASE_URL}/bookings/tutor/${tutorId}`,
+    );
     tutorBookings = bookRes.data;
   } catch (e) {
     tutorBookings = [];
@@ -52,24 +54,24 @@ function toGoogleDriveEmbedUrl(url) {
 async function fetchTutorProfile() {
   try {
     const res = await axios.get(
-      `${API_BASE_URL}/tutor/${tutorId}?courseId=${selectedCourseId || ""}`
+      `${API_BASE_URL}/tutor/${tutorId}?courseId=${selectedCourseId || ""}`,
     );
     const data = res.data;
 
     // 基本資料（全部加 null 檢查，避免找不到 id 報錯）
-    const elAvatar    = document.getElementById("tutor-avatar");
-    const elName      = document.getElementById("tutor-name");
-    const elNameBg    = document.getElementById("tutor-name-bg");
-    const elHeadline  = document.getElementById("tutor-headline");
-    const elIntro     = document.getElementById("tutor-intro");
-    const elRating    = document.getElementById("tutor-rating");
+    const elAvatar = document.getElementById("tutor-avatar");
+    const elName = document.getElementById("tutor-name");
+    const elNameBg = document.getElementById("tutor-name-bg");
+    const elHeadline = document.getElementById("tutor-headline");
+    const elIntro = document.getElementById("tutor-intro");
+    const elRating = document.getElementById("tutor-rating");
 
-    if (elAvatar)   elAvatar.src = convertGoogleDriveUrl(data.avatar);
-    if (elName)     elName.textContent = data.name || "老師姓名";
-    if (elNameBg)   elNameBg.textContent = data.name || "老師";
+    if (elAvatar) elAvatar.src = convertGoogleDriveUrl(data.avatar);
+    if (elName) elName.textContent = data.name || "老師姓名";
+    if (elNameBg) elNameBg.textContent = data.name || "老師";
     if (elHeadline) elHeadline.textContent = data.headline || "";
-    if (elIntro)    elIntro.textContent = data.intro || "";
-    if (elRating)   elRating.textContent = `⭐ ${data.averageRating || "—"}`;
+    if (elIntro) elIntro.textContent = data.intro || "";
+    if (elRating) elRating.textContent = `⭐ ${data.averageRating || "—"}`;
 
     // 學歷
     renderEducation(data.education);
@@ -81,8 +83,10 @@ async function fetchTutorProfile() {
     renderReviews(data.reviews);
     renderSchedule(data.schedules);
     renderCertificates(
-      data.certificate1, data.certificateName1,
-      data.certificate2, data.certificateName2
+      data.certificate1,
+      data.certificateName1,
+      data.certificate2,
+      data.certificateName2,
     );
 
     // carousel 只放頭貼
@@ -94,7 +98,6 @@ async function fetchTutorProfile() {
       const cert2Img = document.querySelector("#carousel-cert2 img");
       if (cert2Img) cert2Img.src = convertGoogleDriveUrl(data.certificate2);
     }
-
   } catch (err) {
     console.error("取得老師資料失敗：", err);
   }
@@ -135,7 +138,10 @@ function renderCourseButtons() {
       : "nav-link border rounded-3 px-4 fw-bold";
     a.href = "#";
     a.textContent = course.courseName;
-    a.onclick = (e) => { e.preventDefault(); selectCourse(course.id); };
+    a.onclick = (e) => {
+      e.preventDefault();
+      selectCourse(course.id);
+    };
     container.appendChild(a);
   });
 }
@@ -151,7 +157,9 @@ function selectCourse(courseId) {
 
 // ── 渲染課程描述 ──
 function renderSelectedCourse() {
-  const course = allCourses.find((c) => String(c.id) === String(selectedCourseId));
+  const course = allCourses.find(
+    (c) => String(c.id) === String(selectedCourseId),
+  );
   if (!course) return;
   const elCourseName = document.getElementById("course-name");
   const elCourseDesc = document.getElementById("course-desc");
@@ -161,7 +169,9 @@ function renderSelectedCourse() {
 
 // ── 渲染預約按鈕和價格 ──
 function renderBookingButton() {
-  const course = allCourses.find((c) => String(c.id) === String(selectedCourseId));
+  const course = allCourses.find(
+    (c) => String(c.id) === String(selectedCourseId),
+  );
   if (!course) return;
 
   const price = course.price;
@@ -174,10 +184,11 @@ function renderBookingButton() {
       return;
     }
     const tutorName = encodeURIComponent(
-      document.getElementById("tutor-name").textContent
+      document.getElementById("tutor-name").textContent,
     );
     const courseName = encodeURIComponent(course.courseName);
-    window.location.href = `booking.html?tutorId=${tutorId}&courseId=${selectedCourseId}&price=${price}&tutorName=${tutorName}&courseName=${courseName}`;
+    // window.location.href = `booking.html?tutorId=${tutorId}&courseId=${selectedCourseId}&price=${price}&tutorName=${tutorName}&courseName=${courseName}`;
+    window.location.href = `booking.html?tutorId=${tutorId}&courseId=${selectedCourseId}`;
   };
 }
 
@@ -190,7 +201,8 @@ function renderEducation(education) {
   const container = document.getElementById("education-list");
   if (!container) return;
   if (!education) {
-    container.innerHTML = '<li><span class="text-secondary"> ✦ </span> 尚未填寫</li>';
+    container.innerHTML =
+      '<li><span class="text-secondary"> ✦ </span> 尚未填寫</li>';
     return;
   }
   container.innerHTML = `<li><span class="text-secondary"> ✦ </span> ${education}</li>`;
@@ -202,12 +214,13 @@ function renderExperience(exp1, exp2) {
   if (!container) return;
   const items = [exp1, exp2].filter(Boolean);
   if (items.length === 0) {
-    container.innerHTML = '<li><span class="text-secondary"> ✦ </span> 尚未填寫</li>';
+    container.innerHTML =
+      '<li><span class="text-secondary"> ✦ </span> 尚未填寫</li>';
     return;
   }
-  container.innerHTML = items.map(exp =>
-    `<li><span class="text-secondary"> ✦ </span> ${exp}</li>`
-  ).join("");
+  container.innerHTML = items
+    .map((exp) => `<li><span class="text-secondary"> ✦ </span> ${exp}</li>`)
+    .join("");
 }
 
 // ── 評價 ──
@@ -217,7 +230,9 @@ function renderReviews(reviews) {
     container.innerHTML = '<p style="color:#999;">目前還沒有評價</p>';
     return;
   }
-  container.innerHTML = reviews.map((r, i) => `
+  container.innerHTML = reviews
+    .map(
+      (r, i) => `
     <div class="card border-1 bg-primary border ${i < reviews.length - 1 ? "mb-2" : ""}">
       <div class="card-body">
         <div class="d-flex justify-content-between mb-1">
@@ -227,13 +242,15 @@ function renderReviews(reviews) {
         <p class="text-light mb-0">${r.comment}</p>
       </div>
     </div>
-  `).join("");
+  `,
+    )
+    .join("");
 }
 
 // ── Carousel：只顯示頭貼 ──
 function renderCarousel(avatar) {
-    const avatarImg = document.getElementById("tutor-avatar");
-    if (avatarImg) avatarImg.src = convertGoogleDriveUrl(avatar);
+  const avatarImg = document.getElementById("tutor-avatar");
+  if (avatarImg) avatarImg.src = convertGoogleDriveUrl(avatar);
 }
 
 // ── 影片獨立區塊 ──
@@ -250,6 +267,7 @@ function renderVideos(url1, url2) {
     return;
   }
 
+<<<<<<< HEAD
   const labels = ["自我介紹影片", "教學示範影片"];
 
   container.innerHTML = videos.map((url, i) => {
@@ -287,6 +305,27 @@ function renderVideos(url1, url2) {
       `;
     }
   }).join("");
+=======
+  container.innerHTML = videos
+    .map((url, i) => {
+      const match = url.match(/[/]d[/]([a-zA-Z0-9_-]+)/);
+      const embedUrl = match
+        ? `https://drive.google.com/file/d/${match[1]}/preview`
+        : url;
+      const label = i === 0 ? "自我介紹影片" : "教學示範影片";
+      return `
+            <div class="mb-2">
+                <p class="fw-bold mb-1 nunito" style="font-size:0.9rem;">▶ ${label}</p>
+                <div style="border:2px solid #464646; border-radius:12px; overflow:hidden; height:300px;">
+                    <iframe src="${embedUrl}" width="100%" height="300"
+                        frameborder="0" allowfullscreen allow="autoplay">
+                    </iframe>
+                </div>
+            </div>
+        `;
+    })
+    .join("");
+>>>>>>> dd179b1 (feat: update hero section content for booking system)
 }
 
 // ── 課表 ──
@@ -309,7 +348,9 @@ function renderSchedule(schedules) {
   const availableSlots = schedules
     .filter((s) => s.weekday === targetWeekday)
     .filter((s) => {
-      const slotTime = new Date(`${targetDateStr}T${String(s.hour).padStart(2, "0")}:00:00`);
+      const slotTime = new Date(
+        `${targetDateStr}T${String(s.hour).padStart(2, "0")}:00:00`,
+      );
       return slotTime > after24h;
     })
     .filter((s) => {
@@ -317,12 +358,24 @@ function renderSchedule(schedules) {
         const bDateStr = Array.isArray(b.date)
           ? `${b.date[0]}-${String(b.date[1]).padStart(2, "0")}-${String(b.date[2]).padStart(2, "0")}`
           : b.date;
-        return bDateStr === targetDateStr && b.hour === s.hour && b.slotLocked === true;
+        return (
+          bDateStr === targetDateStr &&
+          b.hour === s.hour &&
+          b.slotLocked === true
+        );
       });
     })
     .sort((a, b) => a.hour - b.hour);
 
-  const dayMap = { 1:"週一", 2:"週二", 3:"週三", 4:"週四", 5:"週五", 6:"週六", 7:"週日" };
+  const dayMap = {
+    1: "週一",
+    2: "週二",
+    3: "週三",
+    4: "週四",
+    5: "週五",
+    6: "週六",
+    7: "週日",
+  };
 
   if (availableSlots.length === 0) {
     container.innerHTML = `<p style="color:#999;">📅 ${targetDateStr} 當天沒有可預約時段</p>`;
@@ -333,11 +386,15 @@ function renderSchedule(schedules) {
     <p style="font-size:0.85em; color:#666; margin-bottom:10px; width:100%;">
       📅 ${targetDateStr}（${dayMap[targetWeekday]}）可預約時段：
     </p>
-    ${availableSlots.map((s) => `
+    ${availableSlots
+      .map(
+        (s) => `
       <button type="button" class="btn btn-success border border-1 py-2">
-        <time class="nunito">${targetDateStr.slice(5).replace("-","/")} ${String(s.hour).padStart(2,"0")}:00</time>
+        <time class="nunito">${targetDateStr.slice(5).replace("-", "/")} ${String(s.hour).padStart(2, "0")}:00</time>
       </button>
-    `).join("")}
+    `,
+      )
+      .join("")}
   `;
 }
 
@@ -346,10 +403,14 @@ function renderCertificates(cert1, name1, cert2, name2) {
   const container = document.getElementById("certificates-container");
   container.innerHTML = "";
 
-  const items = [[cert1, name1], [cert2, name2]].filter(([c]) => c);
+  const items = [
+    [cert1, name1],
+    [cert2, name2],
+  ].filter(([c]) => c);
 
   if (items.length === 0) {
-    container.innerHTML = '<li style="list-style:none; color:#999;">目前沒有證照資料</li>';
+    container.innerHTML =
+      '<li style="list-style:none; color:#999;">目前沒有證照資料</li>';
     return;
   }
 

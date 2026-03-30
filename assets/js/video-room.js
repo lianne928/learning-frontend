@@ -1,17 +1,53 @@
 // ═══════════════════════════════════════════════════
 //  Config & Globals
 // ═══════════════════════════════════════════════════
-const API_BASE_URL = 'http://localhost:8080/api';
-const WS_URL       = 'http://localhost:8080/ws';
+const API_BASE_URL = '/api';
+const WS_URL       = window.location.origin + '/ws';
 
 const urlParams = new URLSearchParams(window.location.search);
 const bookingId = urlParams.get('bookingId');
 
 const token    = localStorage.getItem('jwt_token');
 const userId   = localStorage.getItem('userId');
-// userRole stored as 'TUTOR' or 'STUDENT' from login.js
-const userRole = (localStorage.getItem('userRole') || '').toLowerCase(); // 'tutor' | 'student'
+// userRole stored as 'TUTOR' or 'STUDENT' from login.js — normalizeRole 統一為 'tutor' | 'student'
+const userRole = normalizeRole(localStorage.getItem('userRole'));
 const userName = localStorage.getItem('userName') || '我';
+
+/**
+ * 透過後端 API 驗證 JWT 是否仍有效。
+ * 呼叫已知的 room participants 端點，若回傳 401/403 即視為失效。
+ */
+async function isTokenExpired(jwt) {
+    if (!jwt) return true;
+
+    try {
+        const payload = JSON.parse(atob(jwt.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+
+        // 過期驗證
+        if (payload.exp && Date.now() >= payload.exp * 1000) {
+            console.warn('[JWT] token 已過期', new Date(payload.exp * 1000).toISOString());
+            return true;
+        }
+
+        // 角色驗證：token 工作角色須與頁面當前 userRole 一致
+        // authorities 可能是字串陣列或物件陣列（Spring Security 格式）
+        let rawAuth = '';
+        if (Array.isArray(payload.authorities) && payload.authorities.length > 0) {
+            const first = payload.authorities[0];
+            rawAuth = typeof first === 'string' ? first : (first?.authority || '');
+        }
+        const tokenRole = normalizeRole(payload.role || payload.userRole || rawAuth);
+        if (tokenRole && tokenRole !== userRole) {
+            console.warn('[JWT] 角色不符，token:', tokenRole, '當前:', userRole);
+            return true;
+        }
+
+        return false;
+    } catch (err) {
+        console.warn('[JWT] 解析失敗，視為無效', err);
+        return true;
+    }
+}
 
 let stompClient       = null;
 let peerConnection    = null;
@@ -22,13 +58,45 @@ let isCamOff          = false;
 let isSharingScreen   = false;
 let isConnected       = false;
 let iceCandidateQueue = [];
+let offerRetryTimer   = null;   // 重試 offer 的計時器
+let peerReady         = false;  // 對方是否已在房間
 
 const ICE_CONFIG = {
     iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' }
-    ]
+        { urls: 'stun:stun1.l.google.com:19302' },
+        // TURN 伺服器：NAT 穿透失敗時透過 relay 轉發，解決雙方看不到對方視訊的問題
+        {
+            urls: 'turn:openrelay.metered.ca:80',
+            username: 'openrelayproject',
+            credential: 'openrelayproject'
+        },
+        {
+            urls: 'turn:openrelay.metered.ca:443',
+            username: 'openrelayproject',
+            credential: 'openrelayproject'
+        },
+        {
+            urls: 'turn:openrelay.metered.ca:443?transport=tcp',
+            username: 'openrelayproject',
+            credential: 'openrelayproject'
+        }
+    ],
+    iceCandidatePoolSize: 2
 };
+
+function normalizeRole(role) {
+    const raw = String(role || '').trim().toLowerCase();
+    if (raw === '1' || raw === 'student' || raw === 'role_student') return 'student';
+    if (raw === '2' || raw === 'tutor' || raw === 'teacher' || raw === 'role_tutor' || raw === 'role_teacher') return 'tutor';
+    return raw;
+}
+
+function roleToNumber(role) {
+    if (role === 'student') return 1;
+    if (role === 'tutor')   return 2;
+    return role;
+}
 
 // ═══════════════════════════════════════════════════
 //  Init
@@ -38,7 +106,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Guard: require token + bookingId
     if (!bookingId) {
         alert('缺少有效的預約連結，請重新進入教室');
-        window.location.href = 'index.html';
+        window.location.href = 'student-courses.html';
         return;
     }
     if (!token) {
@@ -47,6 +115,33 @@ document.addEventListener('DOMContentLoaded', async () => {
         alert('請先登入以進入教室');
         window.location.href = 'login.html';
         return;
+    }
+
+    // Token 過期預檢（透過後端驗證）
+    if (await isTokenExpired(token)) {
+        localStorage.setItem('redirect_after_login', window.location.href);
+        alert('登入已過期，請重新登入');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // 頁面角色驗證：若角色不符則自動導向正確的視訊頁面
+    const isTeacherPage = /teacher-VideoRoom/i.test(window.location.pathname);
+    const isStudentPage = /Student-VideoRoom/i.test(window.location.pathname);
+    if (isTeacherPage && userRole !== 'tutor') {
+        alert('您的帳號為學生，正在為您導向學生教室');
+        window.location.href = `Student-VideoRoom.html?bookingId=${bookingId}`;
+        return;
+    }
+    if (isStudentPage && userRole !== 'student') {
+        alert('您的帳號為老師，正在為您導向老師教室');
+        window.location.href = `teacher-VideoRoom.html?bookingId=${bookingId}`;
+        return;
+    }
+
+    // 非安全上下文（HTTP 且非 localhost）提醒
+    if (!window.isSecureContext) {
+        console.warn('[Security] 未使用 HTTPS，攝影機/麥克風將無法使用。請透過 HTTPS 或 localhost 存取。');
     }
 
     initNavbar();
@@ -83,14 +178,48 @@ async function initPreJoin() {
     }
 
     let previewStream = null;
-    try {
-        previewStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        document.getElementById('prejoin-video').srcObject = previewStream;
-    } catch (err) {
-        console.warn('無法取得預覽媒體：', err);
-        const icon = document.getElementById('prejoin-cam-off-icon');
-        if (icon) icon.style.display = 'flex';
-    }
+
+    // iOS Safari 要求 getUserMedia 必須在使用者手勢內呼叫；
+    // 頁面載入時呼叫可能被拒絕，此處先嘗試，失敗則顯示「點擊預覽」提示。
+    const tryPreview = async () => {
+        try {
+            previewStream = await getUserMediaSafe(true, true);
+            const vid = document.getElementById('prejoin-video');
+            vid.srcObject = previewStream;
+            vid.play().catch(() => {});
+            const icon = document.getElementById('prejoin-cam-off-icon');
+            const hasVideoTrack = previewStream.getVideoTracks().length > 0;
+            if (icon) icon.style.display = hasVideoTrack ? 'none' : 'flex';
+            if (vid) vid.style.visibility = hasVideoTrack ? 'visible' : 'hidden';
+        } catch (err) {
+            const noDevice = err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError';
+            if (noDevice) {
+                console.info('預覽裝置不存在，將以無影音模式顯示前置畫面。');
+            } else {
+                console.warn('無法取得預覽媒體：', err);
+            }
+            const icon = document.getElementById('prejoin-cam-off-icon');
+            if (icon) {
+                icon.style.display = 'flex';
+                // 無裝置時顯示可理解提示；其餘錯誤才提供點擊重試。
+                if (!icon.dataset.tapHint) {
+                    icon.dataset.tapHint = '1';
+                    const hint = document.createElement('p');
+                    hint.textContent = noDevice
+                        ? '未偵測到攝影機或麥克風，可直接進入教室'
+                        : '點擊以開啟預覽';
+                    hint.style.cssText = 'margin:8px 0 0;font-size:0.85rem;color:#aaa;cursor:pointer;';
+                    if (!noDevice) {
+                        hint.addEventListener('click', tryPreview);
+                    } else {
+                        hint.style.cursor = 'default';
+                    }
+                    icon.appendChild(hint);
+                }
+            }
+        }
+    };
+    await tryPreview();
 
     // 麥克風切換
     document.getElementById('btn-pre-mic').addEventListener('click', () => {
@@ -122,18 +251,19 @@ async function initPreJoin() {
 
     // 進入教室按鈕
     document.getElementById('btn-enter-room').addEventListener('click', () => {
-        if (previewStream) previewStream.getTracks().forEach(t => t.stop());
+        const streamToReuse = previewStream || null;
+        document.getElementById('prejoin-video').srcObject = null;
         document.getElementById('prejoin-overlay').style.display = 'none';
         document.getElementById('room-layout').style.display = '';
-        enterRoom();
+        enterRoom(streamToReuse);
     });
 }
 
 // ═══════════════════════════════════════════════════
 //  Enter Room (actual session start)
 // ═══════════════════════════════════════════════════
-function enterRoom() {
-    startLocalMedia();
+async function enterRoom(existingStream) {
+    await startLocalMedia(existingStream);
     connectStomp();
     loadChatHistory();
     fetchRoomStatus();
@@ -180,17 +310,74 @@ function logout() {
 // ═══════════════════════════════════════════════════
 //  Local Media
 // ═══════════════════════════════════════════════════
-async function startLocalMedia() {
+
+/**
+ * 取得媒體串流，依序嘗試多種約束以相容行動裝置。
+ * 行動裝置（iOS/Android）需要 HTTPS 才能存取 mediaDevices。
+ */
+async function getUserMediaSafe(wantVideo = true, wantAudio = true) {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw Object.assign(
+            new Error('此瀏覽器不支援媒體裝置，請確認使用 HTTPS 連線並更新瀏覽器'),
+            { name: 'NotSupportedError' }
+        );
+    }
+
+    const attempts = [];
+    if (wantVideo && wantAudio) {
+        attempts.push(
+            { video: { facingMode: 'user' }, audio: true },
+            { video: true, audio: true },
+            { video: true,  audio: false },
+            { video: false, audio: true  }
+        );
+    } else if (wantVideo) {
+        attempts.push({ video: { facingMode: 'user' } }, { video: true });
+    } else {
+        attempts.push({ audio: true });
+    }
+
+    let lastErr;
+    for (const constraints of attempts) {
+        try {
+            return await navigator.mediaDevices.getUserMedia(constraints);
+        } catch (err) {
+            lastErr = err;
+            // 使用者拒絕權限時不再重試；其餘錯誤允許繼續嘗試降級約束。
+            if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+                throw err;
+            }
+        }
+    }
+    throw lastErr;
+}
+
+async function startLocalMedia(existingStream) {
     try {
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        document.getElementById('local-video').srcObject = localStream;
+        if (existingStream) {
+            localStream = existingStream;
+        } else {
+            localStream = await getUserMediaSafe(true, true);
+        }
+        const localVideo = document.getElementById('local-video');
+        localVideo.srcObject = localStream;
+        localVideo.play().catch(() => {}); // iOS 需要明確呼叫 play()
+        const hasVideoTrack = localStream.getVideoTracks().length > 0;
+        document.getElementById('local-placeholder-icon').style.display = hasVideoTrack ? 'none' : 'flex';
     } catch (err) {
-        console.warn('無法取得本地媒體：', err);
+        const noDevice = err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError';
+        if (noDevice) {
+            console.info('未偵測到本地影音裝置，將以無影音模式進入。');
+        } else {
+            console.warn('無法取得本地媒體：', err);
+        }
         document.getElementById('local-placeholder-icon').style.display = 'flex';
-        if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+        if (err.name === 'NotSupportedError') {
+            alert(err.message);
+        } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
             alert('找不到攝影機或麥克風裝置，請確認設備已連接。');
         } else if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-            alert('請允許瀏覽器存取攝影機和麥克風。');
+            alert('請允許瀏覽器存取攝影機和麥克風。\n在 iOS 請至「設定 > Safari > 攝影機/麥克風」開啟權限。');
         }
     }
 }
@@ -199,28 +386,58 @@ async function startLocalMedia() {
 //  STOMP / WebSocket
 // ═══════════════════════════════════════════════════
 function connectStomp() {
+    // SockJS 不支援自訂 HTTP header；Spring Security WebSocket 攔截在 HTTP 握手階段，
+    // 因此必須將 token 放在 URL query parameter，讓 Spring 的 HandshakeInterceptor 讀取。
+    const wsUrlWithToken = WS_URL + '?token=' + encodeURIComponent(token);
+
     stompClient = new StompJs.Client({
-        webSocketFactory: () => new SockJS(WS_URL),
+        webSocketFactory: () => new SockJS(wsUrlWithToken),
         connectHeaders: {
             'Authorization': `Bearer ${token}`
         },
         reconnectDelay: 5000,
         onConnect:    onStompConnected,
-        onDisconnect: () => { isConnected = false; },
-        onStompError: frame => console.error('STOMP error', frame)
+        onDisconnect: () => {
+            isConnected = false;
+            console.warn('[STOMP] Disconnected');
+        },
+        onStompError: frame => {
+            const errMsg = frame.headers?.message || '(no message)';
+            console.error('[STOMP] Broker Error:', errMsg, '\nHeaders:', JSON.stringify(frame.headers));
+            // 若錯誤為認證失敗，提示重新登入
+            if (errMsg.includes('401') || errMsg.includes('403') || errMsg.toLowerCase().includes('auth')) {
+                alert('WebSocket 連線驗證失敗，請重新登入。');
+                localStorage.setItem('redirect_after_login', window.location.href);
+                window.location.href = 'login.html';
+            }
+        },
+        onWebSocketError: evt => {
+            console.error('[STOMP] WebSocket Error:', evt);
+        }
     });
     stompClient.activate();
 }
 
 function onStompConnected() {
     isConnected = true;
+    console.log('[STOMP] Connected. userId:', userId, 'role:', userRole, 'bookingId:', bookingId);
 
-    stompClient.subscribe(`/topic/room/${bookingId}/signal`, onSignalMessage);
+    stompClient.subscribe(`/topic/room/${bookingId}/signal`, frame => {
+        console.log('[STOMP RAW signal]', frame.body.substring(0, 200));
+        onSignalMessage(frame);
+    });
     stompClient.subscribe(`/topic/room/${bookingId}/chat`,   onChatMessage);
-    stompClient.subscribe(`/topic/room/${bookingId}/events`, onRoomEvent);
+    stompClient.subscribe(`/topic/room/${bookingId}/events`, frame => {
+        console.log('[STOMP RAW event]', frame.body.substring(0, 200));
+        onRoomEvent(frame);
+    });
     stompClient.subscribe(`/topic/room/${bookingId}/errors`, onRoomError);
 
     publishEvent('joined');
+    console.log('[STOMP] Published joined event');
+
+    // 備援：透過 REST 檢查對方是否已在房間，避免漏接 STOMP 事件
+    setTimeout(() => checkPeerViaRest(), 2000);
 }
 
 function publishEvent(type) {
@@ -244,10 +461,46 @@ async function fetchRoomStatus() {
         const res = await axios.get(`${API_BASE_URL}/room/${bookingId}/participants`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
+        console.log('[Room] participants response:', JSON.stringify(res.data));
         updateRoomStatusBadge(res.data.state);
         if (res.data.state === 'ENDED') showEndedOverlay();
     } catch (err) {
         console.warn('無法取得房間狀態', err);
+    }
+}
+
+/**
+ * 備援機制：透過 REST API 檢查對方是否已在房間，
+ * 若 STOMP 事件遺漏，仍可正常建立 WebRTC 連線。
+ */
+async function checkPeerViaRest() {
+    try {
+        const res = await axios.get(`${API_BASE_URL}/room/${bookingId}/participants`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = res.data;
+        console.log('[REST Peer Check] state:', data.state, 'participants:', JSON.stringify(data.participants || data));
+
+        // 檢查對方是否已在房間（依回傳格式彈性處理）
+        const participants = data.participants || data.users || [];
+        const peerIsHere = data.state === 'ACTIVE' || participants.some(p => {
+            const pId = String(p.userId || p.id || '');
+            const pRole = normalizeRole(p.role);
+            return (pId && pId !== String(userId)) || (pRole && pRole !== userRole);
+        });
+
+        if (peerIsHere && !peerReady) {
+            console.log('[REST Peer Check] Peer detected via REST, triggering WebRTC...');
+            peerReady = true;
+            document.getElementById('peer-status-dot').className = 'peer-dot online';
+            initiateCallIfCaller();
+            // 老師端：重新通知學生以觸發 offer
+            if (userRole === 'tutor') {
+                publishEvent('joined');
+            }
+        }
+    } catch (err) {
+        console.warn('[REST Peer Check] 無法查詢房間參與者:', err.message || err);
     }
 }
 
@@ -278,12 +531,28 @@ function showEndedOverlay() {
 // ═══════════════════════════════════════════════════
 function onRoomEvent(frame) {
     const evt = JSON.parse(frame.body);
+    const evtRole = normalizeRole(evt.role || evt.senderRole);
+    const evtUserId = String(evt.userId || evt.senderId || '');
 
-    if (evt.role === userRole) return; // ignore own events
+    // 過濾自己的事件 — userId 為主要判斷，role 為備援
+    const isOwnById   = evtUserId && userId && evtUserId === String(userId);
+    const isOwnByRole = !evtUserId && evtRole && evtRole === userRole;
+    if (isOwnById || isOwnByRole) return;
+
+    console.log('[Event] Received:', evt.type, 'from role:', evtRole, 'userId:', evtUserId);
 
     if (evt.type === 'joined') {
+        console.log('[Event] Peer joined! role:', evtRole, 'userId:', evtUserId);
+        peerReady = true;
         document.getElementById('peer-status-dot').className = 'peer-dot online';
         initiateCallIfCaller();
+        // If teacher is already in the room when student arrives, the student won't have
+        // received the teacher's original 'joined' event (published before student subscribed).
+        // Re-announce so the student can initiate the WebRTC offer.
+        if (userRole === 'tutor' && evtRole === 'student') {
+            console.log('[Event] Tutor re-announcing joined for late-arriving student');
+            publishEvent('joined');
+        }
     }
 
     if (evt.type === 'left') {
@@ -309,83 +578,181 @@ function createPeerConnection() {
     peerConnection    = new RTCPeerConnection(ICE_CONFIG);
     iceCandidateQueue = [];
 
-    // Add local tracks
-    if (localStream) {
+    // Add local tracks；若沒有本地媒體，加入 recvonly transceiver 確保能收到對方的影音
+    if (localStream && localStream.getTracks().length > 0) {
         localStream.getTracks().forEach(track => {
             peerConnection.addTrack(track, localStream);
         });
+        console.log('[WebRTC] Added', localStream.getTracks().length, 'local tracks');
+    } else {
+        peerConnection.addTransceiver('audio', { direction: 'recvonly' });
+        peerConnection.addTransceiver('video', { direction: 'recvonly' });
+        console.log('[WebRTC] No local tracks — added recvonly transceivers');
     }
 
     // Receive remote stream
     peerConnection.ontrack = event => {
+        console.log('[WebRTC] ontrack fired, kind:', event.track.kind, 'streams:', event.streams.length);
         const remoteVideo = document.getElementById('remote-video');
-        if (remoteVideo.srcObject !== event.streams[0]) {
-            remoteVideo.srcObject = event.streams[0];
-            document.getElementById('remote-placeholder').classList.add('hidden');
+        // 有些瀏覽器 event.streams 可能為空，需自行建立 MediaStream
+        let stream;
+        if (event.streams && event.streams[0]) {
+            stream = event.streams[0];
+        } else {
+            stream = remoteVideo.srcObject || new MediaStream();
+            stream.addTrack(event.track);
         }
+        if (remoteVideo.srcObject !== stream) {
+            remoteVideo.srcObject = stream;
+        }
+        document.getElementById('remote-placeholder').classList.add('hidden');
+        // iOS Safari 需要明確呼叫 play()；若被阻擋（未靜音自動播放政策）則忽略
+        remoteVideo.play().catch(err => {
+            console.warn('遠端視訊自動播放受限，等待使用者互動後恢復：', err.name);
+        });
     };
 
     // Send ICE candidates via STOMP
     peerConnection.onicecandidate = event => {
         if (event.candidate && isConnected) {
+            console.log('[WebRTC] Sending ICE candidate:', event.candidate.candidate.substring(0, 50) + '...');
             stompClient.publish({
                 destination: `/app/signal/${bookingId}`,
                 body: JSON.stringify({
                     type:          'candidate',
                     senderRole:    userRole,
+                    senderId:      userId,
                     candidate:     event.candidate.candidate,
                     sdpMid:        event.candidate.sdpMid,
                     sdpMLineIndex: event.candidate.sdpMLineIndex
                 })
             });
+        } else if (!event.candidate) {
+            console.log('[WebRTC] ICE gathering complete');
         }
     };
 
     peerConnection.onconnectionstatechange = () => {
         const state = peerConnection.connectionState;
-        if (state === 'connected')                        updateRoomStatusBadge('ACTIVE');
+        console.log('[WebRTC] connectionState:', state);
+        if (state === 'connected')                          updateRoomStatusBadge('ACTIVE');
         if (state === 'disconnected' || state === 'failed') updateRoomStatusBadge('WAITING');
+    };
+
+    // ICE 連線狀態監控：失敗時自動嘗試 ICE restart
+    peerConnection.oniceconnectionstatechange = () => {
+        if (!peerConnection) return;
+        const state = peerConnection.iceConnectionState;
+        console.log('[WebRTC] iceConnectionState:', state);
+        if (state === 'failed' && userRole === 'student') {
+            console.log('[WebRTC] ICE failed — attempting ICE restart');
+            peerConnection.createOffer({ iceRestart: true })
+                .then(offer => peerConnection.setLocalDescription(offer))
+                .then(() => {
+                    stompClient.publish({
+                        destination: `/app/signal/${bookingId}`,
+                        body: JSON.stringify({
+                            type:       'offer',
+                            senderRole: userRole,
+                            senderId:   userId,
+                            sdp:        peerConnection.localDescription.sdp
+                        })
+                    });
+                })
+                .catch(err => console.error('[WebRTC] ICE restart failed:', err));
+        }
+    };
+
+    peerConnection.onicegatheringstatechange = () => {
+        if (!peerConnection) return;
+        console.log('[WebRTC] iceGatheringState:', peerConnection.iceGatheringState);
     };
 }
 
 // Student always initiates the offer
 async function initiateCallIfCaller() {
     if (userRole !== 'student') return;
+    // Guard: skip if a connection is already being established or is active
+    if (peerConnection && ['new', 'connecting', 'connected'].includes(peerConnection.connectionState)) return;
+    console.log('[Signal] Student initiating offer...');
     createPeerConnection();
+    await sendOffer();
+}
+
+async function sendOffer() {
+    // 清除先前的重試計時器
+    if (offerRetryTimer) { clearTimeout(offerRetryTimer); offerRetryTimer = null; }
     try {
         const offer = await peerConnection.createOffer();
         await peerConnection.setLocalDescription(offer);
+        console.log('[Signal] Sending offer, SDP type:', offer.type,
+                    'media lines:', (offer.sdp.match(/^m=/gm) || []).length);
         stompClient.publish({
             destination: `/app/signal/${bookingId}`,
             body: JSON.stringify({
                 type:       'offer',
                 senderRole: userRole,
+                senderId:   userId,
                 sdp:        peerConnection.localDescription.sdp
             })
         });
+        // 若 5 秒內未收到 answer，自動重試（最多 3 次）
+        scheduleOfferRetry();
     } catch (err) {
         console.error('建立 offer 失敗:', err);
     }
 }
 
+let offerRetryCount = 0;
+const MAX_OFFER_RETRIES = 3;
+
+function scheduleOfferRetry() {
+    if (offerRetryTimer) clearTimeout(offerRetryTimer);
+    offerRetryTimer = setTimeout(() => {
+        if (!peerConnection) return;
+        // 若已建立連線或正在連線中就不重試
+        if (['connected', 'connecting'].includes(peerConnection.connectionState)) return;
+        if (peerConnection.remoteDescription) return;  // 已收到 answer
+        offerRetryCount++;
+        if (offerRetryCount > MAX_OFFER_RETRIES) {
+            console.warn('[Signal] Offer retry exhausted after', MAX_OFFER_RETRIES, 'attempts');
+            return;
+        }
+        console.log('[Signal] No answer received, retrying offer... (attempt', offerRetryCount + '/' + MAX_OFFER_RETRIES + ')');
+        sendOffer();
+    }, 5000);
+}
+
 async function onSignalMessage(frame) {
     const msg = JSON.parse(frame.body);
+    const senderRole = normalizeRole(msg.senderRole || msg.role);
+    const senderId = String(msg.senderId || msg.userId || '');
 
-    // Ignore own signals
-    if (msg.senderRole === userRole) return;
+    // Ignore own signals — userId 為主要判斷，role 為 senderId 不存在時的備援
+    const isOwnById   = senderId && userId && senderId === String(userId);
+    const isOwnByRole = !senderId && senderRole && senderRole === userRole;
+    if (isOwnById || isOwnByRole) {
+        console.log('[Signal] Ignored own signal:', msg.type, '(senderId:', senderId, 'role:', senderRole, ')');
+        return;
+    }
+
+    console.log('[Signal] Received:', msg.type, 'from role:', senderRole, 'senderId:', senderId);
 
     if (msg.type === 'offer') {
+        console.log('[Signal] Processing offer, creating answer...');
         createPeerConnection();
         try {
-            await peerConnection.setRemoteDescription({ type: 'offer', sdp: msg.sdp });
+            await peerConnection.setRemoteDescription(new RTCSessionDescription({ type: 'offer', sdp: msg.sdp }));
             await flushIceCandidates();
             const answer = await peerConnection.createAnswer();
             await peerConnection.setLocalDescription(answer);
+            console.log('[Signal] Sending answer, media lines:', (answer.sdp.match(/^m=/gm) || []).length);
             stompClient.publish({
                 destination: `/app/signal/${bookingId}`,
                 body: JSON.stringify({
                     type:       'answer',
                     senderRole: userRole,
+                    senderId:   userId,
                     sdp:        answer.sdp
                 })
             });
@@ -396,8 +763,12 @@ async function onSignalMessage(frame) {
 
     else if (msg.type === 'answer') {
         if (!peerConnection) return;
+        console.log('[Signal] Processing answer — cancelling retry timer');
+        // 收到 answer，停止重試
+        if (offerRetryTimer) { clearTimeout(offerRetryTimer); offerRetryTimer = null; }
+        offerRetryCount = 0;
         try {
-            await peerConnection.setRemoteDescription({ type: 'answer', sdp: msg.sdp });
+            await peerConnection.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp: msg.sdp }));
             await flushIceCandidates();
         } catch (err) {
             console.error('處理 answer 失敗:', err);
@@ -405,15 +776,19 @@ async function onSignalMessage(frame) {
     }
 
     else if (msg.type === 'candidate') {
+        console.log('[Signal] Processing ICE candidate');
         const candidate = new RTCIceCandidate({
             candidate:     msg.candidate,
             sdpMid:        msg.sdpMid,
             sdpMLineIndex: msg.sdpMLineIndex
         });
         if (peerConnection && peerConnection.remoteDescription) {
-            await peerConnection.addIceCandidate(candidate).catch(console.warn);
+            await peerConnection.addIceCandidate(candidate).catch(err =>
+                console.warn('[WebRTC] addIceCandidate failed:', err)
+            );
         } else {
             iceCandidateQueue.push(candidate);
+            console.log('[Signal] Queued ICE candidate (remoteDescription not set yet), queue size:', iceCandidateQueue.length);
         }
     }
 }
@@ -432,6 +807,51 @@ function bindControls() {
     document.getElementById('btn-cam').addEventListener('click', toggleCam);
     document.getElementById('btn-screen').addEventListener('click', toggleScreen);
     document.getElementById('btn-hangup').addEventListener('click', hangUp);
+    initPipResize();
+}
+
+function initPipResize() {
+    const wrapper = document.getElementById('local-video-wrapper');
+    if (!wrapper) return;
+
+    const handle = document.createElement('div');
+    handle.className = 'pip-resize-handle';
+    wrapper.appendChild(handle);
+
+    const MIN_W = 90;
+    const MAX_W = 320;
+    let startX, startW, dragging = false;
+
+    function onStart(e) {
+        e.preventDefault();
+        dragging = true;
+        startX = (e.touches ? e.touches[0].clientX : e.clientX);
+        startW = wrapper.offsetWidth;
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup',   onEnd);
+        document.addEventListener('touchmove', onMove, { passive: false });
+        document.addEventListener('touchend',  onEnd);
+    }
+
+    function onMove(e) {
+        if (!dragging) return;
+        e.preventDefault();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const dx = startX - clientX;
+        const newW = Math.min(MAX_W, Math.max(MIN_W, startW + dx));
+        wrapper.style.width = newW + 'px';
+    }
+
+    function onEnd() {
+        dragging = false;
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup',   onEnd);
+        document.removeEventListener('touchmove', onMove);
+        document.removeEventListener('touchend',  onEnd);
+    }
+
+    handle.addEventListener('mousedown',  onStart);
+    handle.addEventListener('touchstart', onStart, { passive: false });
 }
 
 function toggleMic() {
@@ -509,6 +929,9 @@ function hangUp() {
 }
 
 function cleanup() {
+    if (offerRetryTimer) { clearTimeout(offerRetryTimer); offerRetryTimer = null; }
+    offerRetryCount = 0;
+    peerReady = false;
     if (localStream)    { localStream.getTracks().forEach(t => t.stop());    localStream    = null; }
     if (screenStream)   { screenStream.getTracks().forEach(t => t.stop());   screenStream   = null; }
     if (peerConnection) { peerConnection.close();                             peerConnection = null; }
@@ -584,7 +1007,7 @@ async function handleFileUpload(e) {
     const formData = new FormData();
     formData.append('file',      file);
     formData.append('bookingId', bookingId);
-    formData.append('role',      userRole);
+    formData.append('role',      roleToNumber(userRole));
 
     try {
         const res = await axios.post(`${API_BASE_URL}/chatMessage/upload`, formData, {
@@ -666,16 +1089,19 @@ function appendMessage(msg, isMine) {
         bubble.appendChild(video);
 
     } else if (type === 6) {
-        // FILE
+        // FILE — 透過帶 Auth 的 blob 下載，避免瀏覽器直接請求被 401
         const a = document.createElement('a');
         a.className = 'msg-file-link';
-        a.href = buildDownloadUrl(msg.mediaUrl);
-        a.download = msg.message || '下載檔案';
-        a.target = '_blank';
+        a.href = '#';
+        const downloadName = msg.message || '附件';
+        a.addEventListener('click', (e) => {
+            e.preventDefault();
+            downloadWithAuth(msg.mediaUrl, downloadName);
+        });
         const icon = document.createElement('i');
         icon.className = 'bi bi-file-earmark-arrow-down';
         a.appendChild(icon);
-        a.appendChild(document.createTextNode(' ' + (msg.message || '附件')));
+        a.appendChild(document.createTextNode(' ' + downloadName));
         bubble.appendChild(a);
 
     } else if (type === 2) {
@@ -750,29 +1176,54 @@ function resolveMediaUrl(mediaUrl) {
     return API_BASE_URL + (mediaUrl.startsWith('/') ? '' : '/') + mediaUrl;
 }
 
+/**
+ * 將後端回傳的 mediaUrl 轉換為可經由 Vite proxy 存取的相對路徑。
+ * 若後端回傳完整 URL（如 http://localhost:8080/uploads/...），
+ * 取其 pathname 走 proxy，避免跨域問題。
+ */
+function toProxyPath(mediaUrl) {
+    if (!mediaUrl) return '';
+    if (mediaUrl.startsWith('blob:')) return mediaUrl;
+    if (mediaUrl.startsWith('http')) {
+        try { return new URL(mediaUrl).pathname; } catch { /* fall through */ }
+    }
+    return (mediaUrl.startsWith('/') ? '' : '/') + mediaUrl;
+}
+
 async function loadMediaWithAuth(element, mediaUrl) {
     if (!mediaUrl) return;
-    // Use a relative URL so the Vite proxy forwards to the backend correctly.
-    // resolveMediaUrl() prepends API_BASE_URL which produces /api/uploads/...
-    // — the wrong path. Static uploads are served at /uploads/... (proxied).
-    let url;
-    if (mediaUrl.startsWith('http') || mediaUrl.startsWith('blob:')) {
-        url = mediaUrl;
-    } else {
-        url = (mediaUrl.startsWith('/') ? '' : '/') + mediaUrl;
-    }
+    const url = toProxyPath(mediaUrl);
     try {
         const res = await axios.get(url, {
             headers: { 'Authorization': `Bearer ${token}` },
             responseType: 'blob'
         });
         element.src = URL.createObjectURL(res.data);
-    } catch { /* leave src empty; element shows broken state */ }
+    } catch (err) {
+        console.warn('[Chat] 媒體載入失敗', url, err);
+    }
 }
 
-function buildDownloadUrl(mediaUrl) {
-    const filename = (mediaUrl || '').split('/').pop();
-    return `${API_BASE_URL}/chatMessage/download/${filename}?name=${encodeURIComponent(filename)}`;
+async function downloadWithAuth(mediaUrl, filename) {
+    const url = toProxyPath(mediaUrl);
+    if (!url) return;
+    try {
+        const res = await axios.get(url, {
+            headers: { 'Authorization': `Bearer ${token}` },
+            responseType: 'blob'
+        });
+        const blobUrl = URL.createObjectURL(res.data);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+        console.error('[Chat] 檔案下載失敗', url, err);
+        alert('檔案下載失敗');
+    }
 }
 
 function detectMessageType(mimeType) {

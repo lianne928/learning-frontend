@@ -2,8 +2,7 @@
 #room-layout {
     display: flex;
     height: calc(100vh - 62px);
-    overflow: hidden;
-
+    overflow: auto;
 }
 
 /* ── Video Panel (left 70%) ──────────────────────────── */
@@ -15,10 +14,7 @@
     flex-direction: column;
     overflow: hidden;
     min-width: 0;
-    margin-top: 40px;
-    margin-bottom: 40px;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: clamp(10px, 2vw, 40px) clamp(8px, 1.5vw, 20px);
     border-radius: 10px;
 }
 
@@ -62,14 +58,27 @@
     position: absolute;
     bottom: 80px;
     right: 16px;
-    width: 180px;
-    height: 120px;
+    width: clamp(120px, 15vw, 240px);
+    aspect-ratio: 3 / 2;
     border: 2px solid #464646;
     box-shadow: 4px 4px 0 #464646;
     background: #222;
     overflow: hidden;
     border-radius: 8px;
     z-index: 10;
+}
+
+.pip-resize-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 18px;
+    height: 18px;
+    cursor: nwse-resize;
+    background: linear-gradient(315deg, transparent 50%, rgba(255,255,255,0.5) 50%);
+    border-radius: 6px 0 0 0;
+    z-index: 11;
+    touch-action: none;
 }
 
 #local-video {
@@ -202,7 +211,7 @@
 /* ── Chat Panel (right 30%) ──────────────────────────── */
 #chat-panel {
     flex: 3;
-    min-width: 280px;
+    min-width: 240px;
     max-width: 400px;
     border: 2px solid #464646;
     background: #fff;
@@ -438,21 +447,20 @@
 
     #video-panel {
         flex: none;
-        height: 55vw;
-        min-height: 240px;
+        height: clamp(200px, 50vw, 50vh);
+        min-height: 200px;
     }
 
     #chat-panel {
-        flex: none;
+        flex: 1;
         max-width: 100%;
         border-left: none;
         border-top: 2px solid #464646;
-        height: 50vh;
+        min-height: 40vh;
     }
 
     #local-video-wrapper {
-        width: 90px;
-        height: 60px;
+        width: clamp(80px, 20vw, 120px);
         bottom: 70px;
         right: 8px;
     }
