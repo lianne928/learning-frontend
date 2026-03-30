@@ -92,6 +92,12 @@ function normalizeRole(role) {
     return raw;
 }
 
+function roleToNumber(role) {
+    if (role === 'student') return 1;
+    if (role === 'tutor')   return 2;
+    return role;
+}
+
 // ═══════════════════════════════════════════════════
 //  Init
 // ═══════════════════════════════════════════════════
@@ -956,7 +962,7 @@ async function handleFileUpload(e) {
     const formData = new FormData();
     formData.append('file',      file);
     formData.append('bookingId', bookingId);
-    formData.append('role',      userRole);
+    formData.append('role',      roleToNumber(userRole));
 
     try {
         const res = await axios.post(`${API_BASE_URL}/chatMessage/upload`, formData, {
@@ -1038,16 +1044,19 @@ function appendMessage(msg, isMine) {
         bubble.appendChild(video);
 
     } else if (type === 6) {
-        // FILE
+        // FILE — 透過帶 Auth 的 blob 下載，避免瀏覽器直接請求被 401
         const a = document.createElement('a');
         a.className = 'msg-file-link';
-        a.href = buildDownloadUrl(msg.mediaUrl);
-        a.download = msg.message || '下載檔案';
-        a.target = '_blank';
+        a.href = '#';
+        const downloadName = msg.message || '附件';
+        a.addEventListener('click', (e) => {
+            e.preventDefault();
+            downloadWithAuth(msg.mediaUrl, downloadName);
+        });
         const icon = document.createElement('i');
         icon.className = 'bi bi-file-earmark-arrow-down';
         a.appendChild(icon);
-        a.appendChild(document.createTextNode(' ' + (msg.message || '附件')));
+        a.appendChild(document.createTextNode(' ' + downloadName));
         bubble.appendChild(a);
 
     } else if (type === 2) {
@@ -1122,29 +1131,54 @@ function resolveMediaUrl(mediaUrl) {
     return API_BASE_URL + (mediaUrl.startsWith('/') ? '' : '/') + mediaUrl;
 }
 
+/**
+ * 將後端回傳的 mediaUrl 轉換為可經由 Vite proxy 存取的相對路徑。
+ * 若後端回傳完整 URL（如 http://localhost:8080/uploads/...），
+ * 取其 pathname 走 proxy，避免跨域問題。
+ */
+function toProxyPath(mediaUrl) {
+    if (!mediaUrl) return '';
+    if (mediaUrl.startsWith('blob:')) return mediaUrl;
+    if (mediaUrl.startsWith('http')) {
+        try { return new URL(mediaUrl).pathname; } catch { /* fall through */ }
+    }
+    return (mediaUrl.startsWith('/') ? '' : '/') + mediaUrl;
+}
+
 async function loadMediaWithAuth(element, mediaUrl) {
     if (!mediaUrl) return;
-    // Use a relative URL so the Vite proxy forwards to the backend correctly.
-    // resolveMediaUrl() prepends API_BASE_URL which produces /api/uploads/...
-    // — the wrong path. Static uploads are served at /uploads/... (proxied).
-    let url;
-    if (mediaUrl.startsWith('http') || mediaUrl.startsWith('blob:')) {
-        url = mediaUrl;
-    } else {
-        url = (mediaUrl.startsWith('/') ? '' : '/') + mediaUrl;
-    }
+    const url = toProxyPath(mediaUrl);
     try {
         const res = await axios.get(url, {
             headers: { 'Authorization': `Bearer ${token}` },
             responseType: 'blob'
         });
         element.src = URL.createObjectURL(res.data);
-    } catch { /* leave src empty; element shows broken state */ }
+    } catch (err) {
+        console.warn('[Chat] 媒體載入失敗', url, err);
+    }
 }
 
-function buildDownloadUrl(mediaUrl) {
-    const filename = (mediaUrl || '').split('/').pop();
-    return `${API_BASE_URL}/chatMessage/download/${filename}?name=${encodeURIComponent(filename)}`;
+async function downloadWithAuth(mediaUrl, filename) {
+    const url = toProxyPath(mediaUrl);
+    if (!url) return;
+    try {
+        const res = await axios.get(url, {
+            headers: { 'Authorization': `Bearer ${token}` },
+            responseType: 'blob'
+        });
+        const blobUrl = URL.createObjectURL(res.data);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+        console.error('[Chat] 檔案下載失敗', url, err);
+        alert('檔案下載失敗');
+    }
 }
 
 function detectMessageType(mimeType) {
