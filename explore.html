@@ -9,7 +9,11 @@
 
   <body style="padding-top: 70px">
     <!-- Toast 容器 -->
-    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999" id="toastContainer"></div>
+    <div
+      class="toast-container position-fixed top-0 end-0 p-3"
+      style="z-index: 9999"
+      id="toastContainer"
+    ></div>
 
     <header class="border-bottom py-2 fixed-top navbar-light bg-light">
       <div class="container">
@@ -22,10 +26,14 @@
           <nav class="ms-auto pt-2">
             <ul class="list-unstyled d-flex align-items-center mb-0">
               <li>
-                <a href="explore.html" class="text-decoration-none px-3">我要找老師</a>
+                <a href="explore.html" class="text-decoration-none px-3"
+                  >我要找老師</a
+                >
               </li>
               <li>
-                <a href="#" class="text-decoration-none px-3">註冊送代幣</a>
+                <a href="register.html" class="text-decoration-none px-3"
+                  >註冊送代幣</a
+                >
               </li>
               <li id="auth-nav-item">
                 <a class="fancy" href="login.html">
@@ -66,7 +74,12 @@
               src="./assets/img/loupe.png"
               class="search-icon-img"
               alt="搜尋"
-              style="width: 24px; height: 24px; object-fit: contain; flex-shrink: 0;"
+              style="
+                width: 24px;
+                height: 24px;
+                object-fit: contain;
+                flex-shrink: 0;
+              "
             />
             <input
               type="text"
@@ -81,7 +94,12 @@
               src="./assets/img/curriculum.png"
               class="search-icon-img"
               alt="課程"
-              style="width: 24px; height: 24px; object-fit: contain; flex-shrink: 0;"
+              style="
+                width: 24px;
+                height: 24px;
+                object-fit: contain;
+                flex-shrink: 0;
+              "
             />
             <select id="subjectSelect">
               <option value="">所有課程</option>
@@ -101,7 +119,12 @@
               src="./assets/img/calendar.png"
               class="search-icon-img"
               alt="日期"
-              style="width: 24px; height: 24px; object-fit: contain; flex-shrink: 0;"
+              style="
+                width: 24px;
+                height: 24px;
+                object-fit: contain;
+                flex-shrink: 0;
+              "
             />
             <select id="daySelect">
               <option value="">所有日期</option>
@@ -121,7 +144,12 @@
               src="./assets/img/clock.png"
               class="search-icon-img"
               alt="時段"
-              style="width: 24px; height: 24px; object-fit: contain; flex-shrink: 0;"
+              style="
+                width: 24px;
+                height: 24px;
+                object-fit: contain;
+                flex-shrink: 0;
+              "
             />
             <select id="timeSelect">
               <option value="">所有時段</option>
@@ -136,7 +164,7 @@
       </div>
 
       <!-- 課程卡片區 -->
-      <section class="bg-gray">
+      <section>
         <div class="container">
           <div
             id="course-list-container"
@@ -148,12 +176,64 @@
           </div>
 
           <!-- 分頁控制 -->
+<<<<<<< HEAD
           <div id="pagination-container" class="d-flex justify-content-center mt-4" style="display: none;">
+=======
+          <div
+            id="pagination-container"
+            class="d-flex justify-content-center mt-4"
+            style="display: none !important"
+          >
+>>>>>>> dd179b1 (feat: update hero section content for booking system)
             <!-- 分頁按鈕會動態生成 -->
           </div>
         </div>
       </section>
     </div>
+
+    <footer class="bg-white border-top py-5 mt-auto">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
+            <a
+              href="index.html"
+              class="text-decoration-none d-flex align-items-center justify-content-center justify-content-md-start"
+            >
+              <h3 class="nunito fst-italic mb-0 me-2 text-primary">Merge</h3>
+              <span class="text-muted small">&copy; 2026</span>
+            </a>
+          </div>
+          <div class="col-md-4 mb-3 mb-md-0">
+            <ul class="list-unstyled d-flex justify-content-center mb-0 small">
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >服務條款</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >隱私政策</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-muted text-decoration-none px-2"
+                  >聯絡我們</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4 text-center text-md-end">
+            <a href="#" class="text-muted me-3"
+              ><i class="bi bi-facebook"></i
+            ></a>
+            <a href="#" class="text-muted me-3"
+              ><i class="bi bi-instagram"></i
+            ></a>
+            <a href="#" class="text-muted"><i class="bi bi-github"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
