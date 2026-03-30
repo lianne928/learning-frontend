@@ -1,0 +1,413 @@
+// ==========================================
+// 行程與排課頁面樣式 (_student-schedule.scss)
+// ==========================================
+
+// 頁籤
+.schedule-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.schedule-tab-btn {
+    padding: 10px 20px;
+    border: none;
+    background: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #94a3b8;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &:hover { color: #334155; }
+
+    &.active {
+        color: #1A2238;
+        border-bottom-color: #FFD000;
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400;
+            color: #FFD000;
+        }
+    }
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+// ==========================================
+// 週行事曆
+// ==========================================
+
+.week-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+
+    button {
+        border: 2px solid #e2e8f0;
+        background: #fff;
+        padding: 6px 14px;
+        font-weight: 700;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.15s;
+        color: #334155;
+        font-size: 0.85rem;
+
+        &:hover { background: #f8fafc; }
+
+        &:disabled {
+            color: #cbd5e1;
+            border-color: #f1f5f9;
+            cursor: not-allowed;
+            background: #fff;
+        }
+    }
+}
+
+.week-label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #1A2238;
+}
+
+.week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.week-day-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.week-day-header {
+    text-align: center;
+    padding: 8px 4px;
+    border-radius: 10px;
+    background: #f1f5f9;
+    font-size: 0.78rem;
+
+    .day-name { font-weight: 700; display: block; color: #334155; }
+    .day-date { font-size: 0.72rem; color: #94a3b8; }
+
+    &.is-today {
+        background: #1A2238;
+        .day-name { color: #fff; }
+        .day-date { color: #FFD000; }
+    }
+}
+
+.booking-slot {
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 0.72rem;
+    color: #1D4ED8;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.day-empty-slot {
+    text-align: center;
+    color: #e2e8f0;
+    font-size: 0.8rem;
+    padding: 12px 0;
+}
+
+// ==========================================
+// 未來預約清單
+// ==========================================
+
+.booking-list-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.15s;
+
+    &:last-child { border-bottom: none; }
+    &:hover { background: #fafbff; }
+}
+
+.booking-date-badge {
+    min-width: 52px;
+    text-align: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 6px 8px;
+    flex-shrink: 0;
+
+    .badge-month { font-size: 0.65rem; font-weight: 700; color: #94a3b8; display: block; }
+    .badge-day   { font-size: 1.3rem; font-weight: 900; color: #1A2238; line-height: 1; }
+}
+
+.booking-list-info { flex-grow: 1; }
+
+.booking-list-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #1A2238;
+    margin-bottom: 3px;
+}
+
+.booking-list-meta {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    font-weight: 600;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.booking-status-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+
+    &.status-scheduled { background: #ECFDF5; color: #059669; }
+    &.status-soon      { background: #FEF9C3; color: #854D0E; }
+}
+
+// ==========================================
+// 課表管理格子
+// ==========================================
+
+.schedule-grid-table {
+    display: grid;
+    grid-template-columns: 48px repeat(7, 1fr);
+    gap: 3px;
+    font-size: 0.72rem;
+}
+
+.sg-header {
+    text-align: center;
+    font-weight: 700;
+    color: #64748b;
+    padding: 6px 2px;
+    font-size: 0.72rem;
+    background: #f8fafc;
+    border-radius: 6px;
+}
+
+.sg-time-label {
+    text-align: right;
+    padding-right: 8px;
+    color: #94a3b8;
+    font-weight: 600;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.sg-cell {
+    height: 36px;
+    border-radius: 6px;
+    background: #f1f5f9;
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+
+    // 唯讀模式（非編輯時）
+    &.readonly {
+        cursor: default;
+    }
+
+    // 非唯讀時可點選
+    &:not(.readonly) {
+        cursor: pointer;
+        &:hover { border-color: #cbd5e1; background: #e2e8f0; }
+    }
+
+    // 開放中
+    &.available {
+        background: #ECFDF5;
+        border-color: #A7F3D0;
+
+        &::after {
+            content: '';
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #10B981;
+        }
+
+        &:not(.readonly):hover {
+            background: #D1FAE5;
+            border-color: #6EE7B7;
+        }
+    }
+
+    // 暫存：改為開放（黃色）
+    &.pending-on {
+        background: #FEF9C3;
+        border-color: #FDE047;
+        cursor: pointer;
+
+        &::after {
+            content: '';
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #EAB308;
+        }
+
+        &:hover { background: #FEF08A; }
+    }
+
+    // 暫存：改為關閉（橘色）
+    &.pending-off {
+        background: #FFF7ED;
+        border-color: #FDBA74;
+        cursor: pointer;
+
+        &:hover { background: #FFEDD5; }
+    }
+}
+
+// 圖例
+.legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #64748b;
+    align-items: center;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
+// ==========================================
+// 未來預約清單 2欄格子版型
+// ==========================================
+
+.upcoming-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 16px 20px;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.upcoming-grid-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    transition: all 0.15s;
+
+    &:hover {
+        background: #fff;
+        border-color: #cbd5e1;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+}
+
+.upcoming-grid-date {
+    min-width: 44px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 6px;
+    flex-shrink: 0;
+
+    .badge-month { font-size: 0.6rem; font-weight: 700; color: #94a3b8; display: block; }
+    .badge-day   { font-size: 1.2rem; font-weight: 900; color: #1A2238; line-height: 1; }
+}
+
+.upcoming-grid-info { flex-grow: 1; min-width: 0; }
+
+.upcoming-grid-course {
+    font-weight: 900;
+    font-size: 0.95rem;
+    color: #1A2238;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.upcoming-grid-student {
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.upcoming-grid-meta {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+// 分頁按鈕
+.upcoming-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 16px 20px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.page-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover { background: #f1f5f9; border-color: #cbd5e1; }
+
+    &.active {
+        background: #1A2238;
+        color: #fff;
+        border-color: #1A2238;
+    }
+}

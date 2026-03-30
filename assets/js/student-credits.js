@@ -10,9 +10,9 @@ async function loadBalance() {
             headers: { Authorization: `Bearer ${token}` }
         });
         const user = res.data;
-        
+
         document.getElementById('current-balance').textContent = user.wallet || 0;
-        
+
     } catch (error) {
         console.error('載入餘額失敗:', error);
         if (error.response?.status === 401) {
@@ -25,20 +25,20 @@ async function loadBalance() {
 // 載入交易明細
 async function loadTransactions() {
     const token = localStorage.getItem('jwt_token'); // ✅ 改成 jwt_token
-    
+
     if (!token) {
         window.location.href = 'login.html';
         return;
     }
-    
+
     try {
         const res = await axios.get(`${API_BASE_URL}/users/wallet-logs`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         const logs = res.data || [];
-        
+
         renderTransactions(logs);
-        
+
     } catch (error) {
         console.error('載入交易明細失敗:', error);
         document.getElementById('transactions-list').innerHTML = `
@@ -53,7 +53,7 @@ async function loadTransactions() {
 // 渲染交易明細
 function renderTransactions(logs) {
     const container = document.getElementById('transactions-list');
-    
+
     if (!logs || logs.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
@@ -63,7 +63,7 @@ function renderTransactions(logs) {
         `;
         return;
     }
-    
+
     container.innerHTML = `
         <div class="transaction-list">
             ${logs.map(log => `
@@ -132,17 +132,56 @@ function formatDate(dateString) {
     const day = String(date.getDate()).padStart(2, '0');
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
-    
+
     return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
 
 // 處理購買（儲值功能）
-function handlePurchase(amount, points) {
-    alert(`選擇方案：NT$ ${amount}\n獲得點數：${points} 點\n\n儲值功能開發中...`);
-}
+// function handlePurchase(amount, points) {
+//     alert(`選擇方案：NT$ ${amount}\n獲得點數：${points} 點\n\n儲值功能開發中...`);
+// }
 
 // 頁面載入
 document.addEventListener('DOMContentLoaded', () => {
     loadBalance();
     loadTransactions();
 });
+
+
+
+function handlePurchase(amount, points) {
+    alert(`選擇方案：NT$ ${amount}\n獲得點數：${points} 點`)
+    const token = localStorage.getItem('jwt_token');
+    
+    if (!token) {
+        alert("請先登入");
+        return;
+    }
+    // const decoded = jwt_decode(token);
+    // console.log(decoded.userId);
+    $.ajax({
+        url: "https://subjugable-uncreditably-ignacia.ngrok-free.dev/api/ecpay/pay",
+        type: "POST",
+        data: {
+            ecpayprice: String(amount)
+        },
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+        success: function(htmlResponse) {
+            // 直接把後端給的 Form 塞進 body，它會自動跳轉
+            $("body").append(htmlResponse);
+        },
+        error: function(xhr) {
+            alert("跳轉失敗，請重新登入");
+        }
+    });
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('success') === 'yes') {
+    alert("儲值成功！");
+}
+
+
+
