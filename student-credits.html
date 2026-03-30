@@ -1,545 +1,219 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Merge | 儲值明細</title>
+    <title>儲值與明細 - Merge 學生後台</title>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./assets/scss/all.scss">
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400;
-            font-size: 20px;
-            vertical-align: middle;
-        }
-
-        .student-main {
-            overflow-y: auto;
-        }
-
-        /* ── 餘額大卡片 ── */
-        .s-balance-card {
-            background: #CCFF00;
-            border: 2px solid #000;
-            border-radius: 16px;
-            box-shadow: 5px 5px 0 #000;
-            padding: 28px 32px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 45px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .s-balance-card::before {
-            content: '';
-            position: absolute;
-            top: -40px; right: -40px;
-            width: 180px; height: 180px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.04);
-            pointer-events: none;
-        }
-
-        .s-balance-label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #333;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .s-balance-amount {
-            font-size: 3rem;
-            font-weight: 900;
-            color: #000;
-            line-height: 1;
-            margin-bottom: 6px;
-        }
-
-        .s-balance-unit {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .s-balance-sub {
-            font-size: 0.8rem;
-            color: #555;
-            font-weight: 500;
-        }
-
-        .s-topup-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            background: #0055FF;
-            color: #fff;
-            font-weight: 900;
-            font-size: 0.9rem;
-            border: 2px solid #000;
-            border-radius: 12px;
-            box-shadow: 4px 4px 0 #000;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.15s;
-            font-family: 'Noto Sans TC', sans-serif;
-            position: relative;
-            z-index: 1;
-        }
-
-        .s-topup-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 5px 5px 0 #000;
-            color: #fff;
-        }
-
-        /* ── 儲值方案 ── */
-        .s-plan-card {
-            background: #fff;
-            border: 2px solid #000;
-            border-radius: 14px;
-            box-shadow: 4px 4px 0 #000;
-            padding: 22px;
-            text-align: center;
-            height: 100%;
-            transition: transform 0.15s, box-shadow 0.15s;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .s-plan-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 5px 7px 0 #000;
-        }
-
-        .s-plan-card.featured {
-            background: #0055FF;
-            color: #fff;
-        }
-
-        .s-plan-badge {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #FF52D9;
-            color: #fff;
-            font-size: 0.65rem;
-            font-weight: 900;
-            padding: 3px 12px;
-            border: 2px solid #000;
-            border-radius: 20px;
-            box-shadow: 2px 2px 0 #000;
-            white-space: nowrap;
-        }
-
-        .s-plan-tokens {
-            font-size: 2.2rem;
-            font-weight: 900;
-            margin-bottom: 4px;
-        }
-
-        .s-plan-token-label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #888;
-            margin-bottom: 12px;
-        }
-
-        .s-plan-card.featured .s-plan-token-label {
-            color: rgba(255,255,255,0.65);
-        }
-
-        .s-plan-price {
-            font-size: 1.3rem;
-            font-weight: 900;
-            margin-bottom: 4px;
-        }
-
-        .s-plan-price-sub {
-            font-size: 0.72rem;
-            color: #aaa;
-            margin-bottom: 16px;
-        }
-
-        .s-plan-card.featured .s-plan-price-sub {
-            color: rgba(255,255,255,0.5);
-        }
-
-        .s-plan-divider {
-            border: none;
-            border-top: 1.5px dashed #ddd;
-            margin: 12px 0;
-        }
-
-        .s-plan-card.featured .s-plan-divider {
-            border-color: rgba(255,255,255,0.2);
-        }
-
-        .s-plan-perks {
-            font-size: 0.75rem;
-            color: #555;
-            margin-bottom: 16px;
-        }
-
-        .s-plan-card.featured .s-plan-perks {
-            color: rgba(255,255,255,0.75);
-        }
-
-        .s-plan-select-btn {
-            width: 100%;
-            padding: 9px;
-            background: #000;
-            color: #CCFF00;
-            font-weight: 900;
-            font-size: 0.82rem;
-            border: 2px solid #000;
-            border-radius: 8px;
-            box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
-            cursor: pointer;
-            transition: all 0.15s;
-            font-family: 'Noto Sans TC', sans-serif;
-        }
-
-        .s-plan-select-btn:hover {
-            background: #333;
-        }
-
-        /* ── 通用卡片 ── */
-        .s-card {
-            background: #fff;
-            border: 2px solid #000;
-            border-radius: 14px;
-            box-shadow: 4px 4px 0 #000;
-            overflow: hidden;
-            margin-bottom: 24px;
-        }
-
-        .s-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 22px;
-            border-bottom: 2px solid #000;
-        }
-
-        .s-card-header h3 {
-            font-size: 0.95rem;
-            font-weight: 900;
-            color: #000;
-            margin: 0;
-        }
-
-        /* ── 交易紀錄列 ── */
-        .tx-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 22px;
-            border-bottom: 1px solid #f0f0f0;
-            transition: background 0.12s;
-        }
-
-        .tx-item:last-child { border-bottom: none; }
-        .tx-item:hover { background: #F5F7FF; }
-
-        .tx-icon {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            border: 2px solid #000;
-            box-shadow: 2px 2px 0 #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .tx-info { flex: 1; min-width: 0; }
-
-        .tx-desc {
-            font-weight: 700;
-            font-size: 0.88rem;
-            color: #111;
-            margin-bottom: 3px;
-        }
-
-        .tx-date {
-            font-size: 0.73rem;
-            color: #aaa;
-            font-weight: 500;
-        }
-
-        .tx-right {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 4px;
-            flex-shrink: 0;
-        }
-
-        .tx-amount {
-            font-size: 1rem;
-            font-weight: 900;
-        }
-
-        .tx-amount.plus  { color: #00C48C; }
-        .tx-amount.minus { color: #FF4433; }
-
-        .tx-balance {
-            font-size: 0.73rem;
-            color: #aaa;
-            font-weight: 500;
-        }
-
-        .tx-type {
-            font-size: 0.68rem;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 20px;
-            border: 1.5px solid;
-        }
-
-        .tx-type.topup  { background: #d1fae5; color: #065f46; border-color: #065f46; }
-        .tx-type.deduct { background: #fee2e2; color: #dc2626; border-color: #dc2626; }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 </head>
+<body class="student-layout">
 
-<body>
-
-    <!-- 手機版頂部 Header -->
-    <header class="student-mobile-header">
-        <button class="btn-menu" id="sidebar-toggle">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
-        <span class="logo-text nunito fst-italic">Merge</span>
-        <div style="width: 40px;"></div>
-    </header>
-
-    <!-- 手機版遮罩 -->
-    <div class="student-overlay" id="sidebar-overlay"></div>
-
-    <div class="student-layout">
-
-        <!-- ===== 左側導覽列 ===== -->
+    <div class="student-container">
+        
+        <!-- 左側導覽列 -->
         <aside class="student-sidebar" id="student-sidebar">
             <div class="student-sidebar-logo">
-                <div class="logo-icon">M</div>
-                <div class="logo-text">
-                    Merge
-                    <span>學生後台</span>
-                </div>
+                <a href="student-dashboard.html" class="d-flex align-items-center gap-3 text-decoration-none">
+                    <div>
+                        <div class="logo-text">Merge</div>
+                        <div class="logo-sub">STUDENT</div>
+                    </div>
+                </a>
             </div>
-            <nav class="flex-grow-1 py-2">
+
+            <nav class="student-nav">
                 <a href="student-dashboard.html" class="student-nav-link">
-                    <span class="material-symbols-outlined">grid_view</span> 控制台
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span>控制台</span>
+                </a>
+                <a href="student-courses.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">school</span>
+                    <span>學習與課程</span>
                 </a>
                 <a href="StudentChat.html" class="student-nav-link">
-                    <span class="material-symbols-outlined">chat_bubble</span> 訊息中心
-                </a>
-                <a href="explore.html" class="student-nav-link">
-                    <span class="material-symbols-outlined">search</span> 找老師
-                </a>
-                <a href="booking.html" class="student-nav-link">
-                    <span class="material-symbols-outlined">calendar_month</span> 我的課程
-                </a>
-                <a href="student-learning-records.html" class="student-nav-link">
-                    <span class="material-symbols-outlined">history</span> 學習紀錄
+                    <span class="material-symbols-outlined">chat_bubble</span>
+                    <span>訊息中心</span>
                 </a>
                 <a href="student-credits.html" class="student-nav-link active">
-                    <span class="material-symbols-outlined">account_balance_wallet</span> 儲值明細
+                    <span class="material-symbols-outlined">account_balance_wallet</span>
+                    <span>儲值與明細</span>
                 </a>
                 <a href="student-settings.html" class="student-nav-link">
-                    <span class="material-symbols-outlined">settings</span> 設定
+                    <span class="material-symbols-outlined">settings</span>
+                    <span>設定</span>
                 </a>
             </nav>
-            <div class="student-sidebar-footer" id="logout-btn">
-                <img src="https://i.pravatar.cc/38?img=5" alt="頭像" class="student-avatar">
-                <div class="student-info">
-                    <div class="student-name" id="sidebar-name">學生</div>
-                    <div class="student-role">學生</div>
+
+            <div class="student-sidebar-footer">
+                <div class="student-user-info">
+                    <div class="student-avatar">
+                        <span class="material-symbols-outlined">account_circle</span>
+                    </div>
+                    <div class="student-info">
+                        <div class="student-name" id="sidebar-name">學生</div>
+                        <div class="student-role">Student</div>
+                    </div>
                 </div>
-                <span class="material-symbols-outlined logout-icon">logout</span>
+                <button class="student-logout-btn" id="logout-btn" title="登出">
+                    <span class="material-symbols-outlined">logout</span>
+                </button>
             </div>
         </aside>
 
-        <!-- ===== 右側主內容區 ===== -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <!-- 主內容區 -->
         <main class="student-main">
-
+            
             <!-- 頁面標題 -->
-            <h1 class="student-page-title">儲值明細</h1>
-
-            <!-- 1. 餘額大卡片 -->
-            <div class="s-balance-card">
-                <div style="position: relative; z-index: 1;">
-                    <div class="s-balance-label">
-                        <span class="material-symbols-outlined" style="font-size:16px;">token</span>
-                        目前代幣餘額
-                    </div>
-                    <div class="s-balance-amount">
-                        <span id="balance-amount">--</span> <span class="s-balance-unit">枚</span>
-                    </div>
-                    <div class="s-balance-sub">每枚代幣 = NT$30 課程價值</div>
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">儲值與明細</h1>
+                    <p class="page-desc">選擇方案，立即開始學習</p>
                 </div>
-                <button class="s-topup-btn">
-                    <span class="material-symbols-outlined" style="font-size:18px;">add_circle</span>
-                    立即儲值
+                <button class="btn-mobile-menu" id="sidebar-toggle">
+                    <span class="material-symbols-outlined">menu</span>
                 </button>
             </div>
 
-            <!-- 2. 儲值方案 -->
-            <div class="row g-3 mb-4">
-                <!-- 小方案 -->
-                <div class="col-md-4">
-                    <div class="s-plan-card">
-                        <div class="s-plan-tokens">50</div>
-                        <div class="s-plan-token-label">枚代幣</div>
-                        <hr class="s-plan-divider">
-                        <div class="s-plan-price">NT$1,200</div>
-                        <div class="s-plan-price-sub">NT$24 / 枚</div>
-                        <div class="s-plan-perks">適合新手體驗</div>
-                        <button class="s-plan-select-btn">選擇方案</button>
-                    </div>
-                </div>
-                <!-- 中方案（推薦） -->
-                <div class="col-md-4">
-                    <div class="s-plan-card featured">
-                        <div class="s-plan-badge">最受歡迎</div>
-                        <div class="s-plan-tokens" style="color:#CCFF00;">120</div>
-                        <div class="s-plan-token-label">枚代幣</div>
-                        <hr class="s-plan-divider">
-                        <div class="s-plan-price">NT$2,500</div>
-                        <div class="s-plan-price-sub">NT$20.8 / 枚，省 13%</div>
-                        <div class="s-plan-perks">最佳 CP 值選擇</div>
-                        <button class="s-plan-select-btn" style="background:#CCFF00; color:#000; border-color:#000;">選擇方案</button>
-                    </div>
-                </div>
-                <!-- 大方案 -->
-                <div class="col-md-4">
-                    <div class="s-plan-card">
-                        <div class="s-plan-tokens">300</div>
-                        <div class="s-plan-token-label">枚代幣</div>
-                        <hr class="s-plan-divider">
-                        <div class="s-plan-price">NT$5,400</div>
-                        <div class="s-plan-price-sub">NT$18 / 枚，省 25%</div>
-                        <div class="s-plan-perks">長期學習最划算</div>
-                        <button class="s-plan-select-btn">選擇方案</button>
+            <!-- 點數餘額卡片 -->
+            <div class="credits-balance-card mb-4">
+                <div class="balance-content">
+                    <div class="balance-icon">💰</div>
+                    <div>
+                        <div class="balance-label">可用點數</div>
+                        <div class="balance-value">
+                            <span id="current-balance">0</span> 點
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 3. 交易明細 -->
-            <div class="s-card">
-                <div class="s-card-header">
-                    <h3>
-                        <span class="material-symbols-outlined" style="font-size:18px; color:#0055FF; margin-right:6px;">receipt_long</span>
+            <!-- 儲值方案 -->
+            <div class="section-title mb-3">
+                <h2>選擇儲值方案</h2>
+                <p>越多送越多，讓學習更划算</p>
+            </div>
+
+            <div class="row g-3 mb-5">
+                <!-- 方案 1：入門體驗 -->
+                <div class="col-md-4">
+                    <div class="credit-plan-card">
+                        <div class="plan-header">
+                            <div class="plan-name">入門體驗</div>
+                            <div class="plan-subtitle">適合體驗課程</div>
+                        </div>
+                        <div class="plan-body">
+                            <div class="plan-price">
+                                <span class="price-currency">NT$</span>
+                                <span class="price-amount">1,500</span>
+                            </div>
+                            <div class="plan-bonus">
+                                <span class="bonus-icon">🎁</span>
+                                <span>加贈 200 點</span>
+                            </div>
+                            <div class="plan-total">
+                                總共獲得 <strong>1,700</strong> 點
+                            </div>
+                        </div>
+                        <button class="plan-btn" onclick="handlePurchase(1500, 1700 )">
+                            選擇方案
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 方案 2：熱門推薦 -->
+                <div class="col-md-4">
+                    <div class="credit-plan-card">
+                        
+                        <div class="plan-header">
+                            <div class="plan-name">熱門推薦</div>
+                            <div class="plan-subtitle">適合長期學習</div>
+                        </div>
+                        <div class="plan-body">
+                            <div class="plan-price">
+                                <span class="price-currency">NT$</span>
+                                <span class="price-amount">3,000</span>
+                            </div>
+                            <div class="plan-bonus">
+                                <span class="bonus-icon">🎁</span>
+                                <span>加贈 600 點</span>
+                            </div>
+                            <div class="plan-total">
+                                總共獲得 <strong>3,600</strong> 點
+                            </div>
+                            <div class="plan-discount">
+                                20% 加贈優惠
+                            </div>
+                        </div>
+                        <button class="plan-btn" onclick="handlePurchase(3000, 3600)">
+                            選擇方案
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 方案 3：超值方案 -->
+                <div class="col-md-4">
+                    <div class="credit-plan-card  plan-popular">
+                        <div class="plan-badge">最划算</div>
+                        <div class="plan-header">
+                            <div class="plan-name">超值方案</div>
+                            <div class="plan-subtitle">適合密集學習</div>
+                        </div>
+                        <div class="plan-body">
+                            <div class="plan-price">
+                                <span class="price-currency">NT$</span>
+                                <span class="price-amount">5,000</span>
+                            </div>
+                            <div class="plan-bonus plan-bonus-hot">
+                                <span class="bonus-icon">🎁</span>
+                                <span>加贈 1,200 點</span>
+                            </div>
+                            <div class="plan-total">
+                                總共獲得 <strong>6,200</strong> 點
+                            </div>
+                            <div class="plan-discount">
+                                24% 加贈優惠
+                            </div>
+                        </div>
+                        <button class="plan-btn plan-btn-popular" onclick="handlePurchase(5000, 6200)">
+                            選擇方案
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 交易明細 -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <span class="material-symbols-outlined">receipt_long</span>
                         交易明細
                     </h3>
-                    <span id="tx-count" style="font-size:0.78rem; color:#aaa; font-weight:600;">載入中…</span>
                 </div>
-
-                <div id="tx-list">
-                    <div class="tx-item" style="justify-content:center; color:#aaa; font-size:0.85rem; padding:24px;">載入中…</div>
+                <div class="card-body">
+                    <div id="transactions-list">
+                        <div class="empty-state">
+                            <span class="material-symbols-outlined">receipt</span>
+                            <p>尚無交易紀錄</p>
+                        </div>
+                    </div>
                 </div>
-
             </div>
 
         </main>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./assets/js/navbar.js"></script>
     <script src="./assets/js/student-layout.js"></script>
-    <script>
-        function handleApiError(err) {
-            if (!err.response) { alert('無法連線至伺服器，請確認網路'); return; }
-            if (err.response.status === 401) { localStorage.clear(); window.location.href = 'login.html'; return; }
-            if (err.response.status === 403) { alert('權限不足'); return; }
-            alert('伺服器發生錯誤，請稍後再試');
-        }
+    <script src="./assets/js/student-credits.js"></script>
 
-        function formatDateTime(iso) {
-            const d = new Date(iso);
-            return d.getFullYear() + '/' +
-                String(d.getMonth() + 1).padStart(2, '0') + '/' +
-                String(d.getDate()).padStart(2, '0') + ' ' +
-                String(d.getHours()).padStart(2, '0') + ':' +
-                String(d.getMinutes()).padStart(2, '0');
-        }
-
-        function renderTxList(logs, currentBalance) {
-            const container = document.getElementById('tx-list');
-            if (!logs || logs.length === 0) {
-                container.innerHTML = '<div class="tx-item" style="justify-content:center; color:#aaa; font-size:0.85rem; padding:24px;">尚無交易紀錄</div>';
-                document.getElementById('tx-count').textContent = '共 0 筆';
-                return;
-            }
-
-            // 依 createdAt 降序排列（最新在最前）
-            const sorted = [...logs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-            let running = currentBalance;
-            let html = '';
-
-            sorted.forEach(log => {
-                const amount = log.amount || 0;
-                const type = log.transactionType;
-                const isPlus = type === 1 || type === 3;
-                const iconBg = isPlus ? '#d1fae5' : '#fee2e2';
-                const iconColor = isPlus ? '#065f46' : '#dc2626';
-                const iconName = isPlus ? 'add_circle' : 'remove_circle';
-                const amountClass = isPlus ? 'plus' : 'minus';
-                const amountText = isPlus ? '+' + amount : '-' + Math.abs(amount);
-                const badgeClass = isPlus ? 'topup' : 'deduct';
-                const badgeText = type === 1 ? '儲值' : type === 2 ? '扣款' : '教學收入';
-                const desc = type === 1 ? '儲值代幣 × ' + amount :
-                             type === 2 ? '課程扣款' : '教學收入';
-                const balanceAfter = running;
-                running -= amount;
-
-                html += `<div class="tx-item">
-                    <div class="tx-icon" style="background:${iconBg};">
-                        <span class="material-symbols-outlined" style="font-size:18px; color:${iconColor};">${iconName}</span>
-                    </div>
-                    <div class="tx-info">
-                        <div class="tx-desc">${desc}</div>
-                        <div class="tx-date">${log.createdAt ? formatDateTime(log.createdAt) : ''}</div>
-                    </div>
-                    <div class="tx-right">
-                        <div class="tx-amount ${amountClass}">${amountText}</div>
-                        <div class="tx-balance">餘額 ${balanceAfter} 枚</div>
-                        <span class="tx-type ${badgeClass}">${badgeText}</span>
-                    </div>
-                </div>`;
-            });
-
-            container.innerHTML = html;
-            document.getElementById('tx-count').textContent = '共 ' + sorted.length + ' 筆';
-        }
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const [userRes, logsRes] = await Promise.all([
-                    axios.get(API_BASE_URL + '/users/me'),
-                    axios.get(API_BASE_URL + '/users/wallet-logs')
-                ]);
-                const wallet = userRes.data.wallet || 0;
-                document.getElementById('balance-amount').textContent = wallet;
-                renderTxList(logsRes.data, wallet);
-            } catch (err) {
-                handleApiError(err);
-            }
-        });
-    </script>
 </body>
-
 </html>

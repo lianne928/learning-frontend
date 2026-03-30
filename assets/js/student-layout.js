@@ -62,4 +62,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const userName = localStorage.getItem('userName');
     const nameEl = document.getElementById('sidebar-name');
     if (nameEl && userName) nameEl.textContent = userName;
+
+    // ── 動態插入返回首頁按鈕 ──
+    const nav = document.querySelector('.student-sidebar nav');
+    if (nav) {
+        const homeLink = document.createElement('a');
+        homeLink.href = 'index.html';
+        homeLink.className = 'student-nav-link';
+        homeLink.innerHTML = '<span class="material-symbols-outlined">home</span> 返回首頁';
+        homeLink.style.marginTop = 'auto';
+        nav.appendChild(homeLink);
+    }
 });

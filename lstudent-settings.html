@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge | 設定</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./assets/scss/all.scss">
+</head>
+
+<body>
+
+    <!-- 手機版頂部 Header -->
+    <header class="student-mobile-header">
+        <button class="btn btn-sm" id="sidebar-toggle" style="color: white;">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <span class="logo-text">Merge</span>
+        <div style="width: 40px;"></div>
+    </header>
+
+    <!-- 手機版遮罩 -->
+    <div class="student-overlay" id="sidebar-overlay"></div>
+
+    <div class="student-layout">
+
+        <!-- ===== 左側導覽列 ===== -->
+        <aside class="student-sidebar" id="student-sidebar">
+
+            <!-- Logo -->
+            <div class="student-sidebar-logo">
+                <div class="logo-icon">M</div>
+                <div class="logo-text">
+                    Merge
+                    <span>學生專用後台</span>
+                </div>
+            </div>
+
+            <!-- 選單 -->
+            <nav class="flex-grow-1 py-2">
+                <a href="lstudent-dashboard.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">grid_view</span> 控制台
+                </a>
+                <a href="lstudent-schedule.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">calendar_month</span> 行程與排課
+                </a>
+                <a href="lstudent-courses.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">menu_book</span> 課程管理
+                </a>
+                <a href="lstudent-reviews.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">assignment</span> 報告與評價
+                </a>
+                <a href="lstudent-wallet.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">account_balance_wallet</span> 儲值中心
+                </a>
+                <a href="lstudent-messages.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">chat_bubble</span> 訊息中心
+                </a>
+                <a href="lstudent-settings.html" class="student-nav-link active">
+                    <span class="material-symbols-outlined">settings</span> 設定
+                </a>
+            </nav>
+
+            <!-- 底部個人資訊 -->
+            <div class="student-sidebar-footer" id="logout-btn">
+                <img id="sidebar-avatar" src="https://via.placeholder.com/38" alt="頭像" class="student-avatar">
+                <div class="student-info">
+                    <div class="student-name" id="sidebar-name">載入中...</div>
+                    <div class="student-role">學生</div>
+                </div>
+                <span class="material-symbols-outlined logout-icon">logout</span>
+            </div>
+        </aside>
+
+        <!-- ===== 右側主內容區 ===== -->
+        <main class="student-main">
+            <h1 class="teacher-page-title">設定</h1>
+            <p class="teacher-page-subtitle">管理你的個人資料與帳號設定</p>
+
+            <!-- 分頁標籤 -->
+            <div class="schedule-tabs">
+                <button class="schedule-tab-btn active" data-tab="profile">
+                    <span class="material-symbols-outlined">person</span> 個人資料
+                </button>
+                <button class="schedule-tab-btn" data-tab="intro">
+                    <span class="material-symbols-outlined">edit_note</span> 自我介紹
+                </button>
+                <button class="schedule-tab-btn" data-tab="media">
+                    <span class="material-symbols-outlined">perm_media</span> 證照與影片
+                </button>
+                <button class="schedule-tab-btn" data-tab="security">
+                    <span class="material-symbols-outlined">lock</span> 帳號安全
+                </button>
+            </div>
+
+            <!-- ===== 分頁一：個人資料 ===== -->
+            <div class="tab-panel active" id="tab-profile">
+                <div class="teacher-card">
+                    <div class="teacher-card-header">
+                        <h3>個人資料</h3>
+                        <button class="btn-teacher" id="btn-edit-profile">
+                            <span class="material-symbols-outlined" style="font-size:16px;">edit</span>
+                            編輯
+                        </button>
+                    </div>
+                    <div class="teacher-card-body">
+
+                        <!-- 頭貼區塊 -->
+                        <div class="settings-avatar-section">
+                            <div class="settings-avatar-wrap">
+                                <img id="avatar-preview" src="https://placehold.co/80" alt="頭貼"
+                                    style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:3px solid #e2e8f0; display:block;">
+                                <label class="settings-avatar-edit" for="avatar-input" id="avatar-edit-btn" title="更換頭貼"
+                                    style="display:none;">
+                                    <span class="material-symbols-outlined" style="font-size:16px;">photo_camera</span>
+                                </label>
+                                <input type="file" id="avatar-input" accept="image/*" style="display:none;">
+                            </div>
+                            <div>
+                                <p class="mb-1 fw-bold" style="color:#1A2238; font-size:1rem;"
+                                    id="profile-name-display">載入中...</p>
+                                <p class="mb-0 small" style="color:#94a3b8;" id="profile-email-display">載入中...</p>
+                            </div>
+                        </div>
+
+                        <hr style="border-color:#f1f5f9; margin:20px 0;">
+
+                        <!-- 顯示模式 -->
+                        <div id="profile-view-mode">
+                            <div class="settings-info-row">
+                                <span class="settings-info-label">姓名：</span>
+                                <span class="settings-info-value" id="view-name">—</span>
+                            </div>
+                            <div class="settings-info-row">
+                                <span class="settings-info-label">Email：</span>
+                                <span class="settings-info-value" id="view-email">—</span>
+                            </div>
+                            <div class="settings-info-row">
+                                <span class="settings-info-label">生日：</span>
+                                <span class="settings-info-value" id="view-birthday">—</span>
+                            </div>
+                        </div>
+
+                        <!-- 編輯模式（預設隱藏）-->
+                        <div id="profile-edit-mode" style="display:none;">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="settings-label" for="input-name">姓名</label>
+                                    <input type="text" class="settings-input" id="input-name" placeholder="請輸入姓名">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="settings-label">Email（不可修改）</label>
+                                    <input type="email" class="settings-input" id="input-email" disabled
+                                        style="background:#f8fafc; color:#94a3b8; cursor:not-allowed;">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="settings-label" for="input-birthday">生日</label>
+                                    <input type="date" class="settings-input" id="input-birthday">
+                                </div>
+                            </div>
+                            <div class="mt-4 d-flex gap-2 justify-content-end">
+                                <button class="btn btn-outline-secondary btn-sm fw-bold"
+                                    id="btn-cancel-profile">取消</button>
+                                <button class="btn-teacher" id="btn-save-profile">
+                                    <span class="material-symbols-outlined" style="font-size:16px;">save</span>
+                                    儲存
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 分頁二：自我介紹 ===== -->
+            <div class="tab-panel" id="tab-intro">
+                <div class="d-flex flex-column gap-3">
+
+                    <!-- 職稱 -->
+                    <div class="teacher-card">
+                        <div class="teacher-card-header">
+                            <div>
+                                <h3 class="mb-0">職稱 / 標語</h3>
+                                <p class="mb-0 small" style="color:#94a3b8;">顯示在課程卡片上的一句話介紹</p>
+                            </div>
+                            <button class="btn-teacher" onclick="toggleEdit('title')">
+                                <span class="material-symbols-outlined" style="font-size:16px;">edit</span>
+                                編輯
+                            </button>
+                        </div>
+                        <div class="teacher-card-body">
+                            <div id="title-view" class="settings-text-display" id="view-title">—</div>
+                            <div id="title-edit" style="display:none;">
+                                <input type="text" class="settings-input" id="input-title"
+                                    placeholder="例如：10年教學經驗 | 專攻兒童英語啟蒙">
+                                <div class="d-flex gap-2 justify-content-end mt-3">
+                                    <button class="btn btn-outline-secondary btn-sm fw-bold"
+                                        onclick="cancelEdit('title')">取消</button>
+                                    <button class="btn-teacher" onclick="saveField('title')">
+                                        <span class="material-symbols-outlined" style="font-size:16px;">save</span> 儲存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 詳細介紹 -->
+                    <div class="teacher-card">
+                        <div class="teacher-card-header">
+                            <h3>詳細介紹</h3>
+                            <button class="btn-teacher" onclick="toggleEdit('intro')">
+                                <span class="material-symbols-outlined" style="font-size:16px;">edit</span>
+                                編輯
+                            </button>
+                        </div>
+                        <div class="teacher-card-body">
+                            <div id="intro-view" class="settings-text-display" style="white-space:pre-line;">—</div>
+                            <div id="intro-edit" style="display:none;">
+                                <textarea class="settings-input" id="input-intro" rows="6"
+                                    placeholder="介紹你的教學經歷、理念、專長..." style="resize:vertical;"></textarea>
+                                <div class="d-flex gap-2 justify-content-end mt-3">
+                                    <button class="btn btn-outline-secondary btn-sm fw-bold"
+                                        onclick="cancelEdit('intro')">取消</button>
+                                    <button class="btn-teacher" onclick="saveField('intro')">
+                                        <span class="material-symbols-outlined" style="font-size:16px;">save</span> 儲存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 教學經歷一 -->
+                    <div class="teacher-card">
+                        <div class="teacher-card-header">
+                            <h3>教學經歷一</h3>
+                            <button class="btn-teacher" onclick="toggleEdit('exp1')">
+                                <span class="material-symbols-outlined" style="font-size:16px;">edit</span>
+                                編輯
+                            </button>
+                        </div>
+                        <div class="teacher-card-body">
+                            <div id="exp1-view" class="settings-text-display">—</div>
+                            <div id="exp1-edit" style="display:none;">
+                                <input type="text" class="settings-input" id="input-exp1" placeholder="例如：國小英語教師 5 年">
+                                <div class="d-flex gap-2 justify-content-end mt-3">
+                                    <button class="btn btn-outline-secondary btn-sm fw-bold"
+                                        onclick="cancelEdit('exp1')">取消</button>
+                                    <button class="btn-teacher" onclick="saveField('exp1')">
+                                        <span class="material-symbols-outlined" style="font-size:16px;">save</span> 儲存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 教學經歷二 -->
+                    <div class="teacher-card">
+                        <div class="teacher-card-header">
+                            <h3>教學經歷二</h3>
+                            <button class="btn-teacher" onclick="toggleEdit('exp2')">
+                                <span class="material-symbols-outlined" style="font-size:16px;">edit</span>
+                                編輯
+                            </button>
+                        </div>
+                        <div class="teacher-card-body">
+                            <div id="exp2-view" class="settings-text-display">—</div>
+                            <div id="exp2-edit" style="display:none;">
+                                <input type="text" class="settings-input" id="input-exp2" placeholder="例如：補習班英語教師 3 年">
+                                <div class="d-flex gap-2 justify-content-end mt-3">
+                                    <button class="btn btn-outline-secondary btn-sm fw-bold"
+                                        onclick="cancelEdit('exp2')">取消</button>
+                                    <button class="btn-teacher" onclick="saveField('exp2')">
+                                        <span class="material-symbols-outlined" style="font-size:16px;">save</span> 儲存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ===== 分頁三：證照與影片 ===== -->
+            <div class="tab-panel" id="tab-media">
+                <div class="row g-3">
+
+                    <!-- 證照 1 -->
+                    <div class="col-md-6">
+                        <div class="teacher-card h-100">
+                            <div class="teacher-card-header">
+                                <h3>證照一</h3>
+                            </div>
+                            <div class="teacher-card-body">
+                                <div class="settings-upload-box">
+                                    <img id="cert1-preview" src="" alt=""
+                                        style="display:none; max-width:100%; border-radius:8px;">
+                                    <div id="cert1-placeholder" class="settings-upload-placeholder">
+                                        <span class="material-symbols-outlined"
+                                            style="font-size:36px; opacity:0.25;">workspace_premium</span>
+                                        <p class="mb-0 small" style="color:#94a3b8;">尚未上傳</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="settings-label" for="input-cert1-name">證照名稱</label>
+                                    <input type="text" class="settings-input mb-3" id="input-cert1-name"
+                                        placeholder="例如：全民英檢中高級">
+                                    <label class="settings-upload-btn" for="cert1-input">
+                                        <span class="material-symbols-outlined" style="font-size:15px;">upload</span>
+                                        選擇圖片
+                                    </label>
+                                    <input type="file" id="cert1-input" accept="image/*" style="display:none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 證照 2 -->
+                    <div class="col-md-6">
+                        <div class="teacher-card h-100">
+                            <div class="teacher-card-header">
+                                <h3>證照二</h3>
+                            </div>
+                            <div class="teacher-card-body">
+                                <div class="settings-upload-box">
+                                    <img id="cert2-preview" src="" alt=""
+                                        style="display:none; max-width:100%; border-radius:8px;">
+                                    <div id="cert2-placeholder" class="settings-upload-placeholder">
+                                        <span class="material-symbols-outlined"
+                                            style="font-size:36px; opacity:0.25;">workspace_premium</span>
+                                        <p class="mb-0 small" style="color:#94a3b8;">尚未上傳</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="settings-label" for="input-cert2-name">證照名稱</label>
+                                    <input type="text" class="settings-input mb-3" id="input-cert2-name"
+                                        placeholder="例如：劍橋英語教師證">
+                                    <label class="settings-upload-btn" for="cert2-input">
+                                        <span class="material-symbols-outlined" style="font-size:15px;">upload</span>
+                                        選擇圖片
+                                    </label>
+                                    <input type="file" id="cert2-input" accept="image/*" style="display:none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 影片 1 -->
+                    <div class="col-md-6">
+                        <div class="teacher-card h-100">
+                            <div class="teacher-card-header">
+                                <h3>自我介紹影片</h3>
+                            </div>
+                            <div class="teacher-card-body">
+                                <div class="settings-upload-box">
+                                    <video id="video1-preview" controls
+                                        style="display:none; max-width:100%; border-radius:8px;"></video>
+                                    <div id="video1-placeholder" class="settings-upload-placeholder">
+                                        <span class="material-symbols-outlined"
+                                            style="font-size:36px; opacity:0.25;">videocam</span>
+                                        <p class="mb-0 small" style="color:#94a3b8;">尚未上傳</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="settings-upload-btn" for="video1-input">
+                                        <span class="material-symbols-outlined" style="font-size:15px;">upload</span>
+                                        選擇影片
+                                    </label>
+                                    <input type="file" id="video1-input" accept="video/*" style="display:none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 影片 2 -->
+                    <div class="col-md-6">
+                        <div class="teacher-card h-100">
+                            <div class="teacher-card-header">
+                                <h3>教學示範影片</h3>
+                            </div>
+                            <div class="teacher-card-body">
+                                <div class="settings-upload-box">
+                                    <video id="video2-preview" controls
+                                        style="display:none; max-width:100%; border-radius:8px;"></video>
+                                    <div id="video2-placeholder" class="settings-upload-placeholder">
+                                        <span class="material-symbols-outlined"
+                                            style="font-size:36px; opacity:0.25;">videocam</span>
+                                        <p class="mb-0 small" style="color:#94a3b8;">尚未上傳</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label class="settings-upload-btn" for="video2-input">
+                                        <span class="material-symbols-outlined" style="font-size:15px;">upload</span>
+                                        選擇影片
+                                    </label>
+                                    <input type="file" id="video2-input" accept="video/*" style="display:none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <button class="btn-teacher" id="btn-save-media">
+                        <span class="material-symbols-outlined" style="font-size:16px;">save</span>
+                        儲存所有媒體
+                    </button>
+                </div>
+            </div>
+
+            <!-- ===== 分頁四：帳號安全 ===== -->
+            <div class="tab-panel" id="tab-security">
+                <div class="teacher-card" style="max-width:560px;">
+                    <div class="teacher-card-header">
+                        <h3>修改密碼</h3>
+                    </div>
+                    <div class="teacher-card-body">
+                        <div class="mb-3">
+                            <label class="settings-label" for="input-old-password">舊密碼</label>
+                            <input type="password" class="settings-input" id="input-old-password" placeholder="請輸入舊密碼">
+                        </div>
+                        <div class="mb-3">
+                            <label class="settings-label" for="input-new-password">新密碼</label>
+                            <input type="password" class="settings-input" id="input-new-password"
+                                placeholder="至少 8 個字元">
+                        </div>
+                        <div class="mb-3">
+                            <label class="settings-label" for="input-confirm-password">確認新密碼</label>
+                            <input type="password" class="settings-input" id="input-confirm-password"
+                                placeholder="再輸入一次新密碼">
+                        </div>
+                        <div class="mt-4 d-flex justify-content-end">
+                            <button class="btn-teacher" id="btn-save-password">
+                                <span class="material-symbols-outlined" style="font-size:16px;">lock_reset</span>
+                                更新密碼
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/js/student-layout.js"></script>
+</body>
+
+</html>

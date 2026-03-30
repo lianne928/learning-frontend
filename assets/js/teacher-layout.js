@@ -53,9 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // 不是老師 → 跳回首頁
-    if (userRole !== 'TUTOR') {
-        window.location.href = 'index.html';
+    // 學生角色 → 跳到學生後台
+    if (userRole === 'STUDENT') {
+        window.location.href = 'student-dashboard.html';
         return;
     }
 

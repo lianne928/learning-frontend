@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge | 訊息中心</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./assets/scss/all.scss">
+</head>
+
+<body>
+
+    <!-- 手機版頂部 Header -->
+    <header class="student-mobile-header">
+        <button class="btn btn-sm" id="sidebar-toggle" style="color: white;">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <span class="logo-text">Merge</span>
+        <div style="width: 40px;"></div>
+    </header>
+
+    <!-- 手機版遮罩 -->
+    <div class="student-overlay" id="sidebar-overlay"></div>
+
+    <div class="student-layout">
+
+        <!-- ===== 左側導覽列 ===== -->
+        <aside class="student-sidebar" id="student-sidebar">
+
+            <!-- Logo -->
+            <div class="student-sidebar-logo">
+                <div class="logo-icon">M</div>
+                <div class="logo-text">
+                    Merge
+                    <span>學生專用後台</span>
+                </div>
+            </div>
+
+            <!-- 選單 -->
+            <nav class="flex-grow-1 py-2">
+                <a href="lstudent-dashboard.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">grid_view</span> 控制台
+                </a>
+                <a href="lstudent-schedule.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">calendar_month</span> 行程與排課
+                </a>
+                <a href="lstudent-courses.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">menu_book</span> 課程管理
+                </a>
+                <a href="lstudent-reviews.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">assignment</span> 報告與評價
+                </a>
+                <a href="lstudent-wallet.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">account_balance_wallet</span> 儲值中心
+                </a>
+                <a href="lstudent-messages.html" class="student-nav-link active">
+                    <span class="material-symbols-outlined">chat_bubble</span> 訊息中心
+                </a>
+                <a href="lstudent-settings.html" class="student-nav-link">
+                    <span class="material-symbols-outlined">settings</span> 設定
+                </a>
+            </nav>
+
+            <!-- 底部個人資訊 -->
+            <div class="student-sidebar-footer" id="logout-btn">
+                <img id="sidebar-avatar" src="https://via.placeholder.com/38" alt="頭像" class="student-avatar">
+                <div class="student-info">
+                    <div class="student-name" id="sidebar-name">載入中...</div>
+                    <div class="student-role">學生</div>
+                </div>
+                <span class="material-symbols-outlined logout-icon">logout</span>
+            </div>
+        </aside>
+
+        <!-- ===== 右側主內容區 ===== -->
+        <main class="student-main">
+            <div id="inmessage">
+                <!-- Left Column: Thread List -->
+                <aside class="sidebar">
+                    <!-- Search Header -->
+                    <div class="sidebar-header">
+                        <div class="sidebar-header-top">
+                            <h1 class="teacher-page-title">訊息中心</h1>
+                            <button class="icon-button">
+                                <span class="material-symbols-outlined">edit_square</span>
+                            </button>
+                        </div>
+                        <div class="search-container">
+                            <span class="material-symbols-outlined">search</span>
+                            <input class="search-input" placeholder="搜尋老師或課程內容..." type="text" />
+                        </div>
+                    </div>
+                    <!-- Thread List -->
+                    <div class="thread-list custom-scrollbar">
+                        <!-- Active Thread -->
+                        <div class="thread-item active">
+                            <div class="avatar-container">
+                                <img alt="Teacher Sarah" class="avatar-img"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDF403sIn1gxvnG_g0c65exlgymqiuJe01uP6vKVCJ0vubXFXDSNM_5yiwHRwSvaeI7s3f95pQm3IffyPDxLbHC10pVv5p1gXomdFKdM2qZ4oCSKrQ7jv5MgvcYHYrzu8pKN0faxO_K0S6srZ2Fm3NzUME4z2wjRX1tWdwVSvROkS0RMBFj5U6xoB1QhybYHb4gL5FdMZ96l5twaBOrKkVmf9shekKcMIAaY_XEQTO3nUcaZir9LSkVViCWX1wE61pM1PdjXxUK-XT1" />
+                                <span class="status-dot status-online"></span>
+                            </div>
+                            <div class="thread-info">
+                                <div class="thread-header">
+                                    <span class="thread-name">Sarah Williams 老師</span>
+                                    <span class="thread-time">14:20</span>
+                                </div>
+                                <p class="thread-preview">好的，我們下週三見！關於課程大綱的部份我已經更新...</p>
+                            </div>
+                        </div>
+                        <!-- Inactive Thread 1 -->
+                        <div class="thread-item">
+                            <div class="avatar-container">
+                                <img alt="Teacher David" class="avatar-img"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9JCbOfnG4Nn5hRIuximbpQh9V8ncyvx_jzs35ubxw0yuYEj53GTE3fMlQdqowFDH-sGI377gE0eCmwCnePWWjirGReHoHBRYT5XaNxJsb6xGoj6TqCmCY4rZ_5xts-A2mARWqZ8F8odpmxTcYq3Dj8mRg7oOOqQfdrMOQnbbIVxYtgb5JT8mopFpj0uK1hlJ3hDCdfHeApxbqQOF5eqdrSVAirD50IE3Z7jjcWnAK8DKvfw9nnTK_7jgUMaMLqWPvYMYPJa-hnJgj" />
+                                <span class="status-dot status-offline"></span>
+                            </div>
+                            <div class="thread-info">
+                                <div class="thread-header">
+                                    <span class="thread-name">David Chen 老師</span>
+                                    <span class="thread-time">昨天</span>
+                                </div>
+                                <p class="thread-preview">作業已經批改完成了，你可以去 Dashboard 查看詳細反饋。</p>
+                            </div>
+                            <div class="unread-indicator"></div>
+                        </div>
+                        <!-- Inactive Thread 2 -->
+                        <div class="thread-item">
+                            <div class="avatar-container">
+                                <img alt="Teacher Elena" class="avatar-img"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_5zKryQeKFQjX7p5jFgKg_QcXSqHw4S2929GbmGW4S8qtsdpAnnKzvXA-8VPcZp6SR2K3F_xk0pmmpIytU48IxFkLaRgar25E0R64e0WS6919zmbQK7UCFZN9UdSEbJz5s-ZOS1cGseonplIl85bDHH7gpzDa006Zyhj4kNJvN_YaOloCsLT65uKDWzYelikjZVIIhsW1SfrZ-LPd7Or-nRzupniVqskMklDxKbgs7ydr8dMGJoBliUTdGyztCQXkaAZO5pKsz087" />
+                                <span class="status-dot status-online"></span>
+                            </div>
+                            <div class="thread-info">
+                                <div class="thread-header">
+                                    <span class="thread-name">Elena Rodriguez 老師</span>
+                                    <span class="thread-time">星期一</span>
+                                </div>
+                                <p class="thread-preview">期待在明天的 UI 設計工作坊見到你！記得準備好你的 Figma 連結。</p>
+                            </div>
+                        </div>
+                        <!-- Inactive Thread 3 -->
+                        <div class="thread-item">
+                            <div class="avatar-container">
+                                <img alt="Teacher Marcus" class="avatar-img"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuApdNyqqXetcBpYjfqA0u1X2kQs_heBCXXBreV49DqaP2vmH4OkWDXioz7aHSwCSasNnmwVB_tASA-sR4wqqn0jwqPjJn3drsy4y8hhCkuzs9xnWwJZ6y1TXOnEjY7YKZUJ0AIlxiexxaIBWgriFtGF8ItjoAUY5MdVmHaNsmzU8JLWSAVcrIsQptFhIkJEO0_C7h-5ALf-yWD8Od6Tk3ai0Um-iAeZWSgtNgkExg6sDGCy-6myyUPom_-s0LiBbxbGxHY9_vCR9pm7" />
+                                <span class="status-dot status-offline"></span>
+                            </div>
+                            <div class="thread-info">
+                                <div class="thread-header">
+                                    <span class="thread-name">Marcus Ng 老師</span>
+                                    <span class="thread-time">2023/10/25</span>
+                                </div>
+                                <p class="thread-preview">已收到你的請假申請，之後有空再補看錄影即可。</p>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+                <!-- Right Column: Active Chat Window -->
+                <div class="chat-main">
+                    <!-- Chat Header -->
+                    <header class="chat-header">
+                        <div class="chat-header-user">
+                            <div class="avatar-container">
+                                <img alt="Sarah Williams" class="chat-header-avatar"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHdBJBBEFmssfurnNhO6KGmq3sl68k7-KklcBBfmHhOO8qyNjyBTBO7SPHa2E1GMBJlmFbA-g9EmfCikefgm7NDJUgvlWS96v1ufv0CIT9zycPP1RcayKocMXjESTA3LTYzQzNO3xqjZXN2Y14_9ZNAdzaZF6q4tThVzbd4BOGS7jtg8PXqRaTNrYx13ymzm3GMHkBJSM56WjG8Z8k3NqdscYObJltsFDYce2aIKqqjQQTXIbW4JUNXAR9P2qfidFLsSCyzB4tc46J" />
+                                <span class="status-dot status-online"></span>
+                            </div>
+                            <div>
+                                <h2 class="chat-header-name">Sarah Williams</h2>
+                                <p class="chat-header-status">
+                                    <span class="status-mini-dot"></span>
+                                    線上 · 正在輸入中...
+                                </p>
+                            </div>
+                        </div>
+                        <div class="chat-header-actions">
+                            <button class="icon-button"><span class="material-symbols-outlined">call</span></button>
+                            <button class="icon-button"><span class="material-symbols-outlined">videocam</span></button>
+                            <div class="divider-v"></div>
+                            <button class="icon-button"><span
+                                    class="material-symbols-outlined">more_vert</span></button>
+                        </div>
+                    </header>
+                    <!-- Message Area -->
+                    <div class="message-area custom-scrollbar">
+                        <div class="timestamp-divider">
+                            <span class="timestamp-pill">今天 10:30 AM</span>
+                        </div>
+                        <!-- Received Message -->
+                        <div class="message-row received">
+                            <img alt="Sarah" class="message-avatar"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRYYX-bj16XCrBjD_r4l7KyLQ3GoqUuVFOrs21ygbsAPnqk5SeCMIH0cZbRcB8vPWIOTn3lfOG1n7vlyHIE-C9UjItWrnliX1BNghET58JQthgVQmPDWbCdyWiaF_HV0IxDEXVoCZn4hIplz3VD_3uvwH3tfAY1lLULKv-0wxR5WKoJ2DQ7LZVodAcKWTQbe0h-Z6Q2W1T3gwZadNxXsdCQQL5nM4Am7y7EGa2m_e9K-Zaadtq2x2pfeLQSzvdLPhWjYFNtqkXVV7y" />
+                            <div class="message-content-wrapper">
+                                <div class="message-bubble">
+                                    早安！關於你昨天提交的進階排版作業，我有一些建議想跟你討論。
+                                </div>
+                                <span class="message-time">10:32 AM</span>
+                            </div>
+                        </div>
+                        <!-- Sent Message -->
+                        <div class="message-row sent">
+                            <div class="message-content-wrapper">
+                                <div class="message-bubble">
+                                    老師早安！太好了，我正想請教老師關於網格系統在不同斷點下的處理方式。
+                                </div>
+                                <span class="message-time">10:35 AM</span>
+                            </div>
+                        </div>
+                        <!-- Received Message (with Image) -->
+                        <div class="message-row received">
+                            <img alt="Sarah" class="message-avatar"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6wUaPBkAzTFIRHZlYtxhS5S1cbRkmk4owC8ZfrzmMCPIHHkit0XXe3awF2VbyrEU1pX6kieGnEsekHXcH2mDleJiijpPejababCWFubeOwCzJTYWNHnMvDKQzPNiKUo5W-DI3mjhCzK4kfDut8GlEWI74K6RLHa3g1rAwbY1XgaW6o3mFt30XHWDuFWEQtTwXEBrvq38WK7gCuv2g5OSD1_xmHCPficGu1APDr77iItuAcu1rxFm_bd0gdoba92VJDy0cwKsfR1Xf" />
+                            <div class="message-content-wrapper">
+                                <div class="message-bubble">
+                                    這是一個很好的問題。我幫你標記了一些可以優化的地方，請看這張截圖：
+                                </div>
+                                <div class="message-image">
+                                    <img alt="Design Feedback"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVL43-hBHW8ctOnn_JGVjprnu94rTI0jVPn0iLQxd2D_pRjGc4wRhPDay226IwgQLV4INAwmbhjNNHLO707UEj5q2vF93EFjJvK5GYDYsl3jH_l7_aJ4DsY_6EUZDVHm_2HmfNxqneeI4fePQgJKtMg-dNh41felmVgmH5582lXQjtTbecxYjaVLZjcKb5lclP_qbBKQDl8tdRiaQsvc_QnpT1slWK29KvsfybzBNcNhQDoweSNmm_wdKlxhcutcWeB_MKxp0Vxsit" />
+                                </div>
+                                <span class="message-time">10:40 AM</span>
+                            </div>
+                        </div>
+                        <!-- Sent Message -->
+                        <div class="message-row sent">
+                            <div class="message-content-wrapper">
+                                <div class="message-bubble">
+                                    收到了！現在看起來清楚多了。我會依照這些建議去修改，下週三上課時再給老師看。
+                                </div>
+                                <span class="message-time">10:45 AM</span>
+                            </div>
+                        </div>
+                        <!-- Received Message -->
+                        <div class="message-row received">
+                            <img alt="Sarah" class="message-avatar"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQlC9I2iJSOIb_SiltIVZkunscfKd85ycMKOyfJRCTOzJa_YmJASMShtRmkCEpDtNiwfHStP5awz2ieCz5JRhN9wINuOqZW3PdTAqCo_5GzIUoGRqAHJTFiwoGy1ON8tEdjEKY0wmn9ywVlux5tRdtBFlfTAt3EXIaCiwCOB_BzaLDnpYitQPhAT5CI8Dpc8ieD3JPqNmHsN8cwzMq4wCWJsFlLsWYUkg5RPOmmFQwl7dGQTp5tFMuxDHjGEKvakV-ZN8sEgu8kfcD" />
+                            <div class="message-content-wrapper">
+                                <div class="message-bubble">
+                                    好的，我們下週三見！關於課程大綱的部份我已經更新在學習手冊裡了。
+                                </div>
+                                <span class="message-time">14:20 PM</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Message Input Bar -->
+                    <footer class="chat-footer">
+                        <div class="input-bar-container">
+                            <div class="input-actions-left">
+                                <button class="icon-button"><span
+                                        class="material-symbols-outlined">add_circle</span></button>
+                                <button class="icon-button"><span
+                                        class="material-symbols-outlined">image</span></button>
+                                <button class="icon-button"><span
+                                        class="material-symbols-outlined">sentiment_satisfied</span></button>
+                            </div>
+                            <div class="input-textarea-wrapper">
+                                <textarea class="input-textarea custom-scrollbar" placeholder="輸入訊息..."
+                                    rows="1"></textarea>
+                            </div>
+                            <button class="send-button">
+                                <span class="material-symbols-outlined"
+                                    style="font-variation-settings: 'FILL' 1;">send</span>
+                            </button>
+                        </div>
+                        <p class="footer-hint">按下 Shift + Enter 換行</p>
+                    </footer>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/js/student-layout.js"></script>
+</body>
+
+</html>
