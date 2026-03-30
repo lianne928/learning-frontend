@@ -22,10 +22,17 @@ let totalMinutes = document.getElementById("totalMinutes");
 let totalLessons = document.getElementById("totalLessons");
 let totalPoints = document.getElementById("totalPoints");
 let bookingBtn = document.getElementById("bookingBtn");
+let prevWeekBtn = document.getElementById("prevWeekBtn");
+let nextWeekBtn = document.getElementById("nextWeekBtn");
+let currentWeekIndex = 0;
 bookingBtn.disabled = true;
 
+let weekBar = document.getElementById("weekBar");
+
 let selectedTime = [];
-let currentScheduleData = [];
+let currentScheduleData = {};
+let allDates = [];
+let activeDate = null;
 
 async function booking() {
   let url = new URLSearchParams(window.location.search);
@@ -44,7 +51,10 @@ async function booking() {
     !totalMinutes ||
     !totalLessons ||
     !totalPoints ||
-    !bookingBtn
+    !bookingBtn ||
+    !weekBar ||
+    !prevWeekBtn ||
+    !nextWeekBtn
   ) {
     return;
   }
@@ -76,6 +86,7 @@ async function booking() {
     console.log(scheduleData);
 
     canSelect.innerHTML = "";
+    weekBar.innerHTML = "";
 
     let dayMap = {
       1: "週一",
@@ -86,6 +97,9 @@ async function booking() {
       6: "週六",
       7: "週日",
     };
+
+    allDates = buildFourWeeksDates();
+    renderWeekBar(weekBar);
 
     for (let item in scheduleData) {
       let day = dayMap[item];
@@ -101,7 +115,7 @@ async function booking() {
 
         timeBox.innerHTML = `
           <div type="btn" class="btn rounded-0 card-content border p-0 w-100">
-            <div class="border-bottom bg-light px-3 d-flex align-items-center">
+            <div class="border-bottom px-3 d-flex align-items-center">
               <p class="mb-0 ps-2 py-2 sansTeg d-inline-block">${day}</p>
             </div>
             <div class="d-flex align-items-center">
@@ -111,7 +125,7 @@ async function booking() {
                 </p>
               </div>
               <div class="mx-auto">
-                <small class="border px-3 rounded-3 bg-light text-center">60mins</small>
+                <small class="border px-3 rounded-3 text-center">60mins</small>
               </div>
             </div>
           </div>
@@ -129,9 +143,9 @@ async function booking() {
           let isSelected = card.classList.contains("selected");
 
           if (isSelected) {
-            card.classList.add("btn-dark");
+            card.classList.add("btn-dark", "text-dark");
           } else {
-            card.classList.remove("btn-dark");
+            card.classList.remove("btn-dark", "text-dark");
           }
 
           orderTime(day, h, isSelected);
@@ -141,13 +155,26 @@ async function booking() {
       });
 
       canSelect.appendChild(dayColumn);
+      prevWeekBtn.onclick = function () {
+        if (currentWeekIndex > 0) {
+          currentWeekIndex--;
+          renderWeekBar(weekBar);
+        }
+      };
+
+      nextWeekBtn.onclick = function () {
+        if (currentWeekIndex < 3) {
+          currentWeekIndex++;
+          renderWeekBar(weekBar);
+        }
+      };
     }
   } catch {
     console.log("booking render error:", err);
   }
 
   function orderTime(day, h, isSelected) {
-    let takeTime = `${day}${String(h).padStart(2, "0")}:00`;
+    let takeTime = `${day} ${String(h).padStart(2, "0")}:00`;
     if (isSelected) {
       selectedTime.push(takeTime);
     } else {
@@ -172,6 +199,90 @@ async function booking() {
     } else {
       bookingBtn.disabled = false;
     }
+  }
+
+  function buildFourWeeksDates() {
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let todayWeekday = today.getDay() === 0 ? 7 : today.getDay();
+
+    // 找到本週週一
+    let monday = new Date(today);
+    monday.setDate(today.getDate() - (todayWeekday - 1));
+
+    let list = [];
+
+    for (let i = 0; i < 28; i++) {
+      let currentDate = new Date(monday);
+      currentDate.setDate(monday.getDate() + i);
+      currentDate.setHours(0, 0, 0, 0);
+
+      let weekdayNumber = currentDate.getDay() === 0 ? 7 : currentDate.getDay();
+
+      list.push({
+        fullDate: `${currentDate.getFullYear()}-${String(
+          currentDate.getMonth() + 1,
+        ).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`,
+        month: currentDate.getMonth() + 1,
+        day: currentDate.getDate(),
+        weekdayNumber: weekdayNumber,
+        isToday: currentDate.getTime() === today.getTime(),
+      });
+    }
+
+    return list;
+  }
+
+  function renderWeekBar(weekBar) {
+    weekBar.innerHTML = "";
+
+    let dayMap = {
+      1: "一",
+      2: "二",
+      3: "三",
+      4: "四",
+      5: "五",
+      6: "六",
+      7: "日",
+    };
+
+    // 例如第 0 週 -> 0~6
+    // 第 1 週 -> 7~13
+    let start = currentWeekIndex * 7;
+    let end = start + 7;
+
+    let currentWeekDates = allDates.slice(start, end);
+
+    currentWeekDates.forEach(function (item) {
+      let box = document.createElement("div");
+      box.className = "flex-shrink-0";
+
+      box.innerHTML = `
+      <button
+        type="button"
+        class="btn rounded-3 border py-2 ${
+          item.isToday ? "btn-outline-secondary" : "btn-outline-dark"
+        }"
+        style="width: 110px;"
+        data-date="${item.fullDate}"
+        data-weekday="${item.weekdayNumber}"
+        ${item.isToday ? "disabled" : "enabled"}
+      >
+        <p class="mb-1 fw-bold">${item.month}/${item.day}</p>
+        <small>週${dayMap[item.weekdayNumber]}</small>
+        ${item.isToday}
+      </button>
+    `;
+
+      weekBar.appendChild(box);
+    });
+
+    // 第一週就不能再往左
+    prevWeekBtn.disabled = currentWeekIndex === 0;
+
+    // 第四週就不能再往右
+    nextWeekBtn.disabled = currentWeekIndex === 3;
   }
 }
 

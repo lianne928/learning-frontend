@@ -39,7 +39,9 @@ function convertGoogleDriveUrl(url) {
 
 // ── 判斷是否為 Google Drive 影片連結 ──
 function isGoogleDriveUrl(url) {
-  return url && (url.includes("drive.google.com") || url.includes("docs.google.com"));
+  return (
+    url && (url.includes("drive.google.com") || url.includes("docs.google.com"))
+  );
 }
 
 // ── 將任意影片 URL 轉為可嵌入的 embed URL（僅限 Google Drive）──
@@ -267,16 +269,16 @@ function renderVideos(url1, url2) {
     return;
   }
 
-<<<<<<< HEAD
   const labels = ["自我介紹影片", "教學示範影片"];
 
-  container.innerHTML = videos.map((url, i) => {
-    const label = labels[i];
+  container.innerHTML = videos
+    .map((url, i) => {
+      const label = labels[i];
 
-    if (isGoogleDriveUrl(url)) {
-      // ── Google Drive：轉成 embed URL，用 <iframe> 播放 ──
-      const embedUrl = toGoogleDriveEmbedUrl(url);
-      return `
+      if (isGoogleDriveUrl(url)) {
+        // ── Google Drive：轉成 embed URL，用 <iframe> 播放 ──
+        const embedUrl = toGoogleDriveEmbedUrl(url);
+        return `
         <div class="mb-2">
           <p class="fw-bold mb-1 nunito" style="font-size:0.9rem;">▶ ${label}</p>
           <div style="border:2px solid #464646; border-radius:12px; overflow:hidden; height:300px;">
@@ -286,9 +288,9 @@ function renderVideos(url1, url2) {
           </div>
         </div>
       `;
-    } else {
-      // ── 本地伺服器 / 一般 URL：用 <video> 標籤直接播放 ──
-      return `
+      } else {
+        // ── 本地伺服器 / 一般 URL：用 <video> 標籤直接播放 ──
+        return `
         <div class="mb-2">
           <p class="fw-bold mb-1 nunito" style="font-size:0.9rem;">▶ ${label}</p>
           <div style="border:2px solid #464646; border-radius:12px; overflow:hidden;">
@@ -303,29 +305,9 @@ function renderVideos(url1, url2) {
           </div>
         </div>
       `;
-    }
-  }).join("");
-=======
-  container.innerHTML = videos
-    .map((url, i) => {
-      const match = url.match(/[/]d[/]([a-zA-Z0-9_-]+)/);
-      const embedUrl = match
-        ? `https://drive.google.com/file/d/${match[1]}/preview`
-        : url;
-      const label = i === 0 ? "自我介紹影片" : "教學示範影片";
-      return `
-            <div class="mb-2">
-                <p class="fw-bold mb-1 nunito" style="font-size:0.9rem;">▶ ${label}</p>
-                <div style="border:2px solid #464646; border-radius:12px; overflow:hidden; height:300px;">
-                    <iframe src="${embedUrl}" width="100%" height="300"
-                        frameborder="0" allowfullscreen allow="autoplay">
-                    </iframe>
-                </div>
-            </div>
-        `;
+      }
     })
     .join("");
->>>>>>> dd179b1 (feat: update hero section content for booking system)
 }
 
 // ── 課表 ──

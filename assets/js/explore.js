@@ -48,15 +48,15 @@ async function fetchAllCourses() {
     const response = await axios.get(`${API_BASE_URL}/view/courses`, {
       params: {
         page: 0,
-        size: 1000 // 載入所有課程
-      }
+        size: 1000, // 載入所有課程
+      },
     });
-    
+
     allCoursesData = response.data.content;
     filteredCourses = [...allCoursesData]; // 初始化為所有課程
-    
+
     console.log("成功載入所有課程：", allCoursesData.length, "筆");
-    
+
     // 顯示第一頁
     displayPage(0);
   } catch (error) {
@@ -72,19 +72,21 @@ async function fetchAllCourses() {
 function displayPage(page) {
   currentPage = page;
   totalPages = Math.ceil(filteredCourses.length / PAGE_SIZE);
-  
+
   // 計算當前頁的起始和結束索引
   const startIndex = page * PAGE_SIZE;
   const endIndex = startIndex + PAGE_SIZE;
   const pageData = filteredCourses.slice(startIndex, endIndex);
-  
-  console.log(`顯示第 ${page + 1} 頁，共 ${totalPages} 頁，本頁 ${pageData.length} 筆，總共 ${filteredCourses.length} 筆符合條件`);
-  
+
+  console.log(
+    `顯示第 ${page + 1} 頁，共 ${totalPages} 頁，本頁 ${pageData.length} 筆，總共 ${filteredCourses.length} 筆符合條件`,
+  );
+
   renderCards(pageData);
   renderPagination();
-  
+
   // 平滑捲動到頁面頂部
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 // ══════════════════════════════════════════
@@ -134,7 +136,7 @@ function renderCards(coursesToRender) {
 
             <!-- 正面 -->
             <div class="flip-card-front explore-card">
-              <span class="explore-tw-badge">Teacher From TW.</span>
+              
               <div class="explore-card-img-wrap">
                 <img src="${convertGoogleDriveUrl(course.avatarUrl)}"
                   class="explore-card-img" alt="${course.teacherName}">
@@ -204,28 +206,28 @@ function renderCards(coursesToRender) {
 // ══════════════════════════════════════════
 function renderPagination() {
   const container = document.getElementById("pagination-container");
-  
+
   // 只有 1 頁或沒有資料時，完全隱藏分頁
   if (totalPages <= 1) {
     container.style.display = "none";
     container.innerHTML = ""; // 清空內容
     return;
   }
-  
+
   container.style.display = "flex";
   container.innerHTML = "";
-  
+
   // 上一頁按鈕
   const prevBtn = document.createElement("button");
   prevBtn.textContent = "← 上一頁";
   prevBtn.disabled = currentPage === 0;
   prevBtn.onclick = () => displayPage(currentPage - 1);
   container.appendChild(prevBtn);
-  
+
   // 頁碼按鈕（最多顯示 5 頁）
   const startPage = Math.max(0, currentPage - 2);
   const endPage = Math.min(totalPages - 1, startPage + 4);
-  
+
   for (let i = startPage; i <= endPage; i++) {
     const pageBtn = document.createElement("button");
     pageBtn.className = i === currentPage ? "btn-primary" : ""; // SCSS 會處理樣式
@@ -233,7 +235,7 @@ function renderPagination() {
     pageBtn.onclick = () => displayPage(i);
     container.appendChild(pageBtn);
   }
-  
+
   // 下一頁按鈕
   const nextBtn = document.createElement("button");
   nextBtn.textContent = "下一頁 →";
@@ -260,8 +262,7 @@ function handleSearch() {
       !keyword ||
       (course.teacherName &&
         course.teacherName.toLowerCase().includes(keyword)) ||
-      (course.courseName &&
-        course.courseName.toLowerCase().includes(keyword));
+      (course.courseName && course.courseName.toLowerCase().includes(keyword));
 
     const matchSubject = !subjectValue || course.subject == subjectValue;
 
@@ -279,7 +280,7 @@ function handleSearch() {
   });
 
   console.log(`過濾結果：${filteredCourses.length} 筆課程符合條件`);
-  
+
   // 顯示第一頁過濾結果
   displayPage(0);
 }
@@ -293,12 +294,12 @@ function clearSearch() {
   document.getElementById("subjectSelect").value = "";
   document.getElementById("daySelect").value = "";
   document.getElementById("timeSelect").value = "";
-  
+
   // 重置為所有課程
   filteredCourses = [...allCoursesData];
-  
+
   console.log("搜尋條件已清除，顯示所有課程");
-  
+
   // 顯示第一頁
   displayPage(0);
 }
@@ -309,11 +310,17 @@ function clearSearch() {
 document.addEventListener("DOMContentLoaded", () => {
   // 載入所有課程資料
   fetchAllCourses();
-  
+
   // 綁定搜尋事件
-  document.getElementById("searchInput").addEventListener("input", handleSearch);
-  document.getElementById("subjectSelect").addEventListener("change", handleSearch);
+  document
+    .getElementById("searchInput")
+    .addEventListener("input", handleSearch);
+  document
+    .getElementById("subjectSelect")
+    .addEventListener("change", handleSearch);
   document.getElementById("daySelect").addEventListener("change", handleSearch);
-  document.getElementById("timeSelect").addEventListener("change", handleSearch);
+  document
+    .getElementById("timeSelect")
+    .addEventListener("change", handleSearch);
   document.getElementById("btnSearch").addEventListener("click", handleSearch);
 });
