@@ -1,0 +1,180 @@
+// ==========================================
+// 報告與評價頁面樣式 (_student-reviews.scss)
+// ==========================================
+
+// 課程切換按鈕
+.course-tab-chip {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 2px solid #e2e8f0;
+    background: #fff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+
+    &:hover { border-color: #FFD000; color: #1A2238; }
+
+    &.active {
+        background: #1A2238;
+        border-color: #1A2238;
+        color: #fff;
+    }
+}
+
+// ==========================================
+// 學生評價列表
+// ==========================================
+
+.review-item {
+    padding: 20px 0;
+    border-bottom: 1px solid #f1f5f9;
+    &:last-child { border-bottom: none; }
+}
+
+.review-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.review-student {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.review-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1A2238, #334155);
+    color: #FFD000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.review-name  { font-weight: 700; font-size: 0.9rem; color: #1A2238; margin-bottom: 2px; }
+.review-date  { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
+
+.review-stars {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.review-rating-num {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #F59E0B;
+    margin-left: 4px;
+}
+
+.review-comment {
+    font-size: 0.88rem;
+    color: #475569;
+    line-height: 1.7;
+    margin: 0;
+    padding: 10px 14px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border-left: 3px solid #e2e8f0;
+}
+
+// ==========================================
+// 課後回饋 - 已完成課堂列表
+// ==========================================
+
+.completed-booking-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f1f5f9;
+
+    &:last-child { border-bottom: none; }
+}
+
+.completed-booking-date {
+    min-width: 44px;
+    text-align: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px;
+    flex-shrink: 0;
+}
+
+.completed-booking-info { flex-grow: 1; }
+
+.completed-booking-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #1A2238;
+    margin-bottom: 3px;
+}
+
+.completed-booking-meta {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.feedback-done-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #059669;
+    background: #ECFDF5;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+// ==========================================
+// 回饋 Modal - 評分按鈕
+// ==========================================
+
+.feedback-score-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #64748b;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.feedback-score-group {
+    display: flex;
+    gap: 6px;
+}
+
+.score-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+    background: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover { border-color: #FFD000; color: #1A2238; }
+
+    &.active {
+        background: #1A2238;
+        border-color: #1A2238;
+        color: #FFD000;
+    }
+}
