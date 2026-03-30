@@ -4,7 +4,7 @@
 // ==========================================
 
 // API 基礎網址 - 共用
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "/api";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("jwt_token");
