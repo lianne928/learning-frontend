@@ -152,38 +152,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function handlePurchase(amount, points) {
-    alert(`選擇方案：NT$ ${amount}\n獲得點數：${points} 點`)
-    const token = localStorage.getItem('jwt_token');
-    
-    if (!token) {
-        alert("請先登入");
-        return;
-    }
-    // const decoded = jwt_decode(token);
-    // console.log(decoded.userId);
-    $.ajax({
-        url: "https://subjugable-uncreditably-ignacia.ngrok-free.dev/api/ecpay/pay",
-        type: "POST",
-        data: {
-            ecpayprice: String(amount)
-        },
-        headers: {
-            "Authorization": "Bearer " + token
-        },
-        success: function(htmlResponse) {
-            // 直接把後端給的 Form 塞進 body，它會自動跳轉
-            $("body").append(htmlResponse);
-        },
-        error: function(xhr) {
-            alert("跳轉失敗，請重新登入");
+
+    Swal.fire({
+        title: '確認購買？',
+        html: `
+            <p>方案：NT$ ${amount}</p>
+            <p>獲得點數：${points} 點</p>
+        `,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '確定購買',
+        cancelButtonText: '取消'
+    }).then((result) => {
+
+        if (!result.isConfirmed) return;
+
+        const token = localStorage.getItem('jwt_token');
+
+        if (!token) {
+            Swal.fire('錯誤', '請先登入', 'error');
+            return;
         }
+
+        $.ajax({
+            url: "https://subjugable-uncreditably-ignacia.ngrok-free.dev/api/ecpay/pay",
+            type: "POST",
+            data: {
+                ecpayprice: String(amount)
+            },
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            success: function(htmlResponse) {
+                $("body").append(htmlResponse);
+            },
+            error: function(xhr) {
+                Swal.fire('失敗', '跳轉失敗，請重新登入', 'error');
+            }
+        });
+
     });
 }
 
 const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('success') === 'yes') {
-    alert("儲值成功！");
-}
+
 
 
 

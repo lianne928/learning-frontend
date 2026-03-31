@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>儲值成功 - Merge 學生後台</title>
+
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/scss/all.scss">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f6fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      width: 350px;
+    }
+
+    .icon {
+      font-size: 60px;
+      color: #27ae60;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #2f80ed;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      margin: 5px;
+    }
+
+    .btn:hover {
+      background: #1c5fd1;
+    }
+  </style>
+</head>
+
+<body class="student-layout">
+  <!-- 左側導覽列 -->
+  <div class="card">
+    <div class="icon">✔</div>
+    <h2>儲值成功！</h2>
+    <p id="info">您的點數已成功加入帳戶</p>
+
+    <a href="/index.html" class="btn">回首頁</a>
+    <a href="/student-credits.html" class="btn">查看交易明細</a>
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(function () {
+      const tradeNo = new URLSearchParams(location.search).get("tradeNo");
+      const $info = $("#info");
+
+      if (!tradeNo) {
+        $info.text("交易不存在");
+        return;
+      }
+
+      function loadWalletLog() {
+        $.ajax({
+          url: `http://localhost:8080/api/ecpay/wallet/byTradeNo?tradeNo=${tradeNo}`,
+          method: "GET",
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('jwt_token') // 若後端有授權
+          }
+        })
+          .done(function (res) {
+            if (res && res.amount != null) {
+              // ⚡ 根據金額計算點數
+              let points = 0;
+              if (res.amount == 1500) points = 200;
+              else if (res.amount == 3000) points = 600;
+              else if (res.amount == 5000) points = 1200;
+
+              $info.text(`成功儲值 NT$ ${res.amount}，獲得 ${points} 點`);
+            } else {
+              $info.text("交易資料尚未生成，請稍候刷新頁面...");
+            }
+          })
+          .fail(function () {
+            $info.text("讀取失敗，請稍後再試。");
+          });
+      }
+
+      loadWalletLog();
+      setInterval(loadWalletLog, 2000); // 每 2 秒重試
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="./assets/js/navbar.js"></script>
+  <script src="./assets/js/student-layout.js"></script>
+  <script src="./assets/js/student-credits.js"></script>
+
+</body>
+
+</html>
