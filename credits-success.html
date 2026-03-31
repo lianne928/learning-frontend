@@ -25,12 +25,12 @@
     }
 
     .card {
-      background: white;
-      padding: 40px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-      width: 350px;
+       background: white;
+            width: 350px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 30px 25px;
+            text-align: center;
     }
 
     .icon {
@@ -71,8 +71,7 @@
     <h2>儲值成功！</h2>
     <p id="info">您的點數已成功加入帳戶</p>
 
-    <a href="/index.html" class="btn">回首頁</a>
-    <a href="/student-credits.html" class="btn">查看交易明細</a>
+    <a href="/student-credits.html" class="btn">回到儲值明細</a>
   </div>
 
 
@@ -99,11 +98,11 @@
             if (res && res.amount != null) {
               // ⚡ 根據金額計算點數
               let points = 0;
-              if (res.amount == 1500) points = 200;
-              else if (res.amount == 3000) points = 600;
-              else if (res.amount == 5000) points = 1200;
+              if (res.amount == 1500) points = 1700;
+              else if (res.amount == 3000) points = 3600;
+              else if (res.amount == 5000) points = 6200;
 
-              $info.text(`成功儲值 NT$ ${res.amount}，獲得 ${points} 點`);
+              $info.text(`成功儲值 NT$ ${res.amount}，總共獲得 ${points} 點`);
             } else {
               $info.text("交易資料尚未生成，請稍候刷新頁面...");
             }
