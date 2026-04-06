@@ -79,29 +79,67 @@ async function loadDashboard() {
 function renderPopular(list) {
     const el = document.getElementById('popular-list');
     if (!el) return;
+
     if (!list.length) {
-        el.innerHTML = `<div class="empty-state"><span class="material-symbols-outlined">bar_chart</span><p>目前無訂單資料</p></div>`;
+        el.innerHTML = `
+            <div class="empty-state">
+                <span class="material-symbols-outlined">bar_chart</span>
+                <p>目前無訂單資料</p>
+            </div>`;
         return;
     }
-    el.innerHTML = list.map((c, i) => {
-        const rankClass = ['rank-1','rank-2','rank-3'][i] ?? 'rank-other';
-        return `
-        <div class="popular-item">
-            <div class="popular-rank ${rankClass}">${i + 1}</div>
-            <div class="popular-info">
-                <div class="popular-title">${c.courseName}</div>
-                <div class="popular-meta">
-                    <span class="material-symbols-outlined" style="font-size:14px;">person</span> ${c.tutorName}
-                    &nbsp;·&nbsp;
-                    <span class="material-symbols-outlined" style="font-size:14px;">category</span> ${subjectLabel[c.subject] ?? c.subject}
-                </div>
-            </div>
-            <div class="popular-count">
-                ${Number(c.totalLessons).toLocaleString()}
-                <small>堂</small>
-            </div>
-        </div>`;
-    }).join('');
+
+    // 清空並建立 canvas
+    el.innerHTML = '<canvas id="popularChart"></canvas>';
+    const ctx = document.getElementById('popularChart');
+
+    // 準備 Chart.js 資料
+    const labels = list.map(c =>` ${c.courseName}\n${c.tutorName}`);
+    const data = list.map(c => Number(c.totalLessons));
+
+    new Chart(ctx, {
+        type: 'bar', // 可改成 'pie' 或 'doughnut'
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '總堂數',
+                data: data,
+                backgroundColor: [
+                    '#ef4444','#3b82f6','#f59e0b','#10b981','#8b5cf6'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const course = list[context.dataIndex];
+                            const subject = subjectLabel[course.subject] ?? course.subject;
+                            return `${context.parsed.y} 堂 · ${course.tutorName} · ${subject}`;
+                        }
+                    }
+                },
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: '堂數' }
+                }
+                , x: {
+                ticks: {
+                    callback: function(value, index) {
+                        // Chart.js 會自動處理 \n 換行，但有時需要這樣強制 split
+                        return this.getLabelForValue(value).split('\n');
+                    }
+                }
+            }
+
+            }
+        }
+    });
 }
 
 // ── 載入老師數量統計（對齊 TutorReviewCountDTO）─────────────────────
